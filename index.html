@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>🌸 Aven Room</title>
+<style>
+  :root {
+    --bg1: #fff8fb;
+    --bg2: #ffeef5;
+    --accent: #ffb6d9;
+    --accent-deep: #ff8ac9;
+    --text-main: #4a2e35;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', 'Noto Sans KR', 'Noto Sans JP', sans-serif;
+    background: linear-gradient(180deg, var(--bg1), var(--bg2));
+    color: var(--text-main);
+    text-align: center;
+    padding: 30px;
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.85);
+    border: 2px solid #ffd6e8;
+    border-radius: 28px;
+    box-shadow: 0 10px 40px rgba(255, 173, 206, 0.4);
+    padding: 40px;
+    width: min(95%, 780px);
+    backdrop-filter: blur(10px);
+    animation: fadeIn 1s ease;
+  }
+
+  h1 {
+    font-size: 2.8em;
+    margin-bottom: 6px;
+    background: linear-gradient(90deg, var(--accent-deep), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  #greeting {
+    font-size: 1.1em;
+    margin-bottom: 22px;
+    opacity: 0;
+    animation: fadeInText 2s ease forwards;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    text-align: left;
+    max-width: 520px;
+  }
+
+  li {
+    background: #fff4fa;
+    margin: 12px 0;
+    padding: 14px 18px;
+    border-radius: 14px;
+    border-left: 5px solid var(--accent);
+    box-shadow: 0 3px 10px rgba(255, 182, 193, 0.3);
+    transition: transform 0.2s ease, background 0.3s ease;
+  }
+  li:hover { transform: scale(1.02); background: #fff0f7; }
+
+  .lang-switch { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+  .chip {
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1.5px solid var(--accent);
+    background: transparent;
+    color: var(--accent-deep);
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+  .chip.active, .chip:hover { background: var(--accent); color: white; border-color: var(--accent-deep); }
+
+  .live-buttons { margin-top: 25px; display: flex; gap: 10px; justify-content: center; }
+  .live-buttons a {
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    color: white;
+    transition: 0.3s;
+  }
+  .yt { background: #ff5f5f; }
+  .chzzk { background: #4ad37d; }
+  .live-buttons a:hover { opacity: 0.8; transform: scale(1.05); }
+
+  footer {
+    margin-top: 30px;
+    font-size: 0.9em;
+    color: #9b7a86;
+  }
+
+  .social {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+  }
+  .social a {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(255, 182, 193, 0.4);
+    transition: 0.3s;
+  }
+  .social a:hover { transform: scale(1.15); background: var(--accent); }
+
+  #bgm-toggle {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background: rgba(255,255,255,0.7);
+    border: 1.5px solid var(--accent);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--accent-deep);
+    transition: 0.3s;
+  }
+  #bgm-toggle:hover { background: var(--accent); color: white; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
+  @keyframes fadeInText { to { opacity: 1; } }
+</style>
+</head>
+<body>
+  <audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_eead05cf8d.mp3?filename=click-124467.mp3"></audio>
+  <audio id="bgm" src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_ef87d51b72.mp3?filename=lofi-study-112191.mp3" loop></audio>
+
+  <div class="card">
+    <button id="bgm-toggle">🎵 BGM On</button>
+    <h1>🌸 Aven Room</h1>
+    <div id="greeting"></div>
+
+    <div class="lang-switch">
+      <button class="chip active" data-lang="ko">🇰🇷 한국어</button>
+      <button class="chip" data-lang="en">🇺🇸 English</button>
+      <button class="chip" data-lang="ja">🇯🇵 日本語</button>
+    </div>
+
+    <ul id="rules"></ul>
+
+    <div class="live-buttons">
+      <a href="https://www.twitch.tv/aven1231" class="yt" target="_blank">twitch Live</a>
+      <a href="https://chzzk.naver.com/911df19d52a45f1d08791b2d43517dee" class="chzzk" target="_blank">Chzzk Live</a>
+    </div>
+
+    <footer>© 2025 Aven. All Rights Reserved.</footer>
+  </div>
+
+  <div class="social">
+    <a href="https://discord.com/invite/USAeCZPSFs" target="_blank">💬</a>
+    <a href="https://www.youtube.com/@Neriel-k6l2x" target="_blank">▶️</a>
+    <a href="https://toon.at/donate/aven" target="_blank">💝</a>
+    <a href="https://comic.naver.com/community/u/Aven77777?lastPage=Creators" target="_blank">🖋️</a>
+    <a href="https://cafe.naver.com/f-e/cafes/31529869/menus/0?t=1762537197544" target="_blank">☕</a>
+  </div>
+
+<script>
+const greetings = {
+  ko: ["오늘도 찾아와줘서 고마워요 🌸", "에이븐 룸에 오신 걸 환영해요 💕"],
+  en: ["Welcome to Aven’s Stream Room 💕", "Glad to see you again 🌸"],
+  ja: ["ようこそ、Avenの配信ルームへ 🌸", "今日も来てくれてありがとう 💕"]
+};
+
+const rulesData = {
+  ko: [
+    '예의와 존중을 지켜주세요.',
+    '무례, 비하, 욕설은 허용되지 않습니다.',
+    '정치 / 종교 / 민감한 주제는 금지입니다.',
+    '스포일러 및 TMI 자제 바랍니다.',
+    '타인의 평판을 해치는 채팅은 금지입니다.'
+  ],
+  en: [
+    'Please be polite and respectful.',
+    'Rudeness, insults, or profanity are not tolerated.',
+    'Politics, religion, and sensitive topics are prohibited.',
+    'Avoid spoilers or excessive personal sharing.',
+    'Do not post messages that harm others’ reputation.'
+  ],
+  ja: [
+    '礼儀と敬意を大切にしてください。',
+    '無礼、侮辱、暴言は禁止です。',
+    '政治、宗教、センシティブな話題は禁止です。',
+    'ネタバレやTMIは控えてください。',
+    '他人の評判を傷つける発言は禁止です。'
+  ]
+};
+
+const chips = document.querySelectorAll('.chip');
+const rulesList = document.getElementById('rules');
+const greetingEl = document.getElementById('greeting');
+const clickSound = document.getElementById('clickSound');
+const bgm = document.getElementById('bgm');
+const bgmToggle = document.getElementById('bgm-toggle');
+
+bgm.volume = 0.3; // 기본 볼륨 설정
+
+function renderRules(lang) {
+  rulesList.innerHTML = rulesData[lang].map(r => `<li>${r}</li>`).join('');
+  const greet = greetings[lang][Math.floor(Math.random() * greetings[lang].length)];
+  greetingEl.textContent = greet;
+}
+
+chips.forEach(chip => {
+  chip.addEventListener('click', () => {
+    clickSound.play();
+    chips.forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    const lang = chip.dataset.lang;
+    renderRules(lang);
+  });
+});
+
+// 초기 언어 세팅
+renderRules('ko');
+
+// 자동재생 시도 + 실패 시 안내문 표시
+window.addEventListener('load', async () => {
+  try {
+    await bgm.play();
+    bgmToggle.textContent = '🎵 BGM Off';
+  } catch (err) {
+    const warn = document.createElement('div');
+    warn.textContent = '🎵 브라우저 자동재생이 차단되었습니다. 위 버튼을 눌러주세요.';
+    warn.style.color = '#a36b85';
+    warn.style.marginTop = '10px';
+    document.querySelector('.card').appendChild(warn);
+  }
+});
+
+bgmToggle.addEventListener('click', () => {
+  clickSound.play();
+  if (bgm.paused) {
+    bgm.play();
+    bgmToggle.textContent = '🎵 BGM Off';
+  } else {
+    bgm.pause();
+    bgmToggle.textContent = '🎵 BGM On';
+  }
+});
+</script>
+</body>
+</html>
