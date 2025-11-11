@@ -98,7 +98,6 @@
   .chzzk { background: #4ad37d; }
   .live-buttons a:hover { opacity: 0.8; transform: scale(1.05); }
 
-  /* 방송 일정 섹션 */
   #schedule {
     margin-top: 30px;
     background: #fff4fa;
@@ -113,24 +112,24 @@
   #schedule p {
     margin: 5px 0;
   }
-  #schedule table {
-    margin: 15px auto;
-    border-collapse: collapse;
-    width: 100%;
+
+  .schedule-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px auto 0;
     max-width: 500px;
-    font-size: 0.95em;
-    text-align: center;
+    text-align: left;
   }
-  #schedule th {
-    padding: 8px;
-    background-color: #ffeef5;
-    color: var(--accent-deep);
-    border-bottom: 2px solid #ffd6e8;
+  .schedule-list li {
+    background: #fff4fa;
+    margin: 10px 0;
+    padding: 14px 18px;
+    border-radius: 14px;
+    border-left: 5px solid var(--accent);
+    box-shadow: 0 3px 10px rgba(255, 182, 193, 0.3);
+    transition: transform 0.2s ease, background 0.3s ease;
   }
-  #schedule td {
-    padding: 6px;
-    border-bottom: 1px solid #ffd6e8;
-  }
+  .schedule-list li:hover { transform: scale(1.02); background: #fff0f7; }
 
   footer {
     margin-top: 30px;
@@ -194,32 +193,12 @@
 
     <ul id="rules"></ul>
 
-    <!-- 🔽 방송 일정 추가 -->
     <section id="schedule">
-      <h2>🎙 방송 일정 / Stream Schedule / 配信スケジュール</h2>
-      <p>⏰ 매일 오전 <strong>6:00 ~ 12:00</strong></p>
-      <p style="color:#a36b85;">※ 컨디션에 따라 조기 방종할 수 있습니다</p>
-      <p style="color:#a36b85;">※ 재학중 평일에는 8시 이후아니면 킬수가 없습니다 (못 킬수도 있음)</p>
-
-      <table>
-        <thead>
-          <tr>
-            <th>요일</th>
-            <th>플랫폼</th>
-            <th>Platform</th>
-            <th>プラットフォーム</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>월</td><td>트위치</td><td>Twitch</td><td>ツイッチ</td></tr>
-          <tr><td>화</td><td>치지직</td><td>Chzzk</td><td>チジジク</td></tr>
-          <tr><td>수</td><td>트위치</td><td>Twitch</td><td>ツイッチ</td></tr>
-          <tr><td>목</td><td>치지직</td><td>Chzzk</td><td>チジジク</td></tr>
-          <tr><td>금</td><td>트위치</td><td>Twitch</td><td>ツイッチ</td></tr>
-          <tr><td>토</td><td>치지직</td><td>Chzzk</td><td>チジジク</td></tr>
-          <tr><td>일</td><td>트위치</td><td>Twitch</td><td>ツイッチ</td></tr>
-        </tbody>
-      </table>
+      <h2 id="schedule-title"></h2>
+      <p id="schedule-time"></p>
+      <p id="schedule-note1" style="color:#a36b85;"></p>
+      <p id="schedule-note2" style="color:#a36b85;"></p>
+      <ul id="schedule-list" class="schedule-list"></ul>
     </section>
 
     <div class="live-buttons">
@@ -269,6 +248,54 @@ const rulesData = {
   ]
 };
 
+const scheduleData = {
+  ko: {
+    title: "🎙 방송 일정",
+    time: "⏰ 매일 PM 6:00 ~ 12:00",
+    note1: "※ 컨디션에 따라 조기 방종할 수 있습니다",
+    note2: "※ 재학 중 평일에는 8시 이후 아니면 킬수가 없습니다 (못 킬 수도 있음)",
+    days: [
+      "월요일 — 🎮 트위치",
+      "화요일 — 💚 치지직",
+      "수요일 — 🎮 트위치",
+      "목요일 — 💚 치지직",
+      "금요일 — 🎮 트위치",
+      "토요일 — 💚 치지직",
+      "일요일 — 🎮 트위치"
+    ]
+  },
+  en: {
+    title: "🎙 Stream Schedule",
+    time: "⏰ Every day 6:00 PM ~ 12:00 PM (KST)",
+    note1: "※ May end earlier depending on condition",
+    note2: "※ On weekdays during school term, no streams before 8 PM (or may skip)",
+    days: [
+      "Monday — 🎮 Twitch",
+      "Tuesday — 💚 Chzzk",
+      "Wednesday — 🎮 Twitch",
+      "Thursday — 💚 Chzzk",
+      "Friday — 🎮 Twitch",
+      "Saturday — 💚 Chzzk",
+      "Sunday — 🎮 Twitch"
+    ]
+  },
+  ja: {
+    title: "🎙 配信スケジュール",
+    time: "⏰ 毎日 PM 6時～12時（韓国時間）",
+    note1: "※ 体調によっては早めに終了する場合があります",
+    note2: "※ 在学中の平日は8時以降でないと配信できない場合があります",
+    days: [
+      "月曜日 — 🎮 ツイッチ",
+      "火曜日 — 💚 チジジク",
+      "水曜日 — 🎮 ツイッチ",
+      "木曜日 — 💚 チジジク",
+      "金曜日 — 🎮 ツイッチ",
+      "土曜日 — 💚 チジジク",
+      "日曜日 — 🎮 ツイッチ"
+    ]
+  }
+};
+
 const chips = document.querySelectorAll('.chip');
 const rulesList = document.getElementById('rules');
 const greetingEl = document.getElementById('greeting');
@@ -278,10 +305,20 @@ const bgmToggle = document.getElementById('bgm-toggle');
 
 bgm.volume = 0.3;
 
+function renderSchedule(lang) {
+  const s = scheduleData[lang];
+  document.getElementById("schedule-title").textContent = s.title;
+  document.getElementById("schedule-time").innerHTML = s.time;
+  document.getElementById("schedule-note1").textContent = s.note1;
+  document.getElementById("schedule-note2").textContent = s.note2;
+  document.getElementById("schedule-list").innerHTML = s.days.map(d => `<li>${d}</li>`).join('');
+}
+
 function renderRules(lang) {
   rulesList.innerHTML = rulesData[lang].map(r => `<li>${r}</li>`).join('');
   const greet = greetings[lang][Math.floor(Math.random() * greetings[lang].length)];
   greetingEl.textContent = greet;
+  renderSchedule(lang);
 }
 
 chips.forEach(chip => {
@@ -300,7 +337,7 @@ window.addEventListener('load', async () => {
   try {
     await bgm.play();
     bgmToggle.textContent = '🎵 BGM Off';
-  } catch (err) {
+  } catch {
     const warn = document.createElement('div');
     warn.textContent = '🎵 브라우저 자동재생이 차단되었습니다. 위 버튼을 눌러주세요.';
     warn.style.color = '#a36b85';
