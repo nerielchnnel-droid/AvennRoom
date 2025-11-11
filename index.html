@@ -16,7 +16,7 @@
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -85,7 +85,7 @@
   }
   .chip.active, .chip:hover { background: var(--accent); color: white; border-color: var(--accent-deep); }
 
-  .live-buttons { margin-top: 25px; display: flex; gap: 10px; justify-content: center; }
+  .live-buttons { margin-top: 25px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
   .live-buttons a {
     text-decoration: none;
     padding: 10px 18px;
@@ -97,6 +97,40 @@
   .yt { background: #ff5f5f; }
   .chzzk { background: #4ad37d; }
   .live-buttons a:hover { opacity: 0.8; transform: scale(1.05); }
+
+  /* 방송 일정 섹션 */
+  #schedule {
+    margin-top: 30px;
+    background: #fff4fa;
+    border-radius: 18px;
+    padding: 20px;
+  }
+  #schedule h2 {
+    font-size: 1.5em;
+    color: var(--accent-deep);
+    margin-bottom: 10px;
+  }
+  #schedule p {
+    margin: 5px 0;
+  }
+  #schedule table {
+    margin: 15px auto;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 500px;
+    font-size: 0.95em;
+    text-align: center;
+  }
+  #schedule th {
+    padding: 8px;
+    background-color: #ffeef5;
+    color: var(--accent-deep);
+    border-bottom: 2px solid #ffd6e8;
+  }
+  #schedule td {
+    padding: 6px;
+    border-bottom: 1px solid #ffd6e8;
+  }
 
   footer {
     margin-top: 30px;
@@ -160,8 +194,35 @@
 
     <ul id="rules"></ul>
 
+    <!-- 🔽 방송 일정 추가 -->
+    <section id="schedule">
+      <h2>🎙 방송 일정 / Stream Schedule / 配信スケジュール</h2>
+      <p>⏰ 매일 오전 <strong>6:00 ~ 12:00</strong></p>
+      <p style="color:#a36b85;">※ 컨디션에 따라 조기 방종할 수 있습니다</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>요일</th>
+            <th>플랫폼</th>
+            <th>Platform</th>
+            <th>プラットフォーム</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>월</td><td>트위치</td><td>Twitch</td><td>ツイッチ</td></tr>
+          <tr><td>화</td><td>치지직</td><td>Chzzk</td><td>チジジク</td></tr>
+          <tr><td>수</td><td>트위치</td><td>Twitch</td><td>ツイッチ</td></tr>
+          <tr><td>목</td><td>치지직</td><td>Chzzk</td><td>チジジク</td></tr>
+          <tr><td>금</td><td>트위치</td><td>Twitch</td><td>ツイッチ</td></tr>
+          <tr><td>토</td><td>치지직</td><td>Chzzk</td><td>チジジク</td></tr>
+          <tr><td>일</td><td>트위치</td><td>Twitch</td><td>ツイッチ</td></tr>
+        </tbody>
+      </table>
+    </section>
+
     <div class="live-buttons">
-      <a href="https://www.twitch.tv/aven1231" class="yt" target="_blank">twitch Live</a>
+      <a href="https://www.twitch.tv/aven1231" class="yt" target="_blank">Twitch Live</a>
       <a href="https://chzzk.naver.com/911df19d52a45f1d08791b2d43517dee" class="chzzk" target="_blank">Chzzk Live</a>
     </div>
 
@@ -214,7 +275,7 @@ const clickSound = document.getElementById('clickSound');
 const bgm = document.getElementById('bgm');
 const bgmToggle = document.getElementById('bgm-toggle');
 
-bgm.volume = 0.3; // 기본 볼륨 설정
+bgm.volume = 0.3;
 
 function renderRules(lang) {
   rulesList.innerHTML = rulesData[lang].map(r => `<li>${r}</li>`).join('');
@@ -232,10 +293,8 @@ chips.forEach(chip => {
   });
 });
 
-// 초기 언어 세팅
 renderRules('ko');
 
-// 자동재생 시도 + 실패 시 안내문 표시
 window.addEventListener('load', async () => {
   try {
     await bgm.play();
