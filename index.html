@@ -109,27 +109,6 @@
     color: var(--accent-deep);
     margin-bottom: 10px;
   }
-  #schedule p {
-    margin: 5px 0;
-  }
-
-  .schedule-list {
-    list-style: none;
-    padding: 0;
-    margin: 20px auto 0;
-    max-width: 500px;
-    text-align: left;
-  }
-  .schedule-list li {
-    background: #fff4fa;
-    margin: 10px 0;
-    padding: 14px 18px;
-    border-radius: 14px;
-    border-left: 5px solid var(--accent);
-    box-shadow: 0 3px 10px rgba(255, 182, 193, 0.3);
-    transition: transform 0.2s ease, background 0.3s ease;
-  }
-  .schedule-list li:hover { transform: scale(1.02); background: #fff0f7; }
 
   footer {
     margin-top: 30px;
@@ -145,6 +124,7 @@
     display: flex;
     gap: 15px;
   }
+
   .social a {
     width: 40px; height: 40px;
     border-radius: 50%;
@@ -176,23 +156,29 @@
   @keyframes fadeInText { to { opacity: 1; } }
 </style>
 </head>
+
 <body>
+  <!-- Sound -->
   <audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_eead05cf8d.mp3?filename=click-124467.mp3"></audio>
   <audio id="bgm" src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_ef87d51b72.mp3?filename=lofi-study-112191.mp3" loop></audio>
 
   <div class="card">
     <button id="bgm-toggle">🎵 BGM On</button>
     <h1>🌸 Aven Room</h1>
+
     <div id="greeting"></div>
 
+    <!-- Language Buttons -->
     <div class="lang-switch">
       <button class="chip active" data-lang="ko">🇰🇷 한국어</button>
       <button class="chip" data-lang="en">🇺🇸 English</button>
       <button class="chip" data-lang="ja">🇯🇵 日本語</button>
     </div>
 
+    <!-- Rules -->
     <ul id="rules"></ul>
 
+    <!-- Schedule -->
     <section id="schedule">
       <h2 id="schedule-title"></h2>
       <p id="schedule-time"></p>
@@ -202,6 +188,7 @@
       <ul id="schedule-list" class="schedule-list"></ul>
     </section>
 
+    <!-- Live Links -->
     <div class="live-buttons">
       <a href="https://www.twitch.tv/aven1231" class="yt" target="_blank">Twitch Live</a>
       <a href="https://chzzk.naver.com/911df19d52a45f1d08791b2d43517dee" class="chzzk" target="_blank">Chzzk Live</a>
@@ -210,6 +197,7 @@
     <footer>© 2025 Aven. All Rights Reserved.</footer>
   </div>
 
+  <!-- Social -->
   <div class="social">
     <a href="https://discord.com/invite/USAeCZPSFs" target="_blank">💬</a>
     <a href="https://www.youtube.com/@Neriel-k6l2x" target="_blank">▶️</a>
@@ -218,13 +206,16 @@
     <a href="https://cafe.naver.com/f-e/cafes/31529869/menus/0?t=1762537197544" target="_blank">☕</a>
   </div>
 
+
 <script>
+/* Greeting Text */
 const greetings = {
   ko: ["오늘도 찾아와줘서 고마워요 🌸", "에이븐 룸에 오신 걸 환영해요 💕"],
   en: ["Welcome to Aven’s Stream Room 💕", "Glad to see you again 🌸"],
   ja: ["ようこそ、Avenの配信ルームへ 🌸", "今日も来てくれてありがとう 💕"]
 };
 
+/* Rules */
 const rulesData = {
   ko: [
     '예의와 존중을 지켜주세요.',
@@ -249,6 +240,7 @@ const rulesData = {
   ]
 };
 
+/* Schedule Data */
 const scheduleData = {
   ko: {
     title: "🎙 방송 일정",
@@ -271,7 +263,7 @@ const scheduleData = {
     time: "⏰ Every day 6:00 PM ~ 12:00 PM (KST)",
     note1: "※ May end earlier depending on condition",
     note2: "※ On weekdays during school term, no streams before 8 PM (or may skip)",
-    note3: "※ The key is broadcasted every day as much as possible, but it may not be possible to do so due to schedule!",
+    note3: "※ Streaming every day is the goal, but some days may be skipped due to schedule!",
     days: [
       "Monday — 🎮 Twitch",
       "Tuesday — 💚 Chzzk",
@@ -287,7 +279,7 @@ const scheduleData = {
     time: "⏰ 毎日 PM 6時～12時（韓国時間）",
     note1: "※ 体調によっては早めに終了する場合があります",
     note2: "※ 在学中の平日は8時以降でないと配信できない場合があります",
-    note3: "※ なるべく毎日つける放送ですが、日程でつけない場合あり！",
+    note3: "※ なるべく毎日配信を目指していますが、予定によりできない日もあります！",
     days: [
       "月曜日 — 🎮 ツイッチ",
       "火曜日 — 💚 チジジク",
@@ -300,24 +292,30 @@ const scheduleData = {
   }
 };
 
+/* DOM Elements */
 const chips = document.querySelectorAll('.chip');
 const rulesList = document.getElementById('rules');
 const greetingEl = document.getElementById('greeting');
-const clickSound = document.getElementById('clickSound');
 const bgm = document.getElementById('bgm');
 const bgmToggle = document.getElementById('bgm-toggle');
+const clickSound = document.getElementById('clickSound');
 
+/* BGM Volume */
 bgm.volume = 0.3;
 
+/* Render Schedule */
 function renderSchedule(lang) {
   const s = scheduleData[lang];
   document.getElementById("schedule-title").textContent = s.title;
   document.getElementById("schedule-time").innerHTML = s.time;
   document.getElementById("schedule-note1").textContent = s.note1;
   document.getElementById("schedule-note2").textContent = s.note2;
-  document.getElementById("schedule-list").innerHTML = s.days.map(d => `<li>${d}</li>`).join('');
+  document.getElementById("schedule-note3").textContent = s.note3;
+  document.getElementById("schedule-list").innerHTML =
+    s.days.map(d => `<li>${d}</li>`).join('');
 }
 
+/* Render Rules + Greeting */
 function renderRules(lang) {
   rulesList.innerHTML = rulesData[lang].map(r => `<li>${r}</li>`).join('');
   const greet = greetings[lang][Math.floor(Math.random() * greetings[lang].length)];
@@ -325,6 +323,7 @@ function renderRules(lang) {
   renderSchedule(lang);
 }
 
+/* Language Switch */
 chips.forEach(chip => {
   chip.addEventListener('click', () => {
     clickSound.play();
@@ -335,8 +334,10 @@ chips.forEach(chip => {
   });
 });
 
+/* Default Language */
 renderRules('ko');
 
+/* Auto BGM Play */
 window.addEventListener('load', async () => {
   try {
     await bgm.play();
@@ -350,6 +351,7 @@ window.addEventListener('load', async () => {
   }
 });
 
+/* BGM Toggle */
 bgmToggle.addEventListener('click', () => {
   clickSound.play();
   if (bgm.paused) {
@@ -361,5 +363,6 @@ bgmToggle.addEventListener('click', () => {
   }
 });
 </script>
+
 </body>
 </html>
