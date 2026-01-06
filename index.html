@@ -1,361 +1,1244 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-theme="light">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>🌸 Avenia Room</title>
 <style>
-  :root {
-    --bg1: #fff8fb;
-    --bg2: #ffeef5;
-    --accent: #ffb6d9;
-    --accent-deep: #ff8ac9;
-    --text-main: #4a2e35;
+  :root{
+    --bg-img: url("bg-space.jpg");
+
+    /* LIGHT */
+    --bg1:#ffffff;
+    --bg2:#fff4f9;
+
+    --card: rgba(255,255,255,0.86);
+    --stroke: rgba(255,182,217,0.55);
+
+    --accent:#ff9fd3;
+    --accent2:#bca6ff;
+    --accent-deep:#ff67bb;
+
+    --text-main:#2f242b;
+    --text-sub:#7b5f6b;
+
+    --shadow: 0 18px 60px rgba(255,137,195,0.24);
+    --radius: 26px;
+
+    /* 배경 오버레이 강도 (라이트는 밝게) */
+    --bg-overlay-1: rgba(255,255,255,0.72);
+    --bg-overlay-2: rgba(255,244,249,0.65);
+    --bg-blur: 0px;
+    --bg-dim: 0.22; /* 우주 이미지 어두움 정도 */
   }
 
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Poppins', 'Noto Sans KR', 'Noto Sans JP', sans-serif;
-    background: linear-gradient(180deg, var(--bg1), var(--bg2));
+  html[data-theme="dark"]{
+    /* DARK */
+    --bg1:#070812;
+    --bg2:#0b0c1a;
+
+    --card: rgba(18,16,30,0.76);
+    --stroke: rgba(188,166,255,0.25);
+
+    --text-main:#f3e9ef;
+    --text-sub:#cdb7c3;
+
+    --shadow: 0 18px 70px rgba(0,0,0,0.45);
+
+    /* 다크는 우주를 더 선명하게 */
+    --bg-overlay-1: rgba(5,6,14,0.55);
+    --bg-overlay-2: rgba(11,12,26,0.60);
+    --bg-blur: 0px;
+    --bg-dim: 0.06;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    font-family:'Poppins','Noto Sans KR','Noto Sans JP',system-ui,sans-serif;
+    color:var(--text-main);
+    padding:28px;
+    overflow-x:hidden;
+
+    /* 기본 컬러 그라데이션 */
+    background:
+      radial-gradient(900px 500px at 20% 10%, rgba(255,159,211,0.18), transparent 60%),
+      radial-gradient(800px 500px at 90% 30%, rgba(188,166,255,0.16), transparent 60%),
+      linear-gradient(180deg, var(--bg1), var(--bg2));
+  }
+
+  /* 우주 배경 레이어 */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image: var(--bg-img);
+    background-size: cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    filter: blur(var(--bg-blur));
+    opacity: 1;
+    z-index:-2;
+  }
+
+  /* 가독성 오버레이 */
+  body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(900px 600px at 30% 20%, rgba(255,159,211,0.20), transparent 55%),
+      radial-gradient(900px 700px at 80% 35%, rgba(188,166,255,0.22), transparent 55%),
+      linear-gradient(180deg, var(--bg-overlay-1), var(--bg-overlay-2));
+    z-index:-1;
+  }
+
+  /* 우주 이미지 자체의 디밍(어두움) */
+  .bg-dim{
+    position:fixed;
+    inset:0;
+    background: rgba(0,0,0,var(--bg-dim));
+    z-index:-1;
+    pointer-events:none;
+  }
+
+  .wrap{ width:min(1040px,96vw); }
+
+  .card{
+    position:relative;
+    background:var(--card);
+    border:1.5px solid var(--stroke);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    backdrop-filter: blur(14px);
+    padding:34px;
+    overflow:hidden;
+    animation: fadeIn .55s ease;
+  }
+
+  /* 상단 헤더 */
+  .header{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:14px;
+    margin-bottom:14px;
+  }
+
+  h1{
+    margin:0;
+    font-size: clamp(28px, 3vw, 42px);
+    letter-spacing:-0.6px;
+    background: linear-gradient(90deg, var(--accent-deep), var(--accent2), var(--accent));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+
+  .subtitle{
+    margin:8px 0 0;
+    color:var(--text-sub);
+    font-weight:700;
+    font-size:14px;
+  }
+
+  /* 헤더 버튼들 */
+  .top-actions{
+    display:flex;
+    gap:10px;
+    align-items:center;
+  }
+
+  .pill-btn{
+    border:1.5px solid var(--stroke);
+    background: rgba(255,255,255,0.55);
+    color:var(--text-main);
+    border-radius:999px;
+    padding:10px 12px;
+    font-weight:900;
+    cursor:pointer;
+    transition: .22s ease;
+    user-select:none;
+  }
+  html[data-theme="dark"] .pill-btn{
+    background: rgba(20,18,32,0.55);
+  }
+  .pill-btn:hover{ transform: translateY(-1px); }
+  .pill-btn:active{ transform: translateY(0px) scale(0.98); }
+
+  /* 탭 (예쁘게) */
+  .tabs{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin:16px 0 12px;
+    flex-wrap:wrap;
+  }
+  .tab{
+    position:relative;
+    padding:10px 14px;
+    border-radius:999px;
+    border:1.5px solid var(--stroke);
+    background: rgba(255,255,255,0.52);
+    color:var(--text-main);
+    font-weight:950;
+    cursor:pointer;
+    transition: transform .18s ease, background .22s ease, border-color .22s ease;
+    overflow:hidden;
+  }
+  html[data-theme="dark"] .tab{
+    background: rgba(20,18,32,0.52);
+  }
+
+  /* 반짝 하이라이트 애니메이션 */
+  .tab::before{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    background: radial-gradient(140px 60px at 20% 0%, rgba(255,103,187,0.35), transparent 60%),
+                radial-gradient(140px 60px at 80% 100%, rgba(188,166,255,0.32), transparent 60%);
+    opacity:0;
+    transition: opacity .22s ease;
+  }
+  .tab:hover{ transform: translateY(-1px); }
+  .tab:hover::before{ opacity:1; }
+
+  /* 활성 탭: 아래 글로우 + 살짝 튀는 느낌 */
+  .tab.active{
+    border-color: rgba(255,103,187,0.35);
+    background: linear-gradient(90deg, rgba(255,103,187,0.20), rgba(188,166,255,0.18), rgba(255,159,211,0.18));
+    transform: translateY(-1px);
+  }
+  .tab.active::after{
+    content:"";
+    position:absolute;
+    left:10px; right:10px; bottom:-10px;
+    height:14px;
+    background: radial-gradient(closest-side, rgba(255,103,187,0.45), transparent 70%);
+    filter: blur(6px);
+    opacity:0.75;
+  }
+
+  /* 탭 전환 애니메이션 */
+  .section{
+    display:none;
+    margin-top: 8px;
+    animation: slideUp .35s ease;
+  }
+  .section.active{ display:block; }
+
+  @keyframes slideUp{
+    from { opacity:0; transform: translateY(8px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  /* 언어 스위치 */
+  .lang-switch{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin: 6px 0 18px;
+    flex-wrap:wrap;
+  }
+  .chip{
+    padding:9px 12px;
+    border-radius:999px;
+    border:1.5px solid var(--stroke);
+    background: rgba(255,255,255,0.52);
+    color:var(--text-main);
+    font-weight:950;
+    cursor:pointer;
+    transition: .22s ease;
+  }
+  html[data-theme="dark"] .chip{
+    background: rgba(20,18,32,0.52);
+  }
+  .chip.active, .chip:hover{
+    background: rgba(255,159,211,0.18);
+    border-color: rgba(255,103,187,0.28);
+    transform: translateY(-1px);
+  }
+
+  #greeting{
+    font-size:15px;
+    margin:0 0 6px;
+    color:var(--text-sub);
+    font-weight:750;
+    opacity:0;
+    animation: fadeInText 1.0s ease forwards;
+  }
+
+  /* 리스트 */
+  ul{ list-style:none; padding:0; margin:0; }
+  li{
+    background: rgba(255,244,250,0.72);
+    margin:10px 0;
+    padding:13px 16px;
+    border-radius:16px;
+    border:1px solid rgba(255,182,217,0.30);
+    box-shadow: 0 6px 18px rgba(255,182,193,0.14);
+    transition: .18s ease;
+  }
+  html[data-theme="dark"] li{
+    background: rgba(24,20,40,0.52);
+    border-color: rgba(188,166,255,0.18);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.28);
+  }
+  li:hover{ transform: translateY(-1px); }
+
+  /* 일정 섹션 박스 */
+  .panel{
+    margin-top: 12px;
+    background: rgba(255,244,250,0.60);
+    border:1px solid rgba(255,182,217,0.28);
+    border-radius:20px;
+    padding:18px;
+  }
+  html[data-theme="dark"] .panel{
+    background: rgba(24,20,40,0.46);
+    border-color: rgba(188,166,255,0.18);
+  }
+  .panel h2{
+    font-size:18px;
+    margin:0 0 8px;
+    color:var(--accent-deep);
+    letter-spacing:-0.3px;
+  }
+  .panel p{
+    margin:6px 0;
+    color:var(--text-sub);
+    font-weight:750;
+  }
+
+  /* 라이브 버튼 */
+  .live-buttons{
+    margin-top:18px;
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .live-buttons a{
+    text-decoration:none;
+    padding:11px 18px;
+    border-radius:999px;
+    font-weight:950;
+    color:white;
+    transition:.22s ease;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+  }
+  .twitch{ background: linear-gradient(90deg, #9146ff, #bca6ff); }
+  .chzzk { background: linear-gradient(90deg, #34d399, #4ad37d); }
+  .live-buttons a:hover{ transform: translateY(-1px); opacity:0.93; }
+
+  /* 소셜 */
+  .social{
+    margin-top:14px;
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .social a{
+    width:44px; height:44px;
+    border-radius:999px;
+    background: rgba(255,255,255,0.60);
+    display:grid;
+    place-items:center;
+    box-shadow: 0 8px 18px rgba(255,182,193,0.16);
+    border: 1px solid rgba(255,182,217,0.28);
+    transition:.22s ease;
+    text-decoration:none;
+  }
+  html[data-theme="dark"] .social a{
+    background: rgba(20,18,32,0.56);
+    border-color: rgba(188,166,255,0.18);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.28);
+  }
+  .social a:hover{ transform: translateY(-1px); background: rgba(255,159,211,0.16); }
+
+  footer{
+    margin-top:18px;
+    font-size:12px;
+    color: rgba(123,95,107,0.90);
+    text-align:center;
+    font-weight:700;
+  }
+  html[data-theme="dark"] footer{ color: rgba(205,183,195,0.85); }
+
+  /* RP */
+  .rp-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:14px;
+    margin-top:8px;
+  }
+  @media (min-width: 820px){
+    .rp-grid{ grid-template-columns: 1.05fr 0.95fr; align-items:start; }
+  }
+  .rp-card{
+    background: rgba(255,255,255,0.58);
+    border:1px solid rgba(255,182,217,0.28);
+    border-radius:20px;
+    padding:16px;
+    box-shadow: 0 10px 26px rgba(255,182,193,0.14);
+  }
+  html[data-theme="dark"] .rp-card{
+    background: rgba(20,18,32,0.56);
+    border-color: rgba(188,166,255,0.18);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.30);
+  }
+
+  .rp-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:0 0 10px;
+    font-weight:1000;
+    letter-spacing:-0.2px;
+  }
+  .badge{
+    padding:6px 10px;
+    border-radius:999px;
+    border:1px solid rgba(255,182,217,0.32);
+    background: rgba(255,159,211,0.14);
+    font-size:12px;
+    font-weight:950;
+    color:var(--text-main);
+  }
+  html[data-theme="dark"] .badge{
+    border-color: rgba(188,166,255,0.22);
+    background: rgba(188,166,255,0.10);
+  }
+
+  .rp-text{
+    margin:0;
+    line-height:1.65;
+    color:var(--text-main);
+    font-weight:700;
+    white-space:pre-line;
+  }
+
+  .rp-hr{
+    margin:12px 0;
+    border:none;
+    height:1px;
+    background: linear-gradient(90deg, transparent, rgba(255,103,187,0.35), rgba(188,166,255,0.28), transparent);
+  }
+
+  .avatars{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  .avatar{
+    background: rgba(255,244,250,0.56);
+    border:1px solid rgba(255,182,217,0.24);
+    border-radius:18px;
+    padding:10px;
+    box-shadow: 0 8px 20px rgba(255,182,193,0.12);
+  }
+  html[data-theme="dark"] .avatar{
+    background: rgba(24,20,40,0.46);
+    border-color: rgba(188,166,255,0.16);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.28);
+  }
+  .avatar .label{
+    font-weight:950;
+    color:var(--text-sub);
+    font-size:12px;
+    margin:0 0 8px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .avatar img{
+    width:100%;
+    height:220px;
+    object-fit:contain;
+    border-radius:14px;
+    background: rgba(255,255,255,0.62);
+  }
+  html[data-theme="dark"] .avatar img{
+    background: rgba(10,10,18,0.45);
+  }
+  @media (max-width: 520px){
+    .avatars{ grid-template-columns:1fr; }
+    .avatar img{ height:240px; }
+  }
+
+  @keyframes fadeIn{
+    from{ opacity:0; transform: translateY(8px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+  @keyframes fadeInText{ to{ opacity:1; } }
+
+  /* BGM Track Select */
+  .pill-select{
+    border:1.5px solid var(--stroke);
+    background: rgba(255,255,255,0.55);
+    color:var(--text-main);
+    border-radius:999px;
+    padding:10px 12px;
+    font-weight:900;
+    cursor:pointer;
+    transition: .22s ease;
+    user-select:none;
+    appearance:none;
+    -webkit-appearance:none;
+    outline:none;
+  }
+  html[data-theme="dark"] .pill-select{ background: rgba(20,18,32,0.55); }
+  .pill-select:hover{ transform: translateY(-1px); }
+
+  /* Fortune */
+  .fortune-box{
+    margin-top: 12px;
+    background: rgba(255,244,250,0.60);
+    border:1px solid rgba(255,182,217,0.28);
+    border-radius:20px;
+    padding:18px;
+  }
+  html[data-theme="dark"] .fortune-box{
+    background: rgba(24,20,40,0.46);
+    border-color: rgba(188,166,255,0.18);
+  }
+
+  .fortune-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .fortune-meta{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .fortune-date{
+    font-weight:1000;
+    letter-spacing:-0.2px;
     color: var(--text-main);
-    text-align: center;
-    padding: 30px;
+  }
+  .fortune-hint{
+    font-weight:800;
+    color: var(--text-sub);
+    font-size: 13px;
   }
 
-  .card {
-    background: rgba(255, 255, 255, 0.85);
-    border: 2px solid #ffd6e8;
-    border-radius: 28px;
-    box-shadow: 0 10px 40px rgba(255, 173, 206, 0.4);
-    padding: 40px;
-    width: min(95%, 780px);
-    backdrop-filter: blur(10px);
-    animation: fadeIn 1s ease;
+  .fortune-btn{
+    border:1.5px solid var(--stroke);
+    background: linear-gradient(90deg, rgba(255,103,187,0.22), rgba(188,166,255,0.18), rgba(255,159,211,0.18));
+    color:var(--text-main);
+    border-radius:999px;
+    padding:10px 14px;
+    font-weight:1000;
+    cursor:pointer;
+    transition: .18s ease;
+    user-select:none;
+  }
+  .fortune-btn:hover{ transform: translateY(-1px); }
+  .fortune-btn:active{ transform: translateY(0px) scale(0.98); }
+
+  .fortune-result{
+    margin-top:12px;
+    padding:14px 16px;
+    border-radius:16px;
+    border:1px solid rgba(255,182,217,0.28);
+    background: rgba(255,255,255,0.58);
+    box-shadow: 0 10px 26px rgba(255,182,193,0.12);
+    min-height: 52px;
+    font-weight:800;
+    line-height:1.55;
+    white-space:pre-line;
+  }
+  html[data-theme="dark"] .fortune-result{
+    background: rgba(20,18,32,0.56);
+    border-color: rgba(188,166,255,0.18);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.28);
   }
 
-  h1 {
-    font-size: 2.8em;
-    margin-bottom: 6px;
-    background: linear-gradient(90deg, var(--accent-deep), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  .luck-wrap{ margin-top: 12px; }
+  .luck-label{
+    font-size: 13px;
+    font-weight: 950;
+    color: var(--text-sub);
+    margin-bottom: 8px;
   }
-
-  #greeting {
-    font-size: 1.1em;
-    margin-bottom: 22px;
-    opacity: 0;
-    animation: fadeInText 2s ease forwards;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0 auto;
-    text-align: left;
-    max-width: 520px;
-  }
-
-  li {
-    background: #fff4fa;
-    margin: 12px 0;
-    padding: 14px 18px;
-    border-radius: 14px;
-    border-left: 5px solid var(--accent);
-    box-shadow: 0 3px 10px rgba(255, 182, 193, 0.3);
-    transition: transform 0.2s ease, background 0.3s ease;
-  }
-  li:hover { transform: scale(1.02); background: #fff0f7; }
-
-  .lang-switch { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
-  .chip {
-    padding: 8px 12px;
+  .luck-bar{
+    height: 12px;
     border-radius: 999px;
-    border: 1.5px solid var(--accent);
-    background: transparent;
-    color: var(--accent-deep);
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s ease;
+    background: rgba(0,0,0,0.08);
+    overflow:hidden;
+    border:1px solid rgba(255,182,217,0.22);
   }
-  .chip.active, .chip:hover { background: var(--accent); color: white; border-color: var(--accent-deep); }
-
-  .live-buttons { margin-top: 25px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-  .live-buttons a {
-    text-decoration: none;
-    padding: 10px 18px;
+  html[data-theme="dark"] .luck-bar{
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(188,166,255,0.14);
+  }
+  .luck-fill{
+    height: 100%;
     border-radius: 999px;
-    font-weight: 600;
-    color: white;
-    transition: 0.3s;
-  }
-  .yt { background: #ff5f5f; }
-  .chzzk { background: #4ad37d; }
-  .live-buttons a:hover { opacity: 0.8; transform: scale(1.05); }
-
-  #schedule {
-    margin-top: 30px;
-    background: #fff4fa;
-    border-radius: 18px;
-    padding: 20px;
-  }
-  #schedule h2 {
-    font-size: 1.5em;
-    color: var(--accent-deep);
-    margin-bottom: 10px;
+    background: linear-gradient(90deg, rgba(255,103,187,0.55), rgba(188,166,255,0.55), rgba(255,159,211,0.55));
+    width: 0%;
+    transition: width .55s ease;
   }
 
-  footer {
-    margin-top: 30px;
-    font-size: 0.9em;
-    color: #9b7a86;
-  }
-
-  .social {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 15px;
-  }
-
-  .social a {
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 10px rgba(255, 182, 193, 0.4);
-    transition: 0.3s;
-  }
-  .social a:hover { transform: scale(1.15); background: var(--accent); }
-
-  #bgm-toggle {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    background: rgba(255,255,255,0.7);
-    border: 1.5px solid var(--accent);
-    border-radius: 999px;
-    padding: 6px 12px;
-    font-weight: 600;
-    cursor: pointer;
-    color: var(--accent-deep);
-    transition: 0.3s;
-  }
-  #bgm-toggle:hover { background: var(--accent); color: white; }
-
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
-  @keyframes fadeInText { to { opacity: 1; } }
 </style>
 </head>
 
 <body>
+  <div class="bg-dim"></div>
+
   <!-- Sound -->
   <audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_eead05cf8d.mp3?filename=click-124467.mp3"></audio>
-  <audio id="bgm" src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_ef87d51b72.mp3?filename=lofi-study-112191.mp3" loop></audio>
+  <audio id="bgm" loop></audio>
 
-  <div class="card">
-    <button id="bgm-toggle">🎵 BGM On</button>
-    <h1>🌸 Avenia Room</h1>
+  <div class="wrap">
+    <div class="card">
 
-    <div id="greeting"></div>
+      <div class="header">
+        <div>
+          <h1>🌸 Avenia Room</h1>
+          <div class="subtitle" id="subline">Selenoid Gel • Cosmic Rift • Nekomata Soul</div>
+        </div>
 
-    <!-- Language Buttons -->
-    <div class="lang-switch">
-      <button class="chip active" data-lang="ko">🇰🇷 한국어</button>
-      <button class="chip" data-lang="en">🇺🇸 English</button>
-      <button class="chip" data-lang="ja">🇯🇵 日本語</button>
+        <div class="top-actions">
+          <button id="theme-toggle" class="pill-btn" title="Theme">🌙 Night</button>
+          <select id="track-select" class="pill-select" title="Track"></select>
+          <button id="bgm-toggle" class="pill-btn" title="BGM">🎵 BGM On</button>
+        </div>
+      </div>
+
+      <p id="greeting"></p>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" data-tab="home">🏠 홈</button>
+        <button class="tab" data-tab="rules">📜 규칙</button>
+        <button class="tab" data-tab="schedule">🎙 방송 일정</button>
+        <button class="tab" data-tab="fortune">🔮 운세</button>
+        <button class="tab" data-tab="rp">☪️ RP 소개</button>
+      </div>
+
+      <!-- Language Buttons -->
+      <div class="lang-switch">
+        <button class="chip active" data-lang="ko">🇰🇷 한국어</button>
+        <button class="chip" data-lang="en">🇺🇸 English</button>
+        <button class="chip" data-lang="ja">🇯🇵 日本語</button>
+      </div>
+
+      <!-- HOME -->
+      <section id="section-home" class="section active">
+        <div class="panel">
+          <h2 id="home-title"></h2>
+          <p id="home-desc"></p>
+        </div>
+
+        <div class="live-buttons">
+          <a href="https://www.twitch.tv/aven1231" class="twitch" target="_blank" rel="noopener">Twitch Live</a>
+          <a href="https://chzzk.naver.com/911df19d52a45f1d08791b2d43517dee" class="chzzk" target="_blank" rel="noopener">Chzzk Live</a>
+        </div>
+
+        <div class="social">
+          <a href="https://discord.com/invite/USAeCZPSFs" target="_blank" rel="noopener" title="Discord">💬</a>
+          <a href="https://www.youtube.com/@Avenia-k6l2x" target="_blank" rel="noopener" title="YouTube">▶️</a>
+          <a href="https://toon.at/donate/aven" target="_blank" rel="noopener" title="Donate">💝</a>
+          <a href="https://comic.naver.com/community/u/Aven77777?lastPage=Creators" target="_blank" rel="noopener" title="Naver Comic">🖋️</a>
+          <a href="https://cafe.naver.com/f-e/cafes/31529869/menus/0?t=1762537197544" target="_blank" rel="noopener" title="Cafe">☕</a>
+        </div>
+
+        <footer>© 2025 Avenia. All Rights Reserved.</footer>
+      </section>
+
+      <!-- RULES -->
+      <section id="section-rules" class="section">
+        <div class="panel">
+          <h2 id="rules-title"></h2>
+          <p id="rules-desc"></p>
+        </div>
+        <ul id="rules"></ul>
+        <footer id="rules-footer"></footer>
+      </section>
+
+      <!-- SCHEDULE -->
+      <section id="section-schedule" class="section">
+        <div class="panel">
+          <h2 id="schedule-title"></h2>
+          <p id="schedule-time"></p>
+          <p id="schedule-note1"></p>
+        </div>
+        <ul id="schedule-list"></ul>
+        <footer id="schedule-footer"></footer>
+      </section>
+
+
+      <!-- FORTUNE -->
+      <section id="section-fortune" class="section">
+        <div class="panel">
+          <h2 id="fortune-title"></h2>
+          <p id="fortune-desc"></p>
+        </div>
+
+        <div class="fortune-box">
+          <div class="fortune-top">
+            <div class="fortune-meta">
+              <div class="fortune-date" id="fortune-date"></div>
+              <div class="fortune-hint" id="fortune-hint"></div>
+            </div>
+
+            <button id="fortune-roll" class="fortune-btn" type="button">🔮 운세 뽑기</button>
+          </div>
+
+          <div id="fortune-result" class="fortune-result" aria-live="polite"></div>
+
+          <div class="luck-wrap">
+            <div class="luck-label" id="luck-label"></div>
+            <div class="luck-bar">
+              <div class="luck-fill" id="luck-fill" style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <footer id="fortune-footer"></footer>
+      </section>
+
+
+      <!-- RP -->
+      <section id="section-rp" class="section">
+        <div class="rp-grid">
+          <div class="rp-card">
+            <div class="rp-title">
+              <span class="badge" id="rp-badge">RP</span>
+              <span id="rp-title">Avenia</span>
+            </div>
+            <p class="rp-text" id="rp-text"></p>
+            <hr class="rp-hr">
+            <p class="rp-text" id="rp-stream-setting"></p>
+          </div>
+
+          <div class="rp-card">
+            <div class="rp-title">
+              <span class="badge">Avatar</span>
+              <span id="rp-visual-title">Forms</span>
+            </div>
+
+            <div class="avatars">
+              <div class="avatar">
+                <div class="label"><span id="label-slime">슬라임 폼</span><span>🟣</span></div>
+                <img src="slime.png" alt="Slime Form">
+              </div>
+              <div class="avatar">
+                <div class="label"><span id="label-human">인간 폼</span><span>🌸</span></div>
+                <img src="human.png" alt="Human Form">
+              </div>
+            </div>
+
+            <footer style="margin-top:14px;">☪️ Avenia Lore Panel</footer>
+          </div>
+        </div>
+      </section>
+
     </div>
-
-    <!-- Rules -->
-    <ul id="rules"></ul>
-
-    <!-- Schedule -->
-    <section id="schedule">
-      <h2 id="schedule-title"></h2>
-      <p id="schedule-time"></p>
-      <p id="schedule-note1" style="color:#a36b85;"></p>
-      <p id="schedule-note2" style="color:#a36b85;"></p>
-      <p id="schedule-note3" style="color:#a36b85;"></p>
-      <ul id="schedule-list" class="schedule-list"></ul>
-    </section>
-
-    <!-- Live Links -->
-    <div class="live-buttons">
-      <a href="https://www.twitch.tv/aven1231" class="yt" target="_blank">Twitch Live</a>
-      <a href="https://chzzk.naver.com/911df19d52a45f1d08791b2d43517dee" class="chzzk" target="_blank">Chzzk Live</a>
-    </div>
-
-    <footer>© 2025 Avenia. All Rights Reserved.</footer>
   </div>
-
-  <!-- Social -->
-  <div class="social">
-    <a href="https://discord.com/invite/USAeCZPSFs" target="_blank">💬</a>
-    <a href="https://www.youtube.com/@Avenia-k6l2x" target="_blank">▶️</a>
-    <a href="https://toon.at/donate/aven" target="_blank">💝</a>
-    <a href="https://comic.naver.com/community/u/Aven77777?lastPage=Creators" target="_blank">🖋️</a>
-    <a href="https://cafe.naver.com/f-e/cafes/31529869/menus/0?t=1762537197544" target="_blank">☕</a>
-  </div>
-
 
 <script>
-/* Greeting Text */
+/* Greeting */
 const greetings = {
   ko: ["오늘도 찾아와줘서 고마워요 🌸", "Avenia 룸에 오신 걸 환영해요 💕"],
   en: ["Welcome to Avenia’s Stream Room 💕", "Glad to see you again 🌸"],
   ja: ["ようこそ、Aveniaの配信ルームへ 🌸", "今日も来てくれてありがとう 💕"]
 };
 
-/* Rules */
-const rulesData = {
-  ko: [
-    '예의와 존중을 지켜주세요.',
-    '무례, 비하, 욕설은 허용되지 않습니다.',
-    '정치 / 종교 / 민감한 주제는 금지입니다.',
-    '스포일러 및 TMI 자제 바랍니다.',
-    '타인의 평판을 해치는 채팅은 금지입니다.'
-  ],
-  en: [
-    'Please be polite and respectful.',
-    'Rudeness, insults, or profanity are not tolerated.',
-    'Politics, religion, and sensitive topics are prohibited.',
-    'Avoid spoilers or excessive personal sharing.',
-    'Do not post messages that harm others’ reputation.'
-  ],
-  ja: [
-    '礼儀と敬意を大切にしてください。',
-    '無礼、侮辱、暴言は禁止です。',
-    '政治、宗教、センシティブな話題は禁止です。',
-    'ネタバレやTMIは控えてください。',
-    '他人の評判を傷つける発言は禁止です。'
-  ]
+/* HOME text */
+const homeData = {
+  ko: { title: "🌌 Avenia Room", desc: "우주의 균열에서 태어난 셀레노이드 젤, Avenia의 공간입니다." },
+  en: { title: "🌌 Avenia Room", desc: "Avenia’s space, a Selenoid Gel born from a cosmic rift." },
+  ja: { title: "🌌 Avenia Room", desc: "宇宙の亀裂から生まれたセレノイド・ジェル、Aveniaの空間です。" }
 };
 
-/* Schedule Data */
-const scheduleData = {
+/* RULES */
+const rulesData = {
   ko: {
-    title: "🎙 방송 일정",
-    time: "⏰ 매일 PM 6:00 ~ 12:00",
-    note1: "※ 컨디션에 따라 조기 방종할 수 있습니다",
-    note2: "※ 재학 중 평일에는 8시 이후 아니면 킬수가 없습니다 (못 킬 수도 있음)",
-    note3: "※ 최대한 매일 키는 방송이지만, 일정으로 못 킬수 있음!",
-    days: [
-      "월요일 — ☀️비방",
-      "화요일 — ☀️비방",
-      "수요일 — 🍓 작업일",
-      "목요일 — 📡 치지직",
-      "금요일 — 📡 치지직",
-      "토요일 — 📡 치지직",
-      "일요일 — 📡 치지직"
+    title: "📜 채팅 규칙",
+    desc: "이 공간은 모두가 편하게 머무를 수 있는 곳입니다.",
+    footer: "※ 어려운 규칙 아니니깐~ 지켜주세요~.",
+    list: [
+      '예의와 존중을 지켜주세요.',
+      '무례, 비하, 욕설은 허용되지 않습니다.',
+      '정치 / 종교 / 민감한 주제는 금지입니다.',
+      '스포일러 및 TMI 자제 바랍니다.',
+      '타인의 평판을 해치는 채팅은 금지입니다.'
     ]
   },
   en: {
-    title: "🎙 Stream Schedule",
-    time: "⏰ Every day 6:00 PM ~ 12:00 PM (KST)",
-    note1: "※ May end earlier depending on condition",
-    note2: "※ On weekdays during school term, no streams before 8 PM (or may skip)",
-    note3: "※ Streaming every day is the goal, but some days may be skipped due to schedule!",
-    days: [
-      "Monday — 🔥Holiday",
-      "Tuesday — 🔥Holiday",
-      "Wednesday — 🍓 No-Stream Day",
-      "Thursday — 📡 Chzzk",
-      "Friday — 📡 Chzzk",
-      "Saturday — 📡 Chzzk",
-      "Sunday — 📡 Chzzk"
+    title: "📜 Chat Rules",
+    desc: "This is a space where everyone can feel comfortable.",
+    footer: "※ It's not a difficult rule, so please keep it ",
+    list: [
+      'Please be polite and respectful.',
+      'Rudeness, insults, or profanity are not tolerated.',
+      'Politics, religion, and sensitive topics are prohibited.',
+      'Avoid spoilers or excessive personal sharing.',
+      'Do not post messages that harm others’ reputation.'
     ]
   },
   ja: {
-    title: "🎙 配信スケジュール",
-    time: "⏰ 毎日 PM 6時～12時（韓国時間）",
-    note1: "※ 体調によっては早めに終了する場合があります",
-    note2: "※ 在学中の平日は8時以降でないと配信できない場合があります",
-    note3: "※ なるべく毎日配信を目指していますが、予定によりできない日もあります！",
-    days: [
-      "月曜日 — 📡 Twitch",
-      "火曜日 — 📡 Twitch",
-      "水曜日 — 🍓 オフ配信デー",
-      "木曜日 — 📺 チジジク",
-      "金曜日 — 📺 チジジク",
-      "土曜日 — 📺 チジジク",
-      "日曜日 — 📺 チジジク"
+    title: "📜 ルール",
+    desc: "ここは、誰もが安心して過ごせる場所です。",
+    footer: "※ 難しいルールではないので、守ってください ",
+    list: [
+      '礼儀と敬意を大切にしてください。',
+      '無礼、侮辱、暴言は禁止です。',
+      '政治、宗教、センシティブな話題は禁止です。',
+      'ネタバレやTMIは控えてください。',
+      '他人の評判を傷つける発言は禁止です。'
     ]
   }
 };
 
-/* DOM Elements */
+/* SCHEDULE (요청 반영: 기본 16~19, 재학중 20시 이후) */
+const scheduleData = {
+  ko: {
+    title: "🎙 방송 일정",
+    time: "기본: 16:00 ~ 19:00",
+    note1: "재학 중: 20:00 이후 방송 (상황에 따라 변동 가능)",
+    footer: "",
+    days: [
+      "공지: 일정은 상황에 따라 달라질 수 있습니다."
+    ]
+  },
+  en: {
+    title: "🎙 Stream Schedule",
+    time: "Default: 4:00 PM ~ 7:00 PM (KST)",
+    note1: "During school term: streams start after 8:00 PM (may vary)",
+    footer: "",
+    days: [
+      "Note: Schedule may change depending on circumstances."
+    ]
+  },
+  ja: {
+    title: "🎙 配信スケジュール",
+    time: "基本：16:00～19:00（韓国時間）",
+    note1: "在学中：20:00以降に配信（状況により変動）",
+    footer: "",
+    days: [
+      "※ 予定は状況により変更される場合があります。"
+    ]
+  }
+};
+
+/* RP (니가 준 내용 + 방송 중 설정 추가) */
+const rpData = {
+  ko: {
+    title: "에이븐 (Avenia)",
+    badge: "RP / 소개",
+    slimeLabel: "슬라임 폼",
+    humanLabel: "인간 폼",
+    text:
+`이름 : 에이븐 (Avenia)
+종족 : 셀레노이드 젤 (Selenoid Gel)
+탄생 : 붕괴된 우주의 균열에서 태어남
+외형 : 슬라임 (젤리)
+
+설명 : 고양이가 네코마타로 변이한 이후, 그 영혼이 우주의 균열체와 융합된 존재.
+육체는 소멸했으나, 의식은 균열 속에서 새로운 형태로 재구성되었다.`,
+    streamSetting:
+`방송 중 설정:
+방송 중에는 인간 형태로 활동하지만,
+세계관상 본질은 항상 슬라임 상태로 유지된다.`
+  },
+  en: {
+    title: "Avenia",
+    badge: "RP / Lore",
+    slimeLabel: "Slime Form",
+    humanLabel: "Human Form",
+    text:
+`Name: Aven (Avenia)
+Species: Selenoid Gel
+Birth: Born from a collapsing cosmic rift
+Form: Slime (jelly)
+
+Description: After a cat mutated into a Nekomata, its soul fused with a cosmic rift-entity.
+The body was lost, but the consciousness was reconstituted into a new form within the rift.`,
+    streamSetting:
+`Stream Setting:
+During streams, Avenia acts in a human form,
+but the true essence remains in a slime state within the lore.`
+  },
+  ja: {
+    title: "エイヴン（Avenia）",
+    badge: "RP / 紹介",
+    slimeLabel: "スライム形態",
+    humanLabel: "人間形態",
+    text:
+`名前：エイヴン（Avenia）
+種族：セレノイド・ジェル（Selenoid Gel）
+誕生：崩壊した宇宙の亀裂から誕生
+外見：スライム（ゼリー状）
+
+説明：猫がネコマタへと変異した後、その魂が宇宙の亀裂体と融合した存在。
+肉体は失われたが、意識は亀裂の中で新たな形として再構築された。`,
+    streamSetting:
+`配信中の設定：
+配信中は人間形態で活動するが、
+世界観上の本質は常にスライムのままである。`
+  }
+
+};
+
+/* Fortune (fun) */
+const fortuneData = {
+  ko: {
+    title: "🔮 오늘의 운세",
+    desc: "재미로만 보는 균열 운세. 마음에 안 들면 다시 뽑아도 됨.",
+    hint: "버튼 눌러서 한 번 뽑아.",
+    footer: "※ 진지하게 믿지 말 것. 재미는 OK.",
+    luckLabel: "오늘의 운(%)",
+    roll: "🔮 운세 뽑기"
+  },
+  en: {
+    title: "🔮 Daily Fortune",
+    desc: "Just for fun. Rift fortune of the day. Don’t like it? Roll again.",
+    hint: "Tap the button and draw one.",
+    footer: "※ For fun only.",
+    luckLabel: "Luck (%)",
+    roll: "🔮 Draw Fortune"
+  },
+  ja: {
+    title: "🔮 今日の運勢",
+    desc: "遊び用の“亀裂占い”。気に入らなければ引き直してOK。",
+    hint: "ボタンで一回引いてみて。",
+    footer: "※ あくまで遊びです。",
+    luckLabel: "今日の運(%)",
+    roll: "🔮 運勢を引く"
+  }
+};
+
+const fortunes = {
+  ko: [
+    {t:"균열이 미소 짓는 날", d:"작은 선택이 큰 결과로 튄다. 오늘은 ‘바로 하기’가 이긴다.", luck: 82, e:"🌌"},
+    {t:"젤리 멘탈 강화", d:"감정 낭비 줄이면 체력 남는다. 말은 짧게, 결정은 빠르게.", luck: 68, e:"🟣"},
+    {t:"네코마타의 촉", d:"눈치가 미친다. 이상한 낌새 느끼면 그쪽이 정답.", luck: 74, e:"🐾"},
+    {t:"반짝 운빨", d:"가챠/뽑기/랜덤은 오늘 유리. 단, 과몰입 금지.", luck: 79, e:"✨"},
+    {t:"조용한 회복", d:"무리하면 깨진다. 컨디션 관리가 최우선.", luck: 61, e:"🫧"},
+    {t:"대화운", d:"한 마디가 사람 붙인다. 고정 멘트 하나 준비해.", luck: 70, e:"💬"},
+    {t:"집중 모드", d:"한 번 붙으면 길게 간다. 정리/작업/개발에 강함.", luck: 76, e:"🧠"},
+    {t:"스포트라이트", d:"사람이 모인다. 대신 말실수만 조심.", luck: 73, e:"🎙️"}
+  ],
+  en: [
+    {t:"The Rift Smiles", d:"Small choices snowball. ‘Do it now’ wins today.", luck: 82, e:"🌌"},
+    {t:"Gel Mind, Strong", d:"Save your energy. Short words, quick decisions.", luck: 68, e:"🟣"},
+    {t:"Nekomata Instinct", d:"Your gut is sharp. If something feels off, it is.", luck: 74, e:"🐾"},
+    {t:"Spark Luck", d:"Random pulls favor you. Don’t overdo it.", luck: 79, e:"✨"},
+    {t:"Quiet Recovery", d:"Don’t push too hard. Protect your condition.", luck: 61, e:"🫧"},
+    {t:"Talk Luck", d:"One line can hook people. Prepare a signature phrase.", luck: 70, e:"💬"},
+    {t:"Focus Mode", d:"Deep work goes well. Organize, build, ship.", luck: 76, e:"🧠"},
+    {t:"Spotlight", d:"Eyes on you today. Avoid careless slips.", luck: 73, e:"🎙️"}
+  ],
+  ja: [
+    {t:"亀裂が微笑む日", d:"小さな選択が大きく跳ねる。「今やる」が勝つ。", luck: 82, e:"🌌"},
+    {t:"ジェル精神強化", d:"感情の無駄遣いを減らすと楽。短く話して、早く決める。", luck: 68, e:"🟣"},
+    {t:"ネコマタの勘", d:"直感が冴える。違和感があったらそっちが正解。", luck: 74, e:"🐾"},
+    {t:"キラ運", d:"ガチャ運よし。やりすぎ注意。", luck: 79, e:"✨"},
+    {t:"静かな回復", d:"無理すると崩れる。コンディション最優先。", luck: 61, e:"🫧"},
+    {t:"会話運", d:"一言で人が集まる。決め台詞を用意すると強い。", luck: 70, e:"💬"},
+    {t:"集中モード", d:"作業が伸びる日。整理・制作・開発が進む。", luck: 76, e:"🧠"},
+    {t:"スポットライト", d:"注目が集まる。うっかり発言だけ注意。", luck: 73, e:"🎙️"}
+  ]
+};
+
+/* BGM Tracks (local files) */
+const tracks = [
+  { label: "Manipulate", file: "Manipulate.mp3" },
+  { label: "himituno_osyaberi", file: "himituno_osyaberi.mp3" },
+  { label: "よふかしは00_59まで", file: "よふかしは00_59まで.wav" },
+  { label: "チアフルデイズ", file: "チアフルデイズ.wav" },
+  { label: "크리스마스 브금", file: "크리스마스 브금.wav" }
+];
+
+
+/* DOM */
 const chips = document.querySelectorAll('.chip');
-const rulesList = document.getElementById('rules');
-const greetingEl = document.getElementById('greeting');
-const bgm = document.getElementById('bgm');
-const bgmToggle = document.getElementById('bgm-toggle');
+const tabs = document.querySelectorAll('.tab');
 const clickSound = document.getElementById('clickSound');
 
-/* BGM Volume */
-bgm.volume = 0.3;
+const bgm = document.getElementById('bgm');
+const bgmToggle = document.getElementById('bgm-toggle');
+const themeToggle = document.getElementById('theme-toggle');
+const trackSelect = document.getElementById('track-select');
 
-/* Render Schedule */
-function renderSchedule(lang) {
-  const s = scheduleData[lang];
-  document.getElementById("schedule-title").textContent = s.title;
-  document.getElementById("schedule-time").innerHTML = s.time;
-  document.getElementById("schedule-note1").textContent = s.note1;
-  document.getElementById("schedule-note2").textContent = s.note2;
-  document.getElementById("schedule-note3").textContent = s.note3;
-  document.getElementById("schedule-list").innerHTML =
-    s.days.map(d => `<li>${d}</li>`).join('');
+const greetingEl = document.getElementById('greeting');
+
+// Fortune DOM
+const fortuneTitleEl = document.getElementById('fortune-title');
+const fortuneDescEl = document.getElementById('fortune-desc');
+const fortuneDateEl = document.getElementById('fortune-date');
+const fortuneHintEl = document.getElementById('fortune-hint');
+const fortuneRollBtn = document.getElementById('fortune-roll');
+const fortuneResultEl = document.getElementById('fortune-result');
+const fortuneFooterEl = document.getElementById('fortune-footer');
+const luckLabelEl = document.getElementById('luck-label');
+const luckFillEl = document.getElementById('luck-fill');
+
+const sections = {
+  home: document.getElementById('section-home'),
+  rules: document.getElementById('section-rules'),
+  schedule: document.getElementById('section-schedule'),
+  fortune: document.getElementById('section-fortune'),
+  rp: document.getElementById('section-rp')
+};
+
+let currentLang = 'ko';
+
+/* Helpers */
+function playClick(){
+  clickSound.currentTime = 0;
+  clickSound.play().catch(()=>{});
 }
 
-/* Render Rules + Greeting */
-function renderRules(lang) {
-  rulesList.innerHTML = rulesData[lang].map(r => `<li>${r}</li>`).join('');
-  const greet = greetings[lang][Math.floor(Math.random() * greetings[lang].length)];
+/* Tabs */
+function setTab(tabName){
+  tabs.forEach(t => t.classList.remove('active'));
+  document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
+
+  Object.values(sections).forEach(s => s.classList.remove('active'));
+  sections[tabName].classList.add('active');
+}
+
+tabs.forEach(t => {
+  t.addEventListener('click', () => {
+    playClick();
+    setTab(t.dataset.tab);
+  });
+});
+
+/* Render HOME */
+function renderHome(lang){
+  const h = homeData[lang];
+  document.getElementById('home-title').textContent = h.title;
+  document.getElementById('home-desc').textContent = h.desc;
+
+  const greet = greetings[lang][Math.floor(Math.random()*greetings[lang].length)];
   greetingEl.textContent = greet;
-  renderSchedule(lang);
+}
+
+/* Render RULES */
+function renderRules(lang){
+  const r = rulesData[lang];
+  document.getElementById('rules-title').textContent = r.title;
+  document.getElementById('rules-desc').textContent = r.desc;
+  document.getElementById('rules-footer').textContent = r.footer;
+  document.getElementById('rules').innerHTML = r.list.map(x => `<li>${x}</li>`).join('');
+}
+
+/* Render SCHEDULE */
+function renderSchedule(lang){
+  const s = scheduleData[lang];
+  document.getElementById('schedule-title').textContent = s.title;
+  document.getElementById('schedule-time').textContent = s.time;
+  document.getElementById('schedule-note1').textContent = s.note1;
+  document.getElementById('schedule-footer').textContent = s.footer;
+  document.getElementById('schedule-list').innerHTML = s.days.map(d => `<li>${d}</li>`).join('');
+}
+
+
+/* Render FORTUNE */
+function renderFortune(lang){
+  const f = fortuneData[lang];
+  fortuneTitleEl.textContent = f.title;
+  fortuneDescEl.textContent = f.desc;
+  fortuneHintEl.textContent = f.hint;
+  fortuneFooterEl.textContent = f.footer;
+  luckLabelEl.textContent = f.luckLabel;
+  fortuneRollBtn.textContent = f.roll;
+
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth()+1).padStart(2,'0');
+  const dd = String(now.getDate()).padStart(2,'0');
+  fortuneDateEl.textContent = `${yyyy}-${mm}-${dd}`;
+
+  // Load saved fortune for today (per lang)
+  const key = `avenia_fortune_${lang}_${yyyy}-${mm}-${dd}`;
+  const saved = localStorage.getItem(key);
+  if(saved){
+    try{
+      const obj = JSON.parse(saved);
+      showFortune(obj);
+    }catch{
+      // ignore
+    }
+  } else {
+    fortuneResultEl.textContent = "";
+    luckFillEl.style.width = "0%";
+  }
+}
+
+// seeded RNG (deterministic-ish)
+function xmur3(str){
+  let h = 1779033703 ^ str.length;
+  for (let i = 0; i < str.length; i++) {
+    h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
+    h = (h << 13) | (h >>> 19);
+  }
+  return function() {
+    h = Math.imul(h ^ (h >>> 16), 2246822507);
+    h = Math.imul(h ^ (h >>> 13), 3266489909);
+    h ^= h >>> 16;
+    return h >>> 0;
+  }
+}
+function mulberry32(a){
+  return function(){
+    let t = a += 0x6D2B79F5;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
+}
+
+function pickFortune(lang){
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth()+1).padStart(2,'0');
+  const dd = String(now.getDate()).padStart(2,'0');
+
+  // Seed based on date + lang (so it feels daily)
+  const seedFn = xmur3(`${lang}-${yyyy}-${mm}-${dd}-Avenia`);
+  const rand = mulberry32(seedFn());
+  const list = fortunes[lang];
+  const idx = Math.floor(rand() * list.length);
+  // add a bit of variance on luck
+  const base = list[idx].luck;
+  const jitter = Math.floor((rand()*12) - 6); // -6..+5
+  const luck = Math.max(5, Math.min(95, base + jitter));
+
+  return { ...list[idx], luck, date: `${yyyy}-${mm}-${dd}` };
+}
+
+function showFortune(obj){
+  fortuneResultEl.textContent = `${obj.e}  ${obj.t}\n${obj.d}`;
+  // animate bar
+  requestAnimationFrame(() => {
+    luckFillEl.style.width = `${obj.luck}%`;
+    luckLabelEl.textContent = `${fortuneData[currentLang].luckLabel} : ${obj.luck}%`;
+  });
+}
+
+
+/* Render RP */
+function renderRP(lang){
+  const r = rpData[lang];
+  document.getElementById('rp-title').textContent = r.title;
+  document.getElementById('rp-badge').textContent = r.badge;
+  document.getElementById('rp-text').textContent = r.text;
+  document.getElementById('rp-stream-setting').textContent = r.streamSetting;
+  document.getElementById('label-slime').textContent = r.slimeLabel;
+  document.getElementById('label-human').textContent = r.humanLabel;
 }
 
 /* Language Switch */
 chips.forEach(chip => {
   chip.addEventListener('click', () => {
-    clickSound.play();
+    playClick();
     chips.forEach(c => c.classList.remove('active'));
     chip.classList.add('active');
-    const lang = chip.dataset.lang;
-    renderRules(lang);
+
+    currentLang = chip.dataset.lang;
+    renderAll(currentLang);
   });
 });
 
-/* Default Language */
-renderRules('ko');
+function renderAll(lang){
+  renderHome(lang);
+  renderRules(lang);
+  renderSchedule(lang);
+  renderFortune(lang);
+  renderRP(lang);
+}
 
-/* Auto BGM Play */
+/* Theme */
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('avenia_theme', theme);
+  themeToggle.textContent = (theme === 'dark') ? "☀️ Day" : "🌙 Night";
+}
+
+themeToggle.addEventListener('click', () => {
+  playClick();
+  const cur = document.documentElement.getAttribute('data-theme') || 'light';
+  applyTheme(cur === 'dark' ? 'light' : 'dark');
+});
+
+/* BGM */
+bgm.volume = 0.28;
+
+// Populate tracks
+function populateTracks(){
+  trackSelect.innerHTML = tracks.map(t => `<option value="${t.file}">${t.label}</option>`).join('');
+}
+function setTrack(file, autoplay=false){
+  if(!file) return;
+  bgm.src = file;
+  localStorage.setItem('avenia_track', file);
+  if(autoplay){
+    bgm.play().then(()=>{
+      bgmToggle.textContent = '🎵 BGM Off';
+    }).catch(()=>{
+      // autoplay blocked
+      bgmToggle.textContent = '🎵 BGM On';
+    });
+  }
+}
+
+populateTracks();
+trackSelect.addEventListener('change', () => {
+  playClick();
+  setTrack(trackSelect.value, true);
+});
+
+
 window.addEventListener('load', async () => {
-  try {
+  // Theme load
+  const savedTheme = localStorage.getItem('avenia_theme');
+  applyTheme(savedTheme || 'light');
+
+  // Default renders
+  renderAll(currentLang);
+
+  // Init track
+  const savedTrack = localStorage.getItem('avenia_track') || tracks[0].file;
+  trackSelect.value = savedTrack;
+  setTrack(savedTrack, false);
+
+  // Fortune roll
+  fortuneRollBtn.addEventListener('click', () => {
+    playClick();
+    const obj = pickFortune(currentLang);
+    showFortune(obj);
+    const key = `avenia_fortune_${currentLang}_${obj.date}`;
+    localStorage.setItem(key, JSON.stringify(obj));
+  });
+
+  // Auto BGM
+  try{
     await bgm.play();
     bgmToggle.textContent = '🎵 BGM Off';
-  } catch {
-    const warn = document.createElement('div');
-    warn.textContent = '🎵 브라우저 자동재생이 차단되었습니다. 위 버튼을 눌러주세요.';
-    warn.style.color = '#a36b85';
-    warn.style.marginTop = '10px';
-    document.querySelector('.card').appendChild(warn);
+  }catch{
+    bgmToggle.textContent = '🎵 BGM On';
   }
 });
 
-/* BGM Toggle */
 bgmToggle.addEventListener('click', () => {
-  clickSound.play();
-  if (bgm.paused) {
-    bgm.play();
+  playClick();
+  if (bgm.paused){
+    bgm.play().catch(()=>{});
     bgmToggle.textContent = '🎵 BGM Off';
   } else {
     bgm.pause();
