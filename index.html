@@ -60,7 +60,11 @@
     min-height:100vh;
     display:grid;
     place-items:center;
-    font-family:'Poppins','Noto Sans KR','Noto Sans JP',system-ui,sans-serif;
+
+    /* ✅ 이모지 폰트 강제 추가 (OBS/윈도우에서 이모지 안 뜨는 문제 방지) */
+    font-family:'Poppins','Noto Sans KR','Noto Sans JP',system-ui,sans-serif,
+                "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+
     color:var(--text-main);
     padding:28px;
     overflow-x:hidden;
@@ -353,6 +357,10 @@
     border: 1px solid rgba(255,182,217,0.28);
     transition:.22s ease;
     text-decoration:none;
+
+    /* ✅ 이모지 크기/정렬 안정화 */
+    font-size: 20px;
+    line-height: 1;
   }
   html[data-theme="dark"] .social a{
     background: rgba(20,18,32,0.56);
@@ -651,7 +659,8 @@
           <a href="https://toon.at/donate/aven" target="_blank" rel="noopener" title="Donate">💝</a>
           <a href="https://comic.naver.com/community/u/Even77777?lastPage=Creators" target="_blank" rel="noopener" title="Naver Comic">🖋️</a>
           <a href="https://cafe.naver.com/f-e/cafes/31529869/menus/0?t=1762537197544" target="_blank" rel="noopener" title="Cafe">☕</a>
-          <a href="https://fancim.me/celeb/profile.aspx?url=758954" target="_blank" rel="noopener" title="fancim">🎁</a>
+          <!-- ✅ 팬심 추가 -->
+          <a href="https://fancim.me/celeb/profile.aspx?url=758954" target="_blank" rel="noopener" title="팬심">🎁</a>
         </div>
 
         <footer>© 2025 Avenia. All Rights Reserved.</footer>
@@ -677,7 +686,6 @@
         <ul id="schedule-list"></ul>
         <footer id="schedule-footer"></footer>
       </section>
-
 
       <!-- FORTUNE -->
       <section id="section-fortune" class="section">
@@ -708,7 +716,6 @@
 
         <footer id="fortune-footer"></footer>
       </section>
-
 
       <!-- RP -->
       <section id="section-rp" class="section">
@@ -760,7 +767,7 @@ const greetings = {
 const homeData = {
   ko: { title: "🌌 Avenia Room", desc: "우주의 균열에서 태어난 셀레노이드 젤, Avenia의 공간입니다." },
   en: { title: "🌌 Avenia Room", desc: "Avenia’s space, a Selenoid Gel born from a cosmic rift." },
-  ja: { title: "🌌 Avenia Room", desc: "宇宙の亀裂から生まれたセレノイド・ジェル、Aveniaの空間です。" }
+  ja: { title: "🌌 Avenia Room", desc: "宇宙の亀裂から生まれたセレ노イド・ジェル、Aveniaの空間です。" }
 };
 
 /* RULES */
@@ -834,7 +841,7 @@ const scheduleData = {
   }
 };
 
-/* RP (니가 준 내용 + 방송 중 설정 추가) */
+/* RP */
 const rpData = {
   ko: {
     title: "에이븐 (Avenia)",
@@ -890,10 +897,9 @@ but the true essence remains in a slime state within the lore.`
 配信中は人間形態で活動するが、
 世界観上の本質は常にスライムのままである。`
   }
-
 };
 
-/* Fortune (fun) */
+/* Fortune */
 const fortuneData = {
   ko: {
     title: "🔮 오늘의 운세",
@@ -962,7 +968,6 @@ const tracks = [
   { label: "チアフルデイズ", file: "チアフルデイズ.wav" },
   { label: "크리스마스 브금", file: "크리스마스 브금.wav" }
 ];
-
 
 /* DOM */
 const chips = document.querySelectorAll('.chip');
@@ -1048,7 +1053,6 @@ function renderSchedule(lang){
   document.getElementById('schedule-list').innerHTML = s.days.map(d => `<li>${d}</li>`).join('');
 }
 
-
 /* Render FORTUNE */
 function renderFortune(lang){
   const f = fortuneData[lang];
@@ -1132,7 +1136,6 @@ function showFortune(obj){
   });
 }
 
-
 /* Render RP */
 function renderRP(lang){
   const r = rpData[lang];
@@ -1203,7 +1206,6 @@ trackSelect.addEventListener('change', () => {
   playClick();
   setTrack(trackSelect.value, true);
 });
-
 
 window.addEventListener('load', async () => {
   // Theme load
