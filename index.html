@@ -318,7 +318,7 @@
     font-weight:750;
   }
 
-  /* 라이브 버튼 */
+  /* 라이브 버튼 (현재 HOME에선 안 쓰지만, 남겨도 OK) */
   .live-buttons{
     margin-top:18px;
     display:flex;
@@ -604,7 +604,7 @@
   }
 
   /* =========================
-     ✅ 추가: 로고 + 상단 큰 버튼(YouTube/Twitch/Chzzk/SOOP)
+     ✅ 추가: 로고 + 상단 큰 버튼(YouTube/Twitch/Chzzk/SOOP/TwitCasting)
      ========================= */
 
   .brand{
@@ -652,6 +652,7 @@
   .hero-buttons .twitch{ background: linear-gradient(90deg, #9146ff, #bca6ff); }
   .hero-buttons .chzzk { background: linear-gradient(90deg, #34d399, #4ad37d); }
   .hero-buttons .soop  { background: linear-gradient(90deg, #22c55e, #a3e635); }
+  .hero-buttons .twitcasting{ background: linear-gradient(90deg, #3b82f6, #60a5fa); }
 
 </style>
 </head>
@@ -682,23 +683,24 @@
         </div>
       </div>
 
-      <!-- ✅ 상단 큰 버튼: YouTube / Twitch / Chzzk / SOOP -->
+      <!-- ✅ 상단 큰 버튼: YouTube / Twitch / Chzzk / SOOP / TwitCasting -->
       <div class="hero-buttons">
         <a href="https://www.youtube.com/@Avenia-k6l2x" class="youtube" target="_blank" rel="noopener">▶️ YouTube</a>
         <a href="https://www.twitch.tv/aven1231" class="twitch" target="_blank" rel="noopener">🟣 Twitch</a>
         <a href="https://chzzk.naver.com/911df19d52a45f1d08791b2d43517dee" class="chzzk" target="_blank" rel="noopener">🟢 Chzzk</a>
         <a href="https://www.sooplive.co.kr/station/slimeavenia" class="soop" target="_blank" rel="noopener">🌿 SOOP</a>
+        <a href="https://ko.twitcasting.tv/g:114782621463128489516" class="twitcasting" target="_blank" rel="noopener">📡 TwitCasting</a>
       </div>
 
       <p id="greeting"></p>
 
       <!-- Tabs -->
       <div class="tabs">
-        <button class="tab active" data-tab="home">🏠 홈</button>
-        <button class="tab" data-tab="rules">📜 규칙</button>
-        <button class="tab" data-tab="schedule">🎙 방송 일정</button>
-        <button class="tab" data-tab="fortune">🔮 운세</button>
-        <button class="tab" data-tab="rp">☪️ RP 소개</button>
+        <button class="tab active" data-tab="home">🏠 home</button>
+        <button class="tab" data-tab="rules">📜 rule</button>
+        <button class="tab" data-tab="schedule">🎙 Schedule</button>
+        <button class="tab" data-tab="fortune">🔮 luck</button>
+        <button class="tab" data-tab="rp">☪️ RP</button>
       </div>
 
       <!-- Language Buttons -->
@@ -715,7 +717,7 @@
           <p id="home-desc"></p>
         </div>
 
-        <!-- ❌ 중복 제거: 아래 live-buttons 블록 삭제됨 -->
+        <!-- ❌ 중복 제거: live-buttons 블록은 HOME에서 삭제됨 -->
 
         <div class="social">
           <a href="https://discord.gg/HMEFa3CPc8" target="_blank" rel="noopener" title="Discord">💬</a>
@@ -838,7 +840,7 @@ const homeData = {
 const rulesData = {
   ko: {
     title: "📜 채팅 규칙",
-    desc: "이 공간은 모두가 편하게 머무를 수 있는 곳입니다.",
+    desc: "기본적인 윤리는 지켜야 모두가 행복한 공간이 될 수 있습니다!.",
     footer: "※ 어려운 규칙 아니니깐~ 지켜주세요~.",
     list: [
       '예의와 존중을 지켜주세요.',
@@ -850,7 +852,7 @@ const rulesData = {
   },
   en: {
     title: "📜 Chat Rules",
-    desc: "This is a space where everyone can feel comfortable.",
+    desc: "Basic ethics must be observed so that it can be a happy space for everyone!.",
     footer: "※ It's not a difficult rule, so please keep it ",
     list: [
       'Please be polite and respectful.',
@@ -862,7 +864,7 @@ const rulesData = {
   },
   ja: {
     title: "📜 ルール",
-    desc: "ここは、誰もが安心して過ごせる場所です。",
+    desc: "基本的な倫理は守ってこそ、皆が幸せな空間になれます！",
     footer: "※ 難しいルールではないので、守ってください ",
     list: [
       '礼儀と敬意を大切にしてください。',
@@ -1146,6 +1148,7 @@ function renderFortune(lang){
   } else {
     fortuneResultEl.textContent = "";
     luckFillEl.style.width = "0%";
+    luckLabelEl.textContent = `${fortuneData[lang].luckLabel} : 0%`;
   }
 }
 
