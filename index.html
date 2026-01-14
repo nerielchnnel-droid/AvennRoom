@@ -603,6 +603,56 @@
     transition: width .55s ease;
   }
 
+  /* =========================
+     ✅ 추가: 로고 + 상단 큰 버튼(YouTube/Twitch/Chzzk/SOOP)
+     ========================= */
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .brand-logo{
+    width:56px;
+    height:56px;
+    object-fit:contain;
+    border-radius:16px;
+    background: rgba(255,255,255,0.55);
+    border:1px solid rgba(255,182,217,0.28);
+    box-shadow: 0 10px 24px rgba(255,137,195,0.16);
+  }
+  html[data-theme="dark"] .brand-logo{
+    background: rgba(20,18,32,0.55);
+    border-color: rgba(188,166,255,0.18);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.28);
+  }
+
+  .hero-buttons{
+    margin: 10px 0 16px;
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .hero-buttons a{
+    text-decoration:none;
+    padding: 14px 22px;
+    border-radius: 999px;
+    font-weight: 1000;
+    font-size: 16px;
+    color: white;
+    transition: .22s ease;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.14);
+    letter-spacing: -0.2px;
+  }
+  .hero-buttons a:hover{ transform: translateY(-1px); opacity:0.94; }
+
+  /* ✅ 상단 큰 버튼 전용 색 */
+  .hero-buttons .youtube{ background: linear-gradient(90deg, #ff3b3b, #ff7a7a); }
+  .hero-buttons .twitch{ background: linear-gradient(90deg, #9146ff, #bca6ff); }
+  .hero-buttons .chzzk { background: linear-gradient(90deg, #34d399, #4ad37d); }
+  .hero-buttons .soop  { background: linear-gradient(90deg, #22c55e, #a3e635); }
+
 </style>
 </head>
 
@@ -617,9 +667,12 @@
     <div class="card">
 
       <div class="header">
-        <div>
-          <h1>🌸 Avenia Room</h1>
-          <div class="subtitle" id="subline">Selenoid Gel • Cosmic Rift • Nekomata Soul</div>
+        <div class="brand">
+          <img class="brand-logo" src="로고.png" alt="Avenia Logo">
+          <div>
+            <h1>🌸 Avenia Room</h1>
+            <div class="subtitle" id="subline">Selenoid Gel • Cosmic Rift • Nekomata Soul</div>
+          </div>
         </div>
 
         <div class="top-actions">
@@ -627,6 +680,14 @@
           <select id="track-select" class="pill-select" title="Track"></select>
           <button id="bgm-toggle" class="pill-btn" title="BGM">🎵 BGM On</button>
         </div>
+      </div>
+
+      <!-- ✅ 상단 큰 버튼: YouTube / Twitch / Chzzk / SOOP -->
+      <div class="hero-buttons">
+        <a href="https://www.youtube.com/@Avenia-k6l2x" class="youtube" target="_blank" rel="noopener">▶️ YouTube</a>
+        <a href="https://www.twitch.tv/aven1231" class="twitch" target="_blank" rel="noopener">🟣 Twitch</a>
+        <a href="https://chzzk.naver.com/911df19d52a45f1d08791b2d43517dee" class="chzzk" target="_blank" rel="noopener">🟢 Chzzk</a>
+        <a href="https://www.sooplive.co.kr/station/slimeavenia" class="soop" target="_blank" rel="noopener">🌿 SOOP</a>
       </div>
 
       <p id="greeting"></p>
@@ -654,15 +715,11 @@
           <p id="home-desc"></p>
         </div>
 
-        <div class="live-buttons">
-          <a href="https://www.twitch.tv/aven1231" class="twitch" target="_blank" rel="noopener">Twitch Live</a>
-          <a href="https://chzzk.naver.com/911df19d52a45f1d08791b2d43517dee" class="chzzk" target="_blank" rel="noopener">Chzzk Live</a>
-        </div>
+        <!-- ❌ 중복 제거: 아래 live-buttons 블록 삭제됨 -->
 
         <div class="social">
           <a href="https://discord.gg/HMEFa3CPc8" target="_blank" rel="noopener" title="Discord">💬</a>
           <a href="https://www.youtube.com/@Avenia-k6l2x" target="_blank" rel="noopener" title="YouTube">▶️</a>
-          <!-- ✅ X class만 추가(수정) -->
           <a href="https://x.com/aven1166793?s=21" target="_blank" rel="noopener" title="X" class="x">𝕏</a>
           <a href="https://toon.at/donate/aven" target="_blank" rel="noopener" title="Donate">💝</a>
           <a href="https://fancim.me/celeb/profile.aspx?url=758954" target="_blank" rel="noopener" title="팬심">🎁</a>
