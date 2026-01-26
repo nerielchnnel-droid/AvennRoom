@@ -604,9 +604,8 @@
   }
 
   /* =========================
-     ✅ 추가: 로고 + 상단 큰 버튼(YouTube/Twitch/Chzzk/SOOP/TwitCasting)
+     ✅ 추가: 로고 + 상단 큰 버튼
      ========================= */
-
   .brand{
     display:flex;
     align-items:center;
@@ -647,13 +646,210 @@
   }
   .hero-buttons a:hover{ transform: translateY(-1px); opacity:0.94; }
 
-  /* ✅ 상단 큰 버튼 전용 색 */
   .hero-buttons .youtube{ background: linear-gradient(90deg, #ff3b3b, #ff7a7a); }
   .hero-buttons .twitch{ background: linear-gradient(90deg, #9146ff, #bca6ff); }
   .hero-buttons .chzzk { background: linear-gradient(90deg, #34d399, #4ad37d); }
   .hero-buttons .soop  { background: linear-gradient(90deg, #22c55e, #a3e635); }
   .hero-buttons .twitcasting{ background: linear-gradient(90deg, #3b82f6, #60a5fa); }
 
+  /* =========================
+     ✅ Clean Schedule UI (A/B toggle + today + LIVE NOW)
+     ========================= */
+  .week-toggle{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin: 10px 0 12px;
+    flex-wrap:wrap;
+  }
+
+  .week-btn{
+    padding:9px 12px;
+    border-radius:999px;
+    border:1.5px solid var(--stroke);
+    background: rgba(255,255,255,0.52);
+    color:var(--text-main);
+    font-weight:950;
+    cursor:pointer;
+    transition:.22s ease;
+  }
+  html[data-theme="dark"] .week-btn{
+    background: rgba(20,18,32,0.52);
+  }
+  .week-btn:hover{ transform: translateY(-1px); }
+  .week-btn:active{ transform: translateY(0px) scale(0.98); }
+  .week-btn.active{
+    background: rgba(255,159,211,0.18);
+    border-color: rgba(255,103,187,0.28);
+  }
+
+  .schedule-grid{
+    margin-top: 8px;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+
+  .week-card{
+    background: rgba(255,255,255,0.58);
+    border:1px solid rgba(255,182,217,0.28);
+    border-radius: 22px;
+    padding: 16px;
+    box-shadow: 0 12px 28px rgba(255,182,193,0.12);
+  }
+  html[data-theme="dark"] .week-card{
+    background: rgba(20,18,32,0.56);
+    border-color: rgba(188,166,255,0.18);
+    box-shadow: 0 14px 34px rgba(0,0,0,0.32);
+  }
+
+  .week-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom: 10px;
+  }
+
+  .week-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-weight: 1000;
+    border: 1px solid rgba(255,182,217,0.30);
+    background: linear-gradient(90deg, rgba(255,103,187,0.18), rgba(188,166,255,0.14), rgba(255,159,211,0.14));
+  }
+  html[data-theme="dark"] .week-chip{
+    border-color: rgba(188,166,255,0.20);
+    background: linear-gradient(90deg, rgba(255,103,187,0.14), rgba(188,166,255,0.12), rgba(255,159,211,0.10));
+  }
+
+  .week-note{
+    font-size: 12px;
+    font-weight: 900;
+    color: var(--text-sub);
+    opacity: 0.92;
+  }
+
+  .live-summary{
+    margin: 6px 0 12px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    border:1px solid rgba(255,182,217,0.22);
+    background: rgba(255,255,255,0.55);
+    font-weight: 950;
+    color: var(--text-main);
+  }
+  html[data-theme="dark"] .live-summary{
+    border-color: rgba(188,166,255,0.16);
+    background: rgba(10,10,18,0.40);
+  }
+
+  .day-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding: 10px 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,182,217,0.22);
+    background: rgba(255,244,250,0.60);
+    position: relative;
+  }
+  html[data-theme="dark"] .day-row{
+    border-color: rgba(188,166,255,0.14);
+    background: rgba(24,20,40,0.44);
+  }
+  .day-row + .day-row{ margin-top: 8px; }
+
+  .day-name{
+    font-weight: 1000;
+    letter-spacing: -0.2px;
+    color: var(--text-main);
+  }
+
+  .day-badges{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  .day-badge{
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 1000;
+    font-size: 12px;
+    border: 1px solid rgba(255,182,217,0.22);
+    background: rgba(255,255,255,0.55);
+    white-space: nowrap;
+  }
+  html[data-theme="dark"] .day-badge{
+    border-color: rgba(188,166,255,0.16);
+    background: rgba(10,10,18,0.40);
+  }
+  .day-badge.live{
+    border-color: rgba(52,211,153,0.35);
+    background: rgba(52,211,153,0.14);
+  }
+  .day-badge.off{
+    border-color: rgba(255,103,187,0.28);
+    background: rgba(255,103,187,0.10);
+  }
+
+  /* Today highlight (선택 주차만 렌더되니까 자동으로 "선택 주차에만" 적용) */
+  .day-row.today{
+    border-color: rgba(188,166,255,0.35);
+    background: linear-gradient(90deg,
+      rgba(188,166,255,0.16),
+      rgba(255,103,187,0.12),
+      rgba(255,159,211,0.10)
+    );
+    box-shadow: 0 10px 24px rgba(188,166,255,0.10);
+  }
+  .day-row.today::after{
+    content:"TODAY";
+    position:absolute;
+    right: 12px;
+    top: -10px;
+    font-size: 10px;
+    font-weight: 1000;
+    padding: 4px 8px;
+    border-radius: 999px;
+    border:1px solid rgba(188,166,255,0.30);
+    background: rgba(188,166,255,0.14);
+    color: var(--text-main);
+  }
+
+  /* LIVE NOW badge */
+  .now-badge{
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 1100;
+    font-size: 12px;
+    border: 1px solid rgba(255,182,217,0.22);
+    background: rgba(255,255,255,0.60);
+    white-space: nowrap;
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+  html[data-theme="dark"] .now-badge{
+    border-color: rgba(188,166,255,0.16);
+    background: rgba(10,10,18,0.48);
+  }
+  .now-badge.now-chzzk{
+    border-color: rgba(52,211,153,0.45);
+    background: rgba(52,211,153,0.18);
+  }
+  .now-badge.now-twitch{
+    border-color: rgba(145,70,255,0.45);
+    background: rgba(145,70,255,0.16);
+  }
+
+  @keyframes pulse{
+    0%{ transform: translateY(0); filter: brightness(1); }
+    50%{ transform: translateY(-1px); filter: brightness(1.08); }
+    100%{ transform: translateY(0); filter: brightness(1); }
+  }
 </style>
 </head>
 
@@ -717,8 +913,6 @@
           <p id="home-desc"></p>
         </div>
 
-        <!-- ❌ 중복 제거: live-buttons 블록은 HOME에서 삭제됨 -->
-
         <div class="social">
           <a href="https://discord.gg/HMEFa3CPc8" target="_blank" rel="noopener" title="Discord">💬</a>
           <a href="https://www.youtube.com/@Even%EB%8B%A4%EC%8B%9C%EB%B3%B4%EA%B8%B0" target="_blank" rel="noopener" title="YouTube">▶️</a>
@@ -742,14 +936,23 @@
         <footer id="rules-footer"></footer>
       </section>
 
-      <!-- SCHEDULE -->
+      <!-- ✅ SCHEDULE -->
       <section id="section-schedule" class="section">
         <div class="panel">
           <h2 id="schedule-title"></h2>
           <p id="schedule-time"></p>
           <p id="schedule-note1"></p>
         </div>
-        <ul id="schedule-list"></ul>
+
+        <!-- A/B 토글 -->
+        <div class="week-toggle">
+          <button id="weekA-btn" class="week-btn" type="button" data-week="A"></button>
+          <button id="weekB-btn" class="week-btn" type="button" data-week="B"></button>
+        </div>
+
+        <!-- 한 주만 렌더 -->
+        <div id="schedule-grid" class="schedule-grid"></div>
+
         <footer id="schedule-footer"></footer>
       </section>
 
@@ -833,7 +1036,7 @@ const greetings = {
 const homeData = {
   ko: { title: "🌌 Avenia Room", desc: "우주의 균열에서 태어난 셀레노이드 젤, Avenia의 공간입니다." },
   en: { title: "🌌 Avenia Room", desc: "Avenia’s space, a Selenoid Gel born from a cosmic rift." },
-  ja: { title: "🌌 Avenia Room", desc: "宇宙の亀裂から生まれたセ레노イド・ジェル、Aveniaの空間です。" }
+  ja: { title: "🌌 Avenia Room", desc: "宇宙の亀裂から生まれたセレノイド・ジェル、Aveniaの空間です。" }
 };
 
 /* RULES */
@@ -853,7 +1056,7 @@ const rulesData = {
   en: {
     title: "📜 Chat Rules",
     desc: "Basic ethics must be observed so that it can be a happy space for everyone!.",
-    footer: "※ It's not a difficult rule, so please keep it ",
+    footer: "※ Not difficult. Please follow it.",
     list: [
       'Please be polite and respectful.',
       'Rudeness, insults, or profanity are not tolerated.',
@@ -865,7 +1068,7 @@ const rulesData = {
   ja: {
     title: "📜 ルール",
     desc: "基本的な倫理は守ってこそ、皆が幸せな空間になれます！",
-    footer: "※ 難しいルールではないので、守ってください ",
+    footer: "※ 難しいルールではないので、守ってください。",
     list: [
       '礼儀と敬意を大切にしてください。',
       '無礼、侮辱、暴言は禁止です。',
@@ -876,79 +1079,107 @@ const rulesData = {
   }
 };
 
-/* SCHEDULE (2주 로테이션) */
+/* ✅ SCHEDULE (2-week rotation + platforms/time + LIVE NOW) */
 const scheduleData = {
   ko: {
     title: "🎙 방송 일정",
-    time: "기본: 16:00 ~ 19:00 (KST)",
-    note1: "재학 중: 20:00 이후 방송 (상황에 따라 변동 가능)",
-    footer: "※ 2주 로테이션으로 반복됩니다.",
-    days: [
-      "🅰️ 1주차: 월 휴방",
-      "🅰️ 1주차: 화 방송",
-      "🅰️ 1주차: 수 휴방",
-      "🅰️ 1주차: 목 방송",
-      "🅰️ 1주차: 금 휴방",
-      "🅰️ 1주차: 토 방송",
-      "🅰️ 1주차: 일 휴방",
-      "🅱️ 2주차: 월 방송",
-      "🅱️ 2주차: 화 휴방",
-      "🅱️ 2주차: 수 방송",
-      "🅱️ 2주차: 목 휴방",
-      "🅱️ 2주차: 금 방송",
-      "🅱️ 2주차: 토 휴방",
-      "🅱️ 2주차: 일 방송",
-      "🔁 다음은 다시 1주차(월 휴방)부터 반복"
-    ]
+    time: "🟢 치지직: 오후 4:00 ~ 오후 6:00 (KST)",
+    note1:"🟣 트위치: 오후 11:00 ~ 오전 2:00 (KST)",
+    footer:"※ 2주 로테이션. 위에서 A/B 주차 선택해서 보세요.",
+    labels:{ live:"방송", off:"휴방" },
+    liveDaysLabel:"방송 요일",
+    nowLabel:"LIVE NOW",
+    platform:{ chzzk:"치지직", twitch:"트위치" },
+    weekA:{ label:"🅰️ 1주차", note:"A Rotation",
+      days:[
+        { day:"월", state:"off" },
+        { day:"화", state:"live" },
+        { day:"수", state:"off" },
+        { day:"목", state:"live" },
+        { day:"금", state:"off" },
+        { day:"토", state:"live" },
+        { day:"일", state:"off" }
+      ]
+    },
+    weekB:{ label:"🅱️ 2주차", note:"B Rotation",
+      days:[
+        { day:"월", state:"live" },
+        { day:"화", state:"off" },
+        { day:"수", state:"live" },
+        { day:"목", state:"off" },
+        { day:"금", state:"live" },
+        { day:"토", state:"off" },
+        { day:"일", state:"live" }
+      ]
+    }
   },
+
   en: {
     title: "🎙 Stream Schedule",
-    time: "Default: 4:00 PM ~ 7:00 PM (KST)",
-    note1: "During school term: streams start after 8:00 PM (may vary)",
-    footer: "※ Repeats in a 2-week rotation.",
-    days: [
-      "🅰️ Week A: Mon OFF",
-      "🅰️ Week A: Tue LIVE",
-      "🅰️ Week A: Wed OFF",
-      "🅰️ Week A: Thu LIVE",
-      "🅰️ Week A: Fri OFF",
-      "🅰️ Week A: Sat LIVE",
-      "🅰️ Week A: Sun OFF",
-      "🅱️ Week B: Mon LIVE",
-      "🅱️ Week B: Tue OFF",
-      "🅱️ Week B: Wed LIVE",
-      "🅱️ Week B: Thu OFF",
-      "🅱️ Week B: Fri LIVE",
-      "🅱️ Week B: Sat OFF",
-      "🅱️ Week B: Sun LIVE",
-      "🔁 Then back to Week A (Mon OFF)"
-    ]
+    time: "🟢 CHZZK: 4:00 PM ~ 6:00 PM (KST)",
+    note1:"🟣 Twitch: 11:00 PM ~ 2:00 AM (KST)",
+    footer:"※ 2-week rotation. Use the A/B toggle above.",
+    labels:{ live:"LIVE", off:"OFF" },
+    liveDaysLabel:"LIVE Days",
+    nowLabel:"LIVE NOW",
+    platform:{ chzzk:"CHZZK", twitch:"Twitch" },
+    weekA:{ label:"🅰️ Week A", note:"A Rotation",
+      days:[
+        { day:"Mon", state:"off" },
+        { day:"Tue", state:"live" },
+        { day:"Wed", state:"off" },
+        { day:"Thu", state:"live" },
+        { day:"Fri", state:"off" },
+        { day:"Sat", state:"live" },
+        { day:"Sun", state:"off" }
+      ]
+    },
+    weekB:{ label:"🅱️ Week B", note:"B Rotation",
+      days:[
+        { day:"Mon", state:"live" },
+        { day:"Tue", state:"off" },
+        { day:"Wed", state:"live" },
+        { day:"Thu", state:"off" },
+        { day:"Fri", state:"live" },
+        { day:"Sat", state:"off" },
+        { day:"Sun", state:"live" }
+      ]
+    }
   },
+
   ja: {
     title: "🎙 配信スケジュール",
-    time: "基本：16:00～19:00（韓国時間）",
-    note1: "在学中：20:00以降に配信（状況により変動）",
-    footer: "※ 2週間ローテーションで繰り返し。",
-    days: [
-      "🅰️ 1週目：月 休み",
-      "🅰️ 1週目：火 配信",
-      "🅰️ 1週目：水 休み",
-      "🅰️ 1週目：木 配信",
-      "🅰️ 1週目：金 休み",
-      "🅰️ 1週目：土 配信",
-      "🅰️ 1週目：日 休み",
-      "🅱️ 2週目：月 配信",
-      "🅱️ 2週目：火 休み",
-      "🅱️ 2週目：水 配信",
-      "🅱️ 2週目：木 休み",
-      "🅱️ 2週目：金 配信",
-      "🅱️ 2週目：土 休み",
-      "🅱️ 2週目：日 配信",
-      "🔁 次は1週目（月 休み）に戻る"
-    ]
+    time: "🟢 CHZZK：16:00～18:00（韓国時間）",
+    note1:"🟣 Twitch：23:00～02:00（韓国時間）",
+    footer:"※ 2週間ローテーション。上のA/Bで切り替えてください。",
+    labels:{ live:"配信", off:"休み" },
+    liveDaysLabel:"配信日",
+    nowLabel:"配信中",
+    platform:{ chzzk:"CHZZK", twitch:"Twitch" },
+    weekA:{ label:"🅰️ 1週目", note:"A Rotation",
+      days:[
+        { day:"月", state:"off" },
+        { day:"火", state:"live" },
+        { day:"水", state:"off" },
+        { day:"木", state:"live" },
+        { day:"金", state:"off" },
+        { day:"土", state:"live" },
+        { day:"日", state:"off" }
+      ]
+    },
+    weekB:{ label:"🅱️ 2週目", note:"B Rotation",
+      days:[
+        { day:"月", state:"live" },
+        { day:"火", state:"off" },
+        { day:"水", state:"live" },
+        { day:"木", state:"off" },
+        { day:"金", state:"live" },
+        { day:"土", state:"off" },
+        { day:"日", state:"live" }
+      ]
+    }
   }
 };
-
 
 /* RP */
 const rpData = {
@@ -1109,7 +1340,13 @@ const sections = {
   rp: document.getElementById('section-rp')
 };
 
+// ✅ Schedule DOM
+const weekABtn = document.getElementById('weekA-btn');
+const weekBBtn = document.getElementById('weekB-btn');
+const scheduleGridEl = document.getElementById('schedule-grid');
+
 let currentLang = 'ko';
+let currentWeek = localStorage.getItem('avenia_week') || 'A';
 
 /* Helpers */
 function playClick(){
@@ -1152,14 +1389,102 @@ function renderRules(lang){
   document.getElementById('rules').innerHTML = r.list.map(x => `<li>${x}</li>`).join('');
 }
 
-/* Render SCHEDULE */
+/* ✅ LIVE NOW 계산 (치지직 16-18, 트위치 23-02 / 00-02는 전날로 표시) */
+function getLiveNowInfo(weekObj){
+  const now = new Date();
+  const h = now.getHours();
+  const m = now.getMinutes();
+  const minutes = h * 60 + m;
+
+  // today index: Mon=0..Sun=6
+  const jsDay = now.getDay(); // 0=Sun..6=Sat
+  const todayIdx = (jsDay === 0) ? 6 : (jsDay - 1);
+  const prevIdx = (todayIdx + 6) % 7;
+
+  // CHZZK: 16:00~18:00 (today)
+  if(minutes >= 16*60 && minutes < 18*60){
+    if(weekObj.days[todayIdx]?.state === 'live'){
+      return { idx: todayIdx, platform: 'chzzk' };
+    }
+  }
+
+  // Twitch: 23:00~24:00 (today)
+  if(minutes >= 23*60){
+    if(weekObj.days[todayIdx]?.state === 'live'){
+      return { idx: todayIdx, platform: 'twitch' };
+    }
+  }
+
+  // Twitch: 00:00~02:00 (yesterday's stream)
+  if(minutes < 2*60){
+    if(weekObj.days[prevIdx]?.state === 'live'){
+      return { idx: prevIdx, platform: 'twitch' };
+    }
+  }
+
+  return null;
+}
+
+/* Render SCHEDULE (A/B toggle + today highlight + live summary + LIVE NOW) */
 function renderSchedule(lang){
   const s = scheduleData[lang];
+
   document.getElementById('schedule-title').textContent = s.title;
   document.getElementById('schedule-time').textContent = s.time;
   document.getElementById('schedule-note1').textContent = s.note1;
   document.getElementById('schedule-footer').textContent = s.footer;
-  document.getElementById('schedule-list').innerHTML = s.days.map(d => `<li>${d}</li>`).join('');
+
+  // Toggle labels + active
+  weekABtn.textContent = s.weekA.label;
+  weekBBtn.textContent = s.weekB.label;
+  weekABtn.classList.toggle('active', currentWeek === 'A');
+  weekBBtn.classList.toggle('active', currentWeek === 'B');
+
+  const weekObj = (currentWeek === 'B') ? s.weekB : s.weekA;
+
+  // Today index (Mon=0..Sun=6)
+  const now = new Date();
+  const jsDay = now.getDay();
+  const todayRowIndex = (jsDay === 0) ? 6 : (jsDay - 1);
+
+  // LIVE days summary
+  const liveDays = weekObj.days.filter(d => d.state === 'live').map(d => d.day).join(" · ");
+  const liveSummaryHTML = `<div class="live-summary">📌 ${s.liveDaysLabel}: ${liveDays || "-"}</div>`;
+
+  // LIVE NOW info
+  const liveNow = getLiveNowInfo(weekObj);
+
+  function rowHTML(d, idx){
+    const badgeText = s.labels[d.state];
+    const todayClass = (idx === todayRowIndex) ? "today" : "";
+    const isNow = liveNow && liveNow.idx === idx;
+    const nowBadge = isNow
+      ? `<div class="now-badge ${liveNow.platform === 'chzzk' ? 'now-chzzk' : 'now-twitch'}">
+           ${s.nowLabel} · ${s.platform[liveNow.platform]}
+         </div>`
+      : "";
+
+    return `
+      <div class="day-row ${todayClass}">
+        <div class="day-name">${d.day}</div>
+        <div class="day-badges">
+          <div class="day-badge ${d.state}">${badgeText}</div>
+          ${nowBadge}
+        </div>
+      </div>
+    `;
+  }
+
+  scheduleGridEl.innerHTML = `
+    <div class="week-card">
+      <div class="week-head">
+        <div class="week-chip">${weekObj.label}</div>
+        <div class="week-note">${weekObj.note}</div>
+      </div>
+      ${liveSummaryHTML}
+      ${weekObj.days.map(rowHTML).join('')}
+    </div>
+  `;
 }
 
 /* Render FORTUNE */
@@ -1178,16 +1503,13 @@ function renderFortune(lang){
   const dd = String(now.getDate()).padStart(2,'0');
   fortuneDateEl.textContent = `${yyyy}-${mm}-${dd}`;
 
-  // Load saved fortune for today (per lang)
   const key = `avenia_fortune_${lang}_${yyyy}-${mm}-${dd}`;
   const saved = localStorage.getItem(key);
   if(saved){
     try{
       const obj = JSON.parse(saved);
       showFortune(obj);
-    }catch{
-      // ignore
-    }
+    }catch{}
   } else {
     fortuneResultEl.textContent = "";
     luckFillEl.style.width = "0%";
@@ -1224,14 +1546,13 @@ function pickFortune(lang){
   const mm = String(now.getMonth()+1).padStart(2,'0');
   const dd = String(now.getDate()).padStart(2,'0');
 
-  // Seed based on date + lang (so it feels daily)
   const seedFn = xmur3(`${lang}-${yyyy}-${mm}-${dd}-Avenia`);
   const rand = mulberry32(seedFn());
   const list = fortunes[lang];
   const idx = Math.floor(rand() * list.length);
-  // add a bit of variance on luck
+
   const base = list[idx].luck;
-  const jitter = Math.floor((rand()*12) - 6); // -6..+5
+  const jitter = Math.floor((rand()*12) - 6);
   const luck = Math.max(5, Math.min(95, base + jitter));
 
   return { ...list[idx], luck, date: `${yyyy}-${mm}-${dd}` };
@@ -1239,7 +1560,6 @@ function pickFortune(lang){
 
 function showFortune(obj){
   fortuneResultEl.textContent = `${obj.e}  ${obj.t}\n${obj.d}`;
-  // animate bar
   requestAnimationFrame(() => {
     luckFillEl.style.width = `${obj.luck}%`;
     luckLabelEl.textContent = `${fortuneData[currentLang].luckLabel} : ${obj.luck}%`;
@@ -1256,6 +1576,15 @@ function renderRP(lang){
   document.getElementById('label-slime').textContent = r.slimeLabel;
   document.getElementById('label-human').textContent = r.humanLabel;
 }
+
+/* Week Toggle */
+function setWeek(w){
+  currentWeek = w;
+  localStorage.setItem('avenia_week', w);
+  renderSchedule(currentLang);
+}
+weekABtn.addEventListener('click', () => { playClick(); setWeek('A'); });
+weekBBtn.addEventListener('click', () => { playClick(); setWeek('B'); });
 
 /* Language Switch */
 chips.forEach(chip => {
@@ -1305,7 +1634,6 @@ function setTrack(file, autoplay=false){
     bgm.play().then(()=>{
       bgmToggle.textContent = '🎵 BGM Off';
     }).catch(()=>{
-      // autoplay blocked
       bgmToggle.textContent = '🎵 BGM On';
     });
   }
@@ -1318,14 +1646,11 @@ trackSelect.addEventListener('change', () => {
 });
 
 window.addEventListener('load', async () => {
-  // Theme load
   const savedTheme = localStorage.getItem('avenia_theme');
   applyTheme(savedTheme || 'light');
 
-  // Default renders
   renderAll(currentLang);
 
-  // Init track
   const savedTrack = localStorage.getItem('avenia_track') || tracks[0].file;
   trackSelect.value = savedTrack;
   setTrack(savedTrack, false);
@@ -1346,6 +1671,11 @@ window.addEventListener('load', async () => {
   }catch{
     bgmToggle.textContent = '🎵 BGM On';
   }
+
+  // ✅ LIVE NOW 갱신(1분마다)
+  setInterval(() => {
+    renderSchedule(currentLang);
+  }, 60 * 1000);
 });
 
 bgmToggle.addEventListener('click', () => {
