@@ -876,36 +876,79 @@ const rulesData = {
   }
 };
 
-/* SCHEDULE (요청 반영: 기본 16~19, 재학중 20시 이후) */
+/* SCHEDULE (2주 로테이션) */
 const scheduleData = {
   ko: {
     title: "🎙 방송 일정",
-    time: "기본: 16:00 ~ 19:00 - 목 / 금 / 토 / 일 주 방송",
+    time: "기본: 16:00 ~ 19:00 (KST)",
     note1: "재학 중: 20:00 이후 방송 (상황에 따라 변동 가능)",
-    footer: "",
+    footer: "※ 2주 로테이션으로 반복됩니다.",
     days: [
-      "공지: 일정은 상황에 따라 달라질 수 있습니다."
+      "🅰️ 1주차: 월 휴방",
+      "🅰️ 1주차: 화 방송",
+      "🅰️ 1주차: 수 휴방",
+      "🅰️ 1주차: 목 방송",
+      "🅰️ 1주차: 금 휴방",
+      "🅰️ 1주차: 토 방송",
+      "🅰️ 1주차: 일 휴방",
+      "🅱️ 2주차: 월 방송",
+      "🅱️ 2주차: 화 휴방",
+      "🅱️ 2주차: 수 방송",
+      "🅱️ 2주차: 목 휴방",
+      "🅱️ 2주차: 금 방송",
+      "🅱️ 2주차: 토 휴방",
+      "🅱️ 2주차: 일 방송",
+      "🔁 다음은 다시 1주차(월 휴방)부터 반복"
     ]
   },
   en: {
     title: "🎙 Stream Schedule",
     time: "Default: 4:00 PM ~ 7:00 PM (KST)",
     note1: "During school term: streams start after 8:00 PM (may vary)",
-    footer: "",
+    footer: "※ Repeats in a 2-week rotation.",
     days: [
-      "Note: Schedule may change depending on circumstances."
+      "🅰️ Week A: Mon OFF",
+      "🅰️ Week A: Tue LIVE",
+      "🅰️ Week A: Wed OFF",
+      "🅰️ Week A: Thu LIVE",
+      "🅰️ Week A: Fri OFF",
+      "🅰️ Week A: Sat LIVE",
+      "🅰️ Week A: Sun OFF",
+      "🅱️ Week B: Mon LIVE",
+      "🅱️ Week B: Tue OFF",
+      "🅱️ Week B: Wed LIVE",
+      "🅱️ Week B: Thu OFF",
+      "🅱️ Week B: Fri LIVE",
+      "🅱️ Week B: Sat OFF",
+      "🅱️ Week B: Sun LIVE",
+      "🔁 Then back to Week A (Mon OFF)"
     ]
   },
   ja: {
     title: "🎙 配信スケジュール",
     time: "基本：16:00～19:00（韓国時間）",
     note1: "在学中：20:00以降に配信（状況により変動）",
-    footer: "",
+    footer: "※ 2週間ローテーションで繰り返し。",
     days: [
-      "※ 予定は状況により変更される場合があります。"
+      "🅰️ 1週目：月 休み",
+      "🅰️ 1週目：火 配信",
+      "🅰️ 1週目：水 休み",
+      "🅰️ 1週目：木 配信",
+      "🅰️ 1週目：金 休み",
+      "🅰️ 1週目：土 配信",
+      "🅰️ 1週目：日 休み",
+      "🅱️ 2週目：月 配信",
+      "🅱️ 2週目：火 休み",
+      "🅱️ 2週目：水 配信",
+      "🅱️ 2週目：木 休み",
+      "🅱️ 2週目：金 配信",
+      "🅱️ 2週目：土 休み",
+      "🅱️ 2週目：日 配信",
+      "🔁 次は1週目（月 休み）に戻る"
     ]
   }
 };
+
 
 /* RP */
 const rpData = {
