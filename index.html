@@ -1,82 +1,65 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="light">
+<html lang="ko" data-theme="dark">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title> Avenia Room</title>
+<title>Irev Official</title>
+
 <style>
   :root{
     --bg-img: url("bg-space.jpg");
+    --kv-img: url("keyvisual.jpg"); /* 없으면 자동으로 그라데이션만 보임 */
 
-    /* LIGHT */
-    --bg1:#ffffff;
-    --bg2:#fff4f9;
+    --bg:#050611;
+    --bg2:#090a18;
 
-    --card: rgba(255,255,255,0.86);
-    --stroke: rgba(255,182,217,0.55);
+    --card: rgba(14, 14, 28, 0.62);
+    --stroke: rgba(188,166,255,0.20);
 
-    --accent:#ff9fd3;
-    --accent2:#bca6ff;
-    --accent-deep:#ff67bb;
+    --text:#f3e9ef;
+    --sub: rgba(243,233,239,0.72);
 
-    --text-main:#2f242b;
-    --text-sub:#7b5f6b;
+    --a:#ff67bb;
+    --b:#bca6ff;
+    --c:#ff9fd3;
 
-    --shadow: 0 18px 60px rgba(255,137,195,0.24);
-    --radius: 26px;
+    --shadow: 0 18px 70px rgba(0,0,0,0.46);
+    --radius: 22px;
 
-    /* 배경 오버레이 강도 (라이트는 밝게) */
-    --bg-overlay-1: rgba(255,255,255,0.72);
-    --bg-overlay-2: rgba(255,244,249,0.65);
-    --bg-blur: 0px;
-    --bg-dim: 0.22; /* 우주 이미지 어두움 정도 */
+    --blur: 14px;
+    --dim: 0.16;
+
+    --max: 1120px;
+
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --sans: system-ui, -apple-system, "Poppins","Noto Sans KR","Noto Sans JP", sans-serif,
+            "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
   }
 
-  html[data-theme="dark"]{
-    /* DARK */
-    --bg1:#070812;
-    --bg2:#0b0c1a;
-
-    --card: rgba(18,16,30,0.76);
-    --stroke: rgba(188,166,255,0.25);
-
-    --text-main:#f3e9ef;
-    --text-sub:#cdb7c3;
-
-    --shadow: 0 18px 70px rgba(0,0,0,0.45);
-
-    /* 다크는 우주를 더 선명하게 */
-    --bg-overlay-1: rgba(5,6,14,0.55);
-    --bg-overlay-2: rgba(11,12,26,0.60);
-    --bg-blur: 0px;
-    --bg-dim: 0.06;
+  html[data-theme="light"]{
+    --bg:#ffffff;
+    --bg2:#fff4f9;
+    --card: rgba(255,255,255,0.76);
+    --stroke: rgba(255,182,217,0.48);
+    --text:#2f242b;
+    --sub: rgba(47,36,43,0.62);
+    --shadow: 0 18px 60px rgba(255,137,195,0.20);
+    --dim: 0.26;
   }
 
   *{ box-sizing:border-box; }
   html,body{ height:100%; }
-
   body{
     margin:0;
-    min-height:100vh;
-    display:grid;
-    place-items:center;
-
-    /* ✅ 이모지 폰트 강제 추가 (OBS/윈도우에서 이모지 안 뜨는 문제 방지) */
-    font-family:'Poppins','Noto Sans KR','Noto Sans JP',system-ui,sans-serif,
-                "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-
-    color:var(--text-main);
-    padding:28px;
+    font-family: var(--sans);
+    color: var(--text);
+    background: radial-gradient(900px 520px at 20% 10%, rgba(255,103,187,0.14), transparent 60%),
+                radial-gradient(900px 520px at 85% 30%, rgba(188,166,255,0.14), transparent 60%),
+                linear-gradient(180deg, var(--bg), var(--bg2));
     overflow-x:hidden;
-
-    /* 기본 컬러 그라데이션 */
-    background:
-      radial-gradient(900px 500px at 20% 10%, rgba(255,159,211,0.18), transparent 60%),
-      radial-gradient(800px 500px at 90% 30%, rgba(188,166,255,0.16), transparent 60%),
-      linear-gradient(180deg, var(--bg1), var(--bg2));
   }
 
-  /* 우주 배경 레이어 */
+  /* Background layers */
   body::before{
     content:"";
     position:fixed;
@@ -85,1185 +68,1260 @@
     background-size: cover;
     background-position:center;
     background-repeat:no-repeat;
-    filter: blur(var(--bg-blur));
     opacity: 1;
-    z-index:-2;
+    z-index:-3;
   }
-
-  /* 가독성 오버레이 */
   body::after{
     content:"";
     position:fixed;
     inset:0;
-    background:
-      radial-gradient(900px 600px at 30% 20%, rgba(255,159,211,0.20), transparent 55%),
-      radial-gradient(900px 700px at 80% 35%, rgba(188,166,255,0.22), transparent 55%),
-      linear-gradient(180deg, var(--bg-overlay-1), var(--bg-overlay-2));
+    background: rgba(0,0,0,var(--dim));
+    z-index:-2;
+  }
+  .noise{
+    position:fixed;
+    inset:-30%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+    opacity: .26;
+    pointer-events:none;
     z-index:-1;
   }
 
-  /* 우주 이미지 자체의 디밍(어두움) */
-  .bg-dim{
+  /* Loader */
+  #loader{
     position:fixed;
     inset:0;
-    background: rgba(0,0,0,var(--bg-dim));
-    z-index:-1;
-    pointer-events:none;
-  }
-
-  .wrap{ width:min(1040px,96vw); }
-
-  .card{
-    position:relative;
-    background:var(--card);
-    border:1.5px solid var(--stroke);
-    border-radius:var(--radius);
-    box-shadow:var(--shadow);
-    backdrop-filter: blur(14px);
-    padding:34px;
-    overflow:hidden;
-    animation: fadeIn .55s ease;
-  }
-
-  /* 상단 헤더 */
-  .header{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:14px;
-    margin-bottom:14px;
-  }
-
-  h1{
-    margin:0;
-    font-size: clamp(28px, 3vw, 42px);
-    letter-spacing:-0.6px;
-    background: linear-gradient(90deg, var(--accent-deep), var(--accent2), var(--accent));
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-  }
-
-  .subtitle{
-    margin:8px 0 0;
-    color:var(--text-sub);
-    font-weight:700;
-    font-size:14px;
-  }
-
-  /* 헤더 버튼들 */
-  .top-actions{
-    display:flex;
-    gap:10px;
-    align-items:center;
-  }
-
-  .pill-btn{
-    border:1.5px solid var(--stroke);
-    background: rgba(255,255,255,0.55);
-    color:var(--text-main);
-    border-radius:999px;
-    padding:10px 12px;
-    font-weight:900;
-    cursor:pointer;
-    transition: .22s ease;
-    user-select:none;
-  }
-  html[data-theme="dark"] .pill-btn{
-    background: rgba(20,18,32,0.55);
-  }
-  .pill-btn:hover{ transform: translateY(-1px); }
-  .pill-btn:active{ transform: translateY(0px) scale(0.98); }
-
-  /* 탭 (예쁘게) */
-  .tabs{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    margin:16px 0 12px;
-    flex-wrap:wrap;
-  }
-  .tab{
-    position:relative;
-    padding:10px 14px;
-    border-radius:999px;
-    border:1.5px solid var(--stroke);
-    background: rgba(255,255,255,0.52);
-    color:var(--text-main);
-    font-weight:950;
-    cursor:pointer;
-    transition: transform .18s ease, background .22s ease, border-color .22s ease;
-    overflow:hidden;
-  }
-  html[data-theme="dark"] .tab{
-    background: rgba(20,18,32,0.52);
-  }
-
-  /* 반짝 하이라이트 애니메이션 */
-  .tab::before{
-    content:"";
-    position:absolute;
-    inset:-2px;
-    background: radial-gradient(140px 60px at 20% 0%, rgba(255,103,187,0.35), transparent 60%),
-                radial-gradient(140px 60px at 80% 100%, rgba(188,166,255,0.32), transparent 60%);
-    opacity:0;
-    transition: opacity .22s ease;
-  }
-  .tab:hover{ transform: translateY(-1px); }
-  .tab:hover::before{ opacity:1; }
-
-  /* 활성 탭: 아래 글로우 + 살짝 튀는 느낌 */
-  .tab.active{
-    border-color: rgba(255,103,187,0.35);
-    background: linear-gradient(90deg, rgba(255,103,187,0.20), rgba(188,166,255,0.18), rgba(255,159,211,0.18));
-    transform: translateY(-1px);
-  }
-  .tab.active::after{
-    content:"";
-    position:absolute;
-    left:10px; right:10px; bottom:-10px;
-    height:14px;
-    background: radial-gradient(closest-side, rgba(255,103,187,0.45), transparent 70%);
-    filter: blur(6px);
-    opacity:0.75;
-  }
-
-  /* 탭 전환 애니메이션 */
-  .section{
-    display:none;
-    margin-top: 8px;
-    animation: slideUp .35s ease;
-  }
-  .section.active{ display:block; }
-
-  @keyframes slideUp{
-    from { opacity:0; transform: translateY(8px); }
-    to   { opacity:1; transform: translateY(0); }
-  }
-
-  /* 언어 스위치 */
-  .lang-switch{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    margin: 6px 0 18px;
-    flex-wrap:wrap;
-  }
-  .chip{
-    padding:9px 12px;
-    border-radius:999px;
-    border:1.5px solid var(--stroke);
-    background: rgba(255,255,255,0.52);
-    color:var(--text-main);
-    font-weight:950;
-    cursor:pointer;
-    transition: .22s ease;
-  }
-  html[data-theme="dark"] .chip{
-    background: rgba(20,18,32,0.52);
-  }
-  .chip.active, .chip:hover{
-    background: rgba(255,159,211,0.18);
-    border-color: rgba(255,103,187,0.28);
-    transform: translateY(-1px);
-  }
-
-  #greeting{
-    font-size:15px;
-    margin:0 0 6px;
-    color:var(--text-sub);
-    font-weight:750;
-    opacity:0;
-    animation: fadeInText 1.0s ease forwards;
-  }
-
-  /* 리스트 */
-  ul{ list-style:none; padding:0; margin:0; }
-  li{
-    background: rgba(255,244,250,0.72);
-    margin:10px 0;
-    padding:13px 16px;
-    border-radius:16px;
-    border:1px solid rgba(255,182,217,0.30);
-    box-shadow: 0 6px 18px rgba(255,182,193,0.14);
-    transition: .18s ease;
-  }
-  html[data-theme="dark"] li{
-    background: rgba(24,20,40,0.52);
-    border-color: rgba(188,166,255,0.18);
-    box-shadow: 0 10px 26px rgba(0,0,0,0.28);
-  }
-  li:hover{ transform: translateY(-1px); }
-
-  /* 일정 섹션 박스 */
-  .panel{
-    margin-top: 12px;
-    background: rgba(255,244,250,0.60);
-    border:1px solid rgba(255,182,217,0.28);
-    border-radius:20px;
-    padding:18px;
-  }
-  html[data-theme="dark"] .panel{
-    background: rgba(24,20,40,0.46);
-    border-color: rgba(188,166,255,0.18);
-  }
-  .panel h2{
-    font-size:18px;
-    margin:0 0 8px;
-    color:var(--accent-deep);
-    letter-spacing:-0.3px;
-  }
-  .panel p{
-    margin:6px 0;
-    color:var(--text-sub);
-    font-weight:750;
-  }
-
-  /* 라이브 버튼 (현재 HOME에선 안 쓰지만, 남겨도 OK) */
-  .live-buttons{
-    margin-top:18px;
-    display:flex;
-    gap:10px;
-    justify-content:center;
-    flex-wrap:wrap;
-  }
-  .live-buttons a{
-    text-decoration:none;
-    padding:11px 18px;
-    border-radius:999px;
-    font-weight:950;
-    color:white;
-    transition:.22s ease;
-    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
-  }
-  .twitch{ background: linear-gradient(90deg, #9146ff, #bca6ff); }
-  .chzzk { background: linear-gradient(90deg, #34d399, #4ad37d); }
-  .live-buttons a:hover{ transform: translateY(-1px); opacity:0.93; }
-
-  /* 소셜 */
-  .social{
-    margin-top:14px;
-    display:flex;
-    gap:12px;
-    justify-content:center;
-    flex-wrap:wrap;
-  }
-  .social a{
-    width:44px; height:44px;
-    border-radius:999px;
-    background: rgba(255,255,255,0.60);
     display:grid;
     place-items:center;
-    box-shadow: 0 8px 18px rgba(255,182,193,0.16);
-    border: 1px solid rgba(255,182,217,0.28);
-    transition:.22s ease;
-    text-decoration:none;
-
-    /* ✅ 이모지 크기/정렬 안정화 */
-    font-size: 20px;
-    line-height: 1;
+    background: radial-gradient(700px 420px at 50% 40%, rgba(255,103,187,0.18), transparent 60%),
+                linear-gradient(180deg, rgba(3,4,10,0.92), rgba(3,4,10,0.86));
+    z-index:9999;
+    transition: opacity .45s ease, visibility .45s ease;
   }
-  html[data-theme="dark"] .social a{
-    background: rgba(20,18,32,0.56);
-    border-color: rgba(188,166,255,0.18);
-    box-shadow: 0 10px 26px rgba(0,0,0,0.28);
-  }
-  .social a:hover{ transform: translateY(-1px); background: rgba(255,159,211,0.16); }
-
-  /* ✅ X 전용(추가) */
-  .social a.x{
-    font-weight: 1000;
-    letter-spacing: -0.5px;
-  }
-
-  footer{
-    margin-top:18px;
-    font-size:12px;
-    color: rgba(123,95,107,0.90);
-    text-align:center;
-    font-weight:700;
-  }
-  html[data-theme="dark"] footer{ color: rgba(205,183,195,0.85); }
-
-  /* RP */
-  .rp-grid{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:14px;
-    margin-top:8px;
-  }
-  @media (min-width: 820px){
-    .rp-grid{ grid-template-columns: 1.05fr 0.95fr; align-items:start; }
-  }
-  .rp-card{
-    background: rgba(255,255,255,0.58);
-    border:1px solid rgba(255,182,217,0.28);
-    border-radius:20px;
-    padding:16px;
-    box-shadow: 0 10px 26px rgba(255,182,193,0.14);
-  }
-  html[data-theme="dark"] .rp-card{
-    background: rgba(20,18,32,0.56);
-    border-color: rgba(188,166,255,0.18);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.30);
-  }
-
-  .rp-title{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin:0 0 10px;
-    font-weight:1000;
-    letter-spacing:-0.2px;
-  }
-  .badge{
-    padding:6px 10px;
-    border-radius:999px;
-    border:1px solid rgba(255,182,217,0.32);
-    background: rgba(255,159,211,0.14);
-    font-size:12px;
-    font-weight:950;
-    color:var(--text-main);
-  }
-  html[data-theme="dark"] .badge{
-    border-color: rgba(188,166,255,0.22);
-    background: rgba(188,166,255,0.10);
-  }
-
-  .rp-text{
-    margin:0;
-    line-height:1.65;
-    color:var(--text-main);
-    font-weight:700;
-    white-space:pre-line;
-  }
-
-  .rp-hr{
-    margin:12px 0;
-    border:none;
-    height:1px;
-    background: linear-gradient(90deg, transparent, rgba(255,103,187,0.35), rgba(188,166,255,0.28), transparent);
-  }
-
-  .avatars{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-  }
-  .avatar{
-    background: rgba(255,244,250,0.56);
-    border:1px solid rgba(255,182,217,0.24);
-    border-radius:18px;
-    padding:10px;
-    box-shadow: 0 8px 20px rgba(255,182,193,0.12);
-  }
-  html[data-theme="dark"] .avatar{
-    background: rgba(24,20,40,0.46);
-    border-color: rgba(188,166,255,0.16);
-    box-shadow: 0 10px 26px rgba(0,0,0,0.28);
-  }
-  .avatar .label{
-    font-weight:950;
-    color:var(--text-sub);
-    font-size:12px;
-    margin:0 0 8px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-  }
-  .avatar img{
-    width:100%;
-    height:220px;
-    object-fit:contain;
-    border-radius:14px;
-    background: rgba(255,255,255,0.62);
-  }
-  html[data-theme="dark"] .avatar img{
-    background: rgba(10,10,18,0.45);
-  }
-  @media (max-width: 520px){
-    .avatars{ grid-template-columns:1fr; }
-    .avatar img{ height:240px; }
-  }
-
-  @keyframes fadeIn{
-    from{ opacity:0; transform: translateY(8px); }
-    to{ opacity:1; transform: translateY(0); }
-  }
-  @keyframes fadeInText{ to{ opacity:1; } }
-
-  /* BGM Track Select */
-  .pill-select{
-    border:1.5px solid var(--stroke);
-    background: rgba(255,255,255,0.55);
-    color:var(--text-main);
-    border-radius:999px;
-    padding:10px 12px;
-    font-weight:900;
-    cursor:pointer;
-    transition: .22s ease;
-    user-select:none;
-    appearance:none;
-    -webkit-appearance:none;
-    outline:none;
-  }
-  html[data-theme="dark"] .pill-select{ background: rgba(20,18,32,0.55); }
-  .pill-select:hover{ transform: translateY(-1px); }
-
-  /* Fortune */
-  .fortune-box{
-    margin-top: 12px;
-    background: rgba(255,244,250,0.60);
-    border:1px solid rgba(255,182,217,0.28);
-    border-radius:20px;
-    padding:18px;
-  }
-  html[data-theme="dark"] .fortune-box{
-    background: rgba(24,20,40,0.46);
-    border-color: rgba(188,166,255,0.18);
-  }
-
-  .fortune-top{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    flex-wrap:wrap;
-  }
-  .fortune-meta{
+  #loader.hide{ opacity:0; visibility:hidden; }
+  .loader-inner{
     display:flex;
     flex-direction:column;
-    gap:4px;
+    align-items:center;
+    gap:12px;
+    text-transform:uppercase;
+    letter-spacing: .24em;
+    font-weight: 900;
   }
-  .fortune-date{
-    font-weight:1000;
-    letter-spacing:-0.2px;
-    color: var(--text-main);
-  }
-  .fortune-hint{
-    font-weight:800;
-    color: var(--text-sub);
-    font-size: 13px;
-  }
-
-  .fortune-btn{
-    border:1.5px solid var(--stroke);
-    background: linear-gradient(90deg, rgba(255,103,187,0.22), rgba(188,166,255,0.18), rgba(255,159,211,0.18));
-    color:var(--text-main);
-    border-radius:999px;
-    padding:10px 14px;
-    font-weight:1000;
-    cursor:pointer;
-    transition: .18s ease;
-    user-select:none;
-  }
-  .fortune-btn:hover{ transform: translateY(-1px); }
-  .fortune-btn:active{ transform: translateY(0px) scale(0.98); }
-
-  .fortune-result{
-    margin-top:12px;
-    padding:14px 16px;
-    border-radius:16px;
-    border:1px solid rgba(255,182,217,0.28);
-    background: rgba(255,255,255,0.58);
-    box-shadow: 0 10px 26px rgba(255,182,193,0.12);
-    min-height: 52px;
-    font-weight:800;
-    line-height:1.55;
-    white-space:pre-line;
-  }
-  html[data-theme="dark"] .fortune-result{
-    background: rgba(20,18,32,0.56);
-    border-color: rgba(188,166,255,0.18);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.28);
-  }
-
-  .luck-wrap{ margin-top: 12px; }
-  .luck-label{
-    font-size: 13px;
-    font-weight: 950;
-    color: var(--text-sub);
-    margin-bottom: 8px;
-  }
-  .luck-bar{
-    height: 12px;
+  .loader-bar{
+    width:min(340px, 72vw);
+    height: 2px;
+    background: rgba(255,255,255,0.14);
     border-radius: 999px;
-    background: rgba(0,0,0,0.08);
     overflow:hidden;
-    border:1px solid rgba(255,182,217,0.22);
   }
-  html[data-theme="dark"] .luck-bar{
-    background: rgba(255,255,255,0.10);
-    border-color: rgba(188,166,255,0.14);
+  .loader-bar > span{
+    display:block;
+    height:100%;
+    width: 42%;
+    background: linear-gradient(90deg, rgba(255,103,187,0.75), rgba(188,166,255,0.75), rgba(255,159,211,0.75));
+    border-radius:999px;
+    animation: load 1.1s ease-in-out infinite;
   }
-  .luck-fill{
-    height: 100%;
-    border-radius: 999px;
-    background: linear-gradient(90deg, rgba(255,103,187,0.55), rgba(188,166,255,0.55), rgba(255,159,211,0.55));
-    width: 0%;
-    transition: width .55s ease;
+  @keyframes load{
+    0%{ transform: translateX(-120%); }
+    100%{ transform: translateX(260%); }
   }
 
-  /* =========================
-     ✅ 추가: 로고 + 상단 큰 버튼
-     ========================= */
+  /* Header */
+  header{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:50;
+    padding: 14px 16px;
+  }
+  .head-wrap{
+    width:min(var(--max), 96vw);
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+  }
+
   .brand{
     display:flex;
     align-items:center;
     gap:12px;
+    min-width: 220px;
   }
-  .brand-logo{
-    width:56px;
-    height:56px;
+  .logo{
+    width:44px; height:44px;
+    border-radius:14px;
     object-fit:contain;
-    border-radius:16px;
-    background: rgba(255,255,255,0.55);
-    border:1px solid rgba(255,182,217,0.28);
-    box-shadow: 0 10px 24px rgba(255,137,195,0.16);
+    background: rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(var(--blur));
+    box-shadow: 0 12px 30px rgba(0,0,0,0.22);
   }
-  html[data-theme="dark"] .brand-logo{
-    background: rgba(20,18,32,0.55);
-    border-color: rgba(188,166,255,0.18);
-    box-shadow: 0 10px 26px rgba(0,0,0,0.28);
+  .brand-title{
+    display:flex;
+    flex-direction:column;
+    line-height:1.1;
+  }
+  .brand-title strong{
+    font-size: 14px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .brand-title span{
+    font-size: 12px;
+    color: var(--sub);
+    font-family: var(--mono);
+  }
+
+  .head-mid{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    justify-content:center;
+    flex:1;
+  }
+  .official{
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: 10px;
+    font-weight: 950;
+    letter-spacing: .22em;
+    opacity:.9;
+    padding: 10px 8px;
+    border:1px solid rgba(255,255,255,0.16);
+    border-radius: 999px;
+    background: rgba(0,0,0,0.18);
+    backdrop-filter: blur(var(--blur));
+    user-select:none;
+  }
+
+  .hot{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    border:1px solid rgba(255,255,255,0.14);
+    background: rgba(0,0,0,0.18);
+    backdrop-filter: blur(var(--blur));
+    box-shadow: 0 14px 34px rgba(0,0,0,0.22);
+    min-width: min(540px, 56vw);
+  }
+  .hot b{
+    font-size: 12px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.92);
+    white-space:nowrap;
+  }
+  .hot .ticker{
+    font-size: 12px;
+    color: var(--sub);
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .head-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width: 220px;
+    justify-content:flex-end;
+  }
+
+  .pill, .iconbtn, select.pill{
+    border:1px solid rgba(255,255,255,0.14);
+    background: rgba(0,0,0,0.18);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 10px 12px;
+    font-weight: 900;
+    cursor:pointer;
+    transition: transform .18s ease, opacity .18s ease;
+    backdrop-filter: blur(var(--blur));
+    appearance:none;
+    -webkit-appearance:none;
+    outline:none;
+  }
+  .pill:hover, .iconbtn:hover, select.pill:hover{ transform: translateY(-1px); opacity:.95; }
+  .pill:active, .iconbtn:active{ transform: translateY(0); }
+
+  .iconbtn{
+    padding: 10px 12px;
+    font-size: 13px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  /* Menu overlay */
+  .menu{
+    position:fixed;
+    inset:0;
+    z-index:60;
+    background: radial-gradient(900px 580px at 30% 20%, rgba(255,103,187,0.18), transparent 55%),
+                radial-gradient(900px 620px at 85% 30%, rgba(188,166,255,0.16), transparent 55%),
+                linear-gradient(180deg, rgba(3,4,10,0.92), rgba(3,4,10,0.84));
+    backdrop-filter: blur(18px);
+    opacity:0;
+    visibility:hidden;
+    transition: opacity .25s ease, visibility .25s ease;
+  }
+  .menu.open{ opacity:1; visibility:visible; }
+  .menu-inner{
+    width:min(var(--max), 92vw);
+    margin: 90px auto 40px;
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .menu-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .menu-title{
+    font-size: 12px;
+    letter-spacing: .26em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.86);
+  }
+  .menu-close{
+    border:1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.92);
+    border-radius:999px;
+    padding: 10px 12px;
+    font-weight: 950;
+    cursor:pointer;
+  }
+  .menu-grid{
+    display:grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 12px;
+  }
+  @media (min-width: 880px){
+    .menu-grid{ grid-template-columns: repeat(3, minmax(0,1fr)); }
+  }
+  .menu-link{
+    text-decoration:none;
+    color: var(--text);
+    border-radius: 18px;
+    border:1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.06);
+    padding: 14px 14px;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.22);
+    transition: transform .18s ease, border-color .18s ease, background .18s ease;
+  }
+  .menu-link:hover{
+    transform: translateY(-2px);
+    border-color: rgba(255,103,187,0.24);
+    background: rgba(255,103,187,0.08);
+  }
+  .menu-link b{
+    display:block;
+    font-size: 12px;
+    letter-spacing: .20em;
+    text-transform: uppercase;
+  }
+  .menu-link span{
+    display:block;
+    margin-top:6px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.70);
+  }
+
+  .menu-controls{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+
+  /* Layout */
+  main{
+    padding-top: 84px; /* fixed header space */
+  }
+
+  .section{
+    width:min(var(--max), 92vw);
+    margin: 0 auto;
+    padding: 70px 0;
+  }
+
+  .stars{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    opacity:.85;
+    margin: 14px 0 0;
+    color: rgba(255,255,255,0.55);
+    letter-spacing:.6em;
+  }
+  html[data-theme="light"] .stars{ color: rgba(47,36,43,0.36); }
+
+  .card{
+    border:1px solid rgba(255,255,255,0.14);
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur));
+    overflow:hidden;
+  }
+
+  /* Hero */
+  .hero{
+    min-height: calc(100vh - 84px);
+    display:grid;
+    place-items:center;
+    padding: 40px 0 20px;
+  }
+  .hero-card{
+    width:100%;
+    position:relative;
+    border-radius: 28px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,0.14);
+    background:
+      radial-gradient(900px 520px at 10% 10%, rgba(255,103,187,0.14), transparent 60%),
+      radial-gradient(900px 520px at 90% 30%, rgba(188,166,255,0.14), transparent 60%),
+      rgba(255,255,255,0.06);
+    box-shadow: 0 30px 90px rgba(0,0,0,0.44);
+  }
+  .hero-card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image: var(--kv-img);
+    background-size: cover;
+    background-position:center;
+    opacity:.22;
+    filter: saturate(1.05) contrast(1.02);
+  }
+  .hero-card::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.30), rgba(0,0,0,0.62));
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    padding: 34px 22px;
+    display:grid;
+    gap: 16px;
+  }
+  @media (min-width: 860px){
+    .hero-inner{
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items:center;
+      padding: 42px 34px;
+    }
+  }
+
+  .hero-title{
+    font-size: clamp(30px, 4vw, 52px);
+    margin:0;
+    letter-spacing: -0.02em;
+    line-height:1.05;
+    background: linear-gradient(90deg, var(--a), var(--b), var(--c));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .hero-sub{
+    margin: 10px 0 0;
+    color: rgba(255,255,255,0.76);
+    font-weight: 800;
+    line-height:1.7;
+  }
+  html[data-theme="light"] .hero-sub{ color: rgba(255,255,255,0.78); } /* hero is dark overlay anyway */
+
+  .hero-meta{
+    display:grid;
+    gap:12px;
+    align-content:start;
+  }
+  .meta-box{
+    border:1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.06);
+    border-radius: 18px;
+    padding: 14px 14px;
+  }
+  .meta-box b{
+    display:block;
+    font-size: 12px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    opacity:.92;
+  }
+  .meta-box p{
+    margin:8px 0 0;
+    color: rgba(255,255,255,0.70);
+    font-weight: 800;
+    line-height:1.6;
   }
 
   .hero-buttons{
-    margin: 10px 0 16px;
+    margin-top: 12px;
     display:flex;
-    gap:12px;
-    justify-content:center;
+    gap:10px;
     flex-wrap:wrap;
   }
-  .hero-buttons a{
+  .btn{
     text-decoration:none;
-    padding: 14px 22px;
-    border-radius: 999px;
-    font-weight: 1000;
-    font-size: 16px;
-    color: white;
-    transition: .22s ease;
-    box-shadow: 0 14px 30px rgba(0,0,0,0.14);
-    letter-spacing: -0.2px;
-  }
-  .hero-buttons a:hover{ transform: translateY(-1px); opacity:0.94; }
-
-  .hero-buttons .youtube{ background: linear-gradient(90deg, #ff3b3b, #ff7a7a); }
-  .hero-buttons .twitch{ background: linear-gradient(90deg, #9146ff, #bca6ff); }
-  .hero-buttons .chzzk { background: linear-gradient(90deg, #34d399, #4ad37d); }
-  .hero-buttons .soop  { background: linear-gradient(90deg, #22c55e, #a3e635); }
-  .hero-buttons .twitcasting{ background: linear-gradient(90deg, #3b82f6, #60a5fa); }
-
-  /* =========================
-     ✅ Clean Schedule UI (A/B toggle + today + LIVE NOW)
-     ========================= */
-  .week-toggle{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    margin: 10px 0 12px;
-    flex-wrap:wrap;
-  }
-
-  .week-btn{
-    padding:9px 12px;
-    border-radius:999px;
-    border:1.5px solid var(--stroke);
-    background: rgba(255,255,255,0.52);
-    color:var(--text-main);
-    font-weight:950;
-    cursor:pointer;
-    transition:.22s ease;
-  }
-  html[data-theme="dark"] .week-btn{
-    background: rgba(20,18,32,0.52);
-  }
-  .week-btn:hover{ transform: translateY(-1px); }
-  .week-btn:active{ transform: translateY(0px) scale(0.98); }
-  .week-btn.active{
-    background: rgba(255,159,211,0.18);
-    border-color: rgba(255,103,187,0.28);
-  }
-
-  .schedule-grid{
-    margin-top: 8px;
-    display:grid;
-    grid-template-columns:1fr;
-    gap:14px;
-  }
-
-  .week-card{
-    background: rgba(255,255,255,0.58);
-    border:1px solid rgba(255,182,217,0.28);
-    border-radius: 22px;
-    padding: 16px;
-    box-shadow: 0 12px 28px rgba(255,182,193,0.12);
-  }
-  html[data-theme="dark"] .week-card{
-    background: rgba(20,18,32,0.56);
-    border-color: rgba(188,166,255,0.18);
-    box-shadow: 0 14px 34px rgba(0,0,0,0.32);
-  }
-
-  .week-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    margin-bottom: 10px;
-  }
-
-  .week-chip{
     display:inline-flex;
     align-items:center;
-    gap:8px;
-    padding: 8px 12px;
+    justify-content:center;
+    padding: 12px 14px;
     border-radius: 999px;
-    font-weight: 1000;
-    border: 1px solid rgba(255,182,217,0.30);
-    background: linear-gradient(90deg, rgba(255,103,187,0.18), rgba(188,166,255,0.14), rgba(255,159,211,0.14));
-  }
-  html[data-theme="dark"] .week-chip{
-    border-color: rgba(188,166,255,0.20);
-    background: linear-gradient(90deg, rgba(255,103,187,0.14), rgba(188,166,255,0.12), rgba(255,159,211,0.10));
-  }
-
-  .week-note{
-    font-size: 12px;
-    font-weight: 900;
-    color: var(--text-sub);
-    opacity: 0.92;
-  }
-
-  .live-summary{
-    margin: 6px 0 12px;
-    padding: 10px 12px;
-    border-radius: 16px;
-    border:1px solid rgba(255,182,217,0.22);
-    background: rgba(255,255,255,0.55);
     font-weight: 950;
-    color: var(--text-main);
+    border:1px solid rgba(255,255,255,0.16);
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.92);
+    transition: transform .18s ease, background .18s ease, border-color .18s ease;
   }
-  html[data-theme="dark"] .live-summary{
-    border-color: rgba(188,166,255,0.16);
-    background: rgba(10,10,18,0.40);
+  .btn:hover{
+    transform: translateY(-1px);
+    background: rgba(255,103,187,0.10);
+    border-color: rgba(255,103,187,0.24);
   }
 
+  /* Section heading */
+  .h{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom: 14px;
+  }
+  .h h2{
+    margin:0;
+    font-size: 18px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+  }
+  .h .jp{
+    font-size: 12px;
+    color: var(--sub);
+    font-weight: 850;
+  }
+
+  /* News list */
+  .news{
+    padding: 16px;
+  }
+  .news ul{ list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+  .news li{
+    border:1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 12px 12px;
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+  }
+  .tag{
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing:.10em;
+    padding: 6px 8px;
+    border-radius: 999px;
+    border:1px solid rgba(255,255,255,0.14);
+    background: rgba(0,0,0,0.18);
+    white-space:nowrap;
+  }
+  .news .title{
+    font-weight: 950;
+    letter-spacing: -0.01em;
+  }
+  .news .desc{
+    margin-top:4px;
+    color: rgba(255,255,255,0.70);
+    font-weight: 750;
+    line-height:1.55;
+  }
+  html[data-theme="light"] .news .desc{ color: rgba(47,36,43,0.68); }
+
+  /* Two columns panels */
+  .grid2{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  @media (min-width: 860px){
+    .grid2{ grid-template-columns: 1fr 1fr; }
+  }
+  .panel{
+    padding: 16px;
+  }
+  .panel p{
+    margin: 8px 0 0;
+    color: rgba(255,255,255,0.72);
+    font-weight: 800;
+    line-height:1.7;
+  }
+  html[data-theme="light"] .panel p{ color: rgba(47,36,43,0.68); }
+
+  /* Rules list */
+  .rules ul{ list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+  .rules li{
+    border:1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 12px 12px;
+    font-weight: 850;
+    line-height:1.55;
+  }
+
+  /* Schedule */
+  .week-toggle{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top: 10px;
+  }
+  .week-btn{
+    border:1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 10px 12px;
+    font-weight: 950;
+    cursor:pointer;
+    transition: transform .18s ease, background .18s ease, border-color .18s ease;
+  }
+  .week-btn:hover{ transform: translateY(-1px); }
+  .week-btn.active{
+    background: rgba(255,103,187,0.10);
+    border-color: rgba(255,103,187,0.24);
+  }
+  .schedule-grid{ margin-top: 12px; display:grid; gap:10px; }
   .day-row{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding: 10px 12px;
+    gap:10px;
+    border:1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.06);
     border-radius: 16px;
-    border: 1px solid rgba(255,182,217,0.22);
-    background: rgba(255,244,250,0.60);
-    position: relative;
+    padding: 12px 12px;
+    position:relative;
   }
-  html[data-theme="dark"] .day-row{
-    border-color: rgba(188,166,255,0.14);
-    background: rgba(24,20,40,0.44);
-  }
-  .day-row + .day-row{ margin-top: 8px; }
-
-  .day-name{
-    font-weight: 1000;
-    letter-spacing: -0.2px;
-    color: var(--text-main);
-  }
-
-  .day-badges{
-    display:flex;
-    align-items:center;
-    gap:8px;
-  }
-
-  .day-badge{
+  .day-name{ font-weight: 1000; letter-spacing:-0.01em; }
+  .badges{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+  .badge{
     padding: 6px 10px;
     border-radius: 999px;
-    font-weight: 1000;
+    font-weight: 950;
     font-size: 12px;
-    border: 1px solid rgba(255,182,217,0.22);
-    background: rgba(255,255,255,0.55);
-    white-space: nowrap;
+    border:1px solid rgba(255,255,255,0.14);
+    background: rgba(0,0,0,0.18);
+    white-space:nowrap;
   }
-  html[data-theme="dark"] .day-badge{
-    border-color: rgba(188,166,255,0.16);
-    background: rgba(10,10,18,0.40);
+  .badge.live{ border-color: rgba(52,211,153,0.40); background: rgba(52,211,153,0.12); }
+  .badge.off{ border-color: rgba(255,103,187,0.26); background: rgba(255,103,187,0.08); }
+  .badge.now{
+    border-color: rgba(255,255,255,0.22);
+    background: linear-gradient(90deg, rgba(255,103,187,0.18), rgba(188,166,255,0.14), rgba(255,159,211,0.14));
+    animation: pulse 1.2s ease-in-out infinite;
   }
-  .day-badge.live{
-    border-color: rgba(52,211,153,0.35);
-    background: rgba(52,211,153,0.14);
-  }
-  .day-badge.off{
-    border-color: rgba(255,103,187,0.28);
-    background: rgba(255,103,187,0.10);
-  }
-
-  /* Today highlight (선택 주차만 렌더되니까 자동으로 "선택 주차에만" 적용) */
   .day-row.today{
-    border-color: rgba(188,166,255,0.35);
-    background: linear-gradient(90deg,
-      rgba(188,166,255,0.16),
-      rgba(255,103,187,0.12),
-      rgba(255,159,211,0.10)
-    );
-    box-shadow: 0 10px 24px rgba(188,166,255,0.10);
+    border-color: rgba(188,166,255,0.28);
+    background: linear-gradient(90deg, rgba(188,166,255,0.12), rgba(255,103,187,0.08), rgba(255,159,211,0.06));
   }
   .day-row.today::after{
     content:"TODAY";
     position:absolute;
-    right: 12px;
-    top: -10px;
+    top:-10px; right:12px;
     font-size: 10px;
     font-weight: 1000;
+    letter-spacing: .12em;
     padding: 4px 8px;
     border-radius: 999px;
-    border:1px solid rgba(188,166,255,0.30);
-    background: rgba(188,166,255,0.14);
-    color: var(--text-main);
+    border:1px solid rgba(188,166,255,0.24);
+    background: rgba(188,166,255,0.12);
   }
-
-  /* LIVE NOW badge */
-  .now-badge{
-    padding: 6px 10px;
-    border-radius: 999px;
-    font-weight: 1100;
-    font-size: 12px;
-    border: 1px solid rgba(255,182,217,0.22);
-    background: rgba(255,255,255,0.60);
-    white-space: nowrap;
-    animation: pulse 1.2s ease-in-out infinite;
-  }
-  html[data-theme="dark"] .now-badge{
-    border-color: rgba(188,166,255,0.16);
-    background: rgba(10,10,18,0.48);
-  }
-  .now-badge.now-chzzk{
-    border-color: rgba(52,211,153,0.45);
-    background: rgba(52,211,153,0.18);
-  }
-  .now-badge.now-twitch{
-    border-color: rgba(145,70,255,0.45);
-    background: rgba(145,70,255,0.16);
-  }
-
   @keyframes pulse{
     0%{ transform: translateY(0); filter: brightness(1); }
     50%{ transform: translateY(-1px); filter: brightness(1.08); }
     100%{ transform: translateY(0); filter: brightness(1); }
   }
+
+  /* Fortune */
+  .fortune-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .fortune-date{ font-weight: 1000; font-family: var(--mono); }
+  .fortune-result{
+    margin-top: 12px;
+    border:1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 12px 12px;
+    min-height: 56px;
+    font-weight: 850;
+    line-height:1.6;
+    white-space:pre-line;
+  }
+  .luck-wrap{ margin-top:12px; }
+  .luck-label{ color: var(--sub); font-weight: 900; font-size: 12px; letter-spacing:.08em; }
+  .luck-bar{
+    margin-top: 8px;
+    height: 12px;
+    border-radius: 999px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,0.12);
+    background: rgba(0,0,0,0.18);
+  }
+  .luck-fill{
+    height:100%;
+    width:0%;
+    border-radius:999px;
+    background: linear-gradient(90deg, rgba(255,103,187,0.62), rgba(188,166,255,0.62), rgba(255,159,211,0.62));
+    transition: width .55s ease;
+  }
+
+  /* Lore + avatars */
+  .rp-text{
+    white-space:pre-line;
+    font-weight: 820;
+    line-height:1.75;
+  }
+  .avatars{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:12px;
+  }
+  @media (min-width: 620px){
+    .avatars{ grid-template-columns: 1fr 1fr; }
+  }
+  .avatar{
+    border:1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.06);
+    border-radius: 18px;
+    padding: 12px;
+  }
+  .avatar .label{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color: var(--sub);
+    font-weight: 950;
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+  .avatar img{
+    width:100%;
+    height: 240px;
+    object-fit:contain;
+    border-radius: 14px;
+    background: rgba(0,0,0,0.18);
+    border:1px solid rgba(255,255,255,0.10);
+  }
+
+  /* Social */
+  .social{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    padding: 16px;
+  }
+  .social a{
+    width:46px; height:46px;
+    display:grid;
+    place-items:center;
+    border-radius:999px;
+    text-decoration:none;
+    border:1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.92);
+    font-size: 20px;
+    transition: transform .18s ease, background .18s ease, border-color .18s ease;
+  }
+  .social a:hover{
+    transform: translateY(-1px);
+    background: rgba(255,103,187,0.10);
+    border-color: rgba(255,103,187,0.24);
+  }
+  .social a.x{ font-weight: 1000; font-size: 18px; }
+
+  /* Scroll indicator */
+  .scrollhint{
+    position:fixed;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    z-index:40;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    border:1px solid rgba(255,255,255,0.14);
+    background: rgba(0,0,0,0.18);
+    backdrop-filter: blur(var(--blur));
+    font-family: var(--mono);
+    font-size: 12px;
+    color: rgba(255,255,255,0.82);
+    opacity:.95;
+    user-select:none;
+  }
+  .dot{
+    width:6px; height:6px;
+    border-radius:999px;
+    background: rgba(255,255,255,0.78);
+    animation: dot 1.2s ease-in-out infinite;
+  }
+  @keyframes dot{
+    0%{ transform: translateY(0); opacity:.55; }
+    50%{ transform: translateY(-2px); opacity:1; }
+    100%{ transform: translateY(0); opacity:.55; }
+  }
+
+  /* Footer */
+  footer{
+    padding: 40px 0 70px;
+    text-align:center;
+    color: rgba(255,255,255,0.58);
+    font-weight: 800;
+    font-size: 12px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+  }
 </style>
 </head>
 
 <body>
-  <div class="bg-dim"></div>
+<div class="noise"></div>
 
-  <!-- Sound -->
-  <audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_eead05cf8d.mp3?filename=click-124467.mp3"></audio>
-  <audio id="bgm" loop></audio>
+<!-- Loader -->
+<div id="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <div>LOADING</div>
+    <div class="loader-bar"><span></span></div>
+  </div>
+</div>
 
-  <div class="wrap">
-    <div class="card">
+<!-- Sounds -->
+<audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_eead05cf8d.mp3?filename=click-124467.mp3"></audio>
+<audio id="bgm" loop></audio>
 
-      <div class="header">
-        <div class="brand">
-          <img class="brand-logo" src="로고.png" alt="Avenia Logo">
-          <div>
-            <h1>🌸 Avenia Room</h1>
-            <div class="subtitle" id="subline">Selenoid Gel • Cosmic Rift • Nekomata Soul</div>
-          </div>
-        </div>
-
-        <div class="top-actions">
-          <button id="theme-toggle" class="pill-btn" title="Theme">🌙 Night</button>
-          <select id="track-select" class="pill-select" title="Track"></select>
-          <button id="bgm-toggle" class="pill-btn" title="BGM">🎵 BGM On</button>
-        </div>
+<header>
+  <div class="head-wrap">
+    <div class="brand">
+      <img class="logo" src="로고.png" alt="Irev Logo">
+      <div class="brand-title">
+        <strong id="brandTop">IREV</strong>
+        <span id="brandSub">OFFICIAL SITE</span>
       </div>
+    </div>
 
-      <!-- ✅ 상단 큰 버튼: YouTube / Twitch / Chzzk / SOOP / TwitCasting -->
-      <div class="hero-buttons">
-        <a href="https://www.youtube.com/@Avenia-k6l2x" class="youtube" target="_blank" rel="noopener">▶️ YouTube</a>
-        <a href="https://www.twitch.tv/aven1231" class="twitch" target="_blank" rel="noopener">🟣 Twitch</a>
-        <a href="https://chzzk.naver.com/911df19d52a45f1d08791b2d43517dee" class="chzzk" target="_blank" rel="noopener">🟢 Chzzk</a>
-        <a href="https://www.sooplive.co.kr/station/slimeavenia" class="soop" target="_blank" rel="noopener">🌿 SOOP</a>
-        <a href="https://ko.twitcasting.tv/g:114782621463128489516" class="twitcasting" target="_blank" rel="noopener">📡 TwitCasting</a>
+    <div class="head-mid">
+      <div class="official">OFFICIAL</div>
+      <div class="hot" role="note" aria-label="Hot News">
+        <b>HOT NEWS</b>
+        <div class="ticker" id="hotTicker">Irev로 리브랜딩 완료. 링크/규칙/스케줄 업데이트.</div>
       </div>
+    </div>
 
-      <p id="greeting"></p>
+    <div class="head-actions">
+      <select id="lang" class="pill" title="Language">
+        <option value="ko">🇰🇷 KO</option>
+        <option value="ja">🇯🇵 JA</option>
+        <option value="en">🇺🇸 EN</option>
+      </select>
 
-      <!-- Tabs -->
-      <div class="tabs">
-        <button class="tab active" data-tab="home">🏠 home</button>
-        <button class="tab" data-tab="rules">📜 rule</button>
-        <button class="tab" data-tab="schedule">🎙 Schedule</button>
-        <button class="tab" data-tab="fortune">🔮 luck</button>
-        <button class="tab" data-tab="rp">☪️ RP</button>
-      </div>
+      <select id="track" class="pill" title="Track"></select>
+      <button id="bgmBtn" class="pill" type="button" title="BGM">🎵 BGM</button>
+      <button id="themeBtn" class="pill" type="button" title="Theme">🌙</button>
 
-      <!-- Language Buttons -->
-      <div class="lang-switch">
-        <button class="chip active" data-lang="ko">🇰🇷 한국어</button>
-        <button class="chip" data-lang="en">🇺🇸 English</button>
-        <button class="chip" data-lang="ja">🇯🇵 日本語</button>
-      </div>
-
-      <!-- HOME -->
-      <section id="section-home" class="section active">
-        <div class="panel">
-          <h2 id="home-title"></h2>
-          <p id="home-desc"></p>
-        </div>
-
-        <div class="social">
-          <a href="https://discord.gg/HMEFa3CPc8" target="_blank" rel="noopener" title="Discord">💬</a>
-          <a href="https://www.youtube.com/@Even%EB%8B%A4%EC%8B%9C%EB%B3%B4%EA%B8%B0" target="_blank" rel="noopener" title="YouTube">▶️</a>
-          <a href="https://x.com/aven1166793?s=21" target="_blank" rel="noopener" title="X" class="x">𝕏</a>
-          <a href="https://toon.at/donate/aven" target="_blank" rel="noopener" title="Donate">💝</a>
-          <a href="https://fancim.me/celeb/profile.aspx?url=758954" target="_blank" rel="noopener" title="팬심">🎁</a>
-          <a href="https://comic.naver.com/community/u/Even77777?lastPage=Creators" target="_blank" rel="noopener" title="Naver Comic">🖋️</a>
-          <a href="https://cafe.naver.com/f-e/cafes/31529869/menus/0?t=1762537197544" target="_blank" rel="noopener" title="Cafe">☕</a>
-        </div>
-
-        <footer>© 2025 Avenia. All Rights Reserved.</footer>
-      </section>
-
-      <!-- RULES -->
-      <section id="section-rules" class="section">
-        <div class="panel">
-          <h2 id="rules-title"></h2>
-          <p id="rules-desc"></p>
-        </div>
-        <ul id="rules"></ul>
-        <footer id="rules-footer"></footer>
-      </section>
-
-      <!-- ✅ SCHEDULE -->
-      <section id="section-schedule" class="section">
-        <div class="panel">
-          <h2 id="schedule-title"></h2>
-          <p id="schedule-time"></p>
-          <p id="schedule-note1"></p>
-        </div>
-
-        <!-- A/B 토글 -->
-        <div class="week-toggle">
-          <button id="weekA-btn" class="week-btn" type="button" data-week="A"></button>
-          <button id="weekB-btn" class="week-btn" type="button" data-week="B"></button>
-        </div>
-
-        <!-- 한 주만 렌더 -->
-        <div id="schedule-grid" class="schedule-grid"></div>
-
-        <footer id="schedule-footer"></footer>
-      </section>
-
-      <!-- FORTUNE -->
-      <section id="section-fortune" class="section">
-        <div class="panel">
-          <h2 id="fortune-title"></h2>
-          <p id="fortune-desc"></p>
-        </div>
-
-        <div class="fortune-box">
-          <div class="fortune-top">
-            <div class="fortune-meta">
-              <div class="fortune-date" id="fortune-date"></div>
-              <div class="fortune-hint" id="fortune-hint"></div>
-            </div>
-
-            <button id="fortune-roll" class="fortune-btn" type="button">🔮 운세 뽑기</button>
-          </div>
-
-          <div id="fortune-result" class="fortune-result" aria-live="polite"></div>
-
-          <div class="luck-wrap">
-            <div class="luck-label" id="luck-label"></div>
-            <div class="luck-bar">
-              <div class="luck-fill" id="luck-fill" style="width:0%"></div>
-            </div>
-          </div>
-        </div>
-
-        <footer id="fortune-footer"></footer>
-      </section>
-
-      <!-- RP -->
-      <section id="section-rp" class="section">
-        <div class="rp-grid">
-          <div class="rp-card">
-            <div class="rp-title">
-              <span class="badge" id="rp-badge">RP</span>
-              <span id="rp-title">Avenia</span>
-            </div>
-            <p class="rp-text" id="rp-text"></p>
-            <hr class="rp-hr">
-            <p class="rp-text" id="rp-stream-setting"></p>
-          </div>
-
-          <div class="rp-card">
-            <div class="rp-title">
-              <span class="badge">Avatar</span>
-              <span id="rp-visual-title">Forms</span>
-            </div>
-
-            <div class="avatars">
-              <div class="avatar">
-                <div class="label"><span id="label-slime">슬라임 폼</span><span>🟣</span></div>
-                <img src="slime.png" alt="Slime Form">
-              </div>
-              <div class="avatar">
-                <div class="label"><span id="label-human">인간 폼</span><span>🌸</span></div>
-                <img src="human.png" alt="Human Form">
-              </div>
-            </div>
-
-            <footer style="margin-top:14px;">☪️ Avenia Lore Panel</footer>
-          </div>
-        </div>
-      </section>
-
+      <button id="menuBtn" class="iconbtn" type="button">MENU</button>
     </div>
   </div>
+</header>
+
+<!-- Menu Overlay -->
+<div id="menu" class="menu" aria-hidden="true">
+  <div class="menu-inner">
+    <div class="menu-top">
+      <div class="menu-title">OFFICIAL MENU</div>
+      <button id="menuClose" class="menu-close" type="button">CLOSE</button>
+    </div>
+
+    <div class="menu-grid">
+      <a class="menu-link" href="#top"><b>TOP</b><span id="mTop">메인</span></a>
+      <a class="menu-link" href="#news"><b>NEWS</b><span id="mNews">최신 소식</span></a>
+      <a class="menu-link" href="#schedule"><b>SCHEDULE</b><span id="mSchedule">방송 일정</span></a>
+      <a class="menu-link" href="#rules"><b>RULE</b><span id="mRules">채팅 규칙</span></a>
+      <a class="menu-link" href="#fortune"><b>LUCK</b><span id="mLuck">운세</span></a>
+      <a class="menu-link" href="#lore"><b>RP</b><span id="mRp">설정</span></a>
+      <a class="menu-link" href="#links"><b>LINKS</b><span id="mLinks">SNS</span></a>
+    </div>
+
+    <div class="menu-controls">
+      <span style="font-family:var(--mono); color:rgba(255,255,255,0.7); font-size:12px;">
+        *   *   *
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="scrollhint" id="scrollHint">
+  <span class="dot"></span>
+  <span id="scrollText">SCROLL</span>
+</div>
+
+<main>
+  <!-- HERO -->
+  <section class="section hero" id="top">
+    <div class="hero-card">
+      <div class="hero-inner">
+        <div>
+          <h1 class="hero-title" id="heroTitle">이래브 (Irev) OFFICIAL</h1>
+          <p class="hero-sub" id="heroSub">
+            우주의 균열에서 태어난 셀레노이드 젤. 오늘도 “재미”로 살아남는다.
+          </p>
+
+          <div class="hero-buttons">
+            <a class="btn" id="btnYt" href="https://www.youtube.com/@Avenia-k6l2x" target="_blank" rel="noopener">▶️ YouTube</a>
+            <a class="btn" id="btnTw" href="https://www.twitch.tv/aven1231" target="_blank" rel="noopener">🟣 Twitch</a>
+            <a class="btn" id="btnCh" href="https://chzzk.naver.com/911df19d52a45f1d08791b2d43517dee" target="_blank" rel="noopener">🟢 Chzzk</a>
+            <a class="btn" id="btnSo" href="https://www.sooplive.co.kr/station/slimeavenia" target="_blank" rel="noopener">🌿 SOOP</a>
+            <a class="btn" id="btnTc" href="https://ko.twitcasting.tv/g:114782621463128489516" target="_blank" rel="noopener">📡 TwitCasting</a>
+          </div>
+
+          <div class="stars">*   *   *</div>
+        </div>
+
+        <div class="hero-meta">
+          <div class="meta-box">
+            <b id="meta1Title">STREAM TIME</b>
+            <p id="meta1Body">🟢 치지직 16:00–18:00 (KST)<br>🟣 트위치 23:00–02:00 (KST)</p>
+          </div>
+          <div class="meta-box">
+            <b id="meta2Title">CONCEPT</b>
+            <p id="meta2Body">Selenoid Gel • Cosmic Rift • Nekomata Soul</p>
+          </div>
+          <div class="meta-box">
+            <b id="meta3Title">NOTICE</b>
+            <p id="meta3Body">2주 로테이션(A/B) 스케줄. 메뉴에서 바로 이동 가능.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWS -->
+  <section class="section" id="news">
+    <div class="h">
+      <h2>NEWS</h2>
+      <div class="jp" id="newsSub">最新情報</div>
+    </div>
+
+    <div class="card news">
+      <ul id="newsList"></ul>
+    </div>
+  </section>
+
+  <!-- SCHEDULE -->
+  <section class="section" id="schedule">
+    <div class="h">
+      <h2>SCHEDULE</h2>
+      <div class="jp" id="scheduleSub">配信スケジュール</div>
+    </div>
+
+    <div class="grid2">
+      <div class="card panel">
+        <b style="font-size:12px; letter-spacing:.22em; text-transform:uppercase;" id="schInfoTitle">INFO</b>
+        <p id="schInfoBody">🟢 치지직: 오후 4:00 ~ 오후 6:00 (KST)<br>🟣 트위치: 오후 11:00 ~ 오전 2:00 (KST)</p>
+        <div class="week-toggle">
+          <button id="weekA" class="week-btn" type="button"></button>
+          <button id="weekB" class="week-btn" type="button"></button>
+        </div>
+        <p id="schFooter" style="margin-top:12px; color:var(--sub); font-weight:850;"></p>
+      </div>
+
+      <div class="card panel">
+        <b style="font-size:12px; letter-spacing:.22em; text-transform:uppercase;" id="schWeekTitle">WEEK</b>
+        <div class="schedule-grid" id="scheduleGrid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RULES -->
+  <section class="section" id="rules">
+    <div class="h">
+      <h2>RULE</h2>
+      <div class="jp" id="rulesSub">ルール</div>
+    </div>
+
+    <div class="grid2">
+      <div class="card panel">
+        <b style="font-size:12px; letter-spacing:.22em; text-transform:uppercase;" id="rulesTitle">CHAT RULES</b>
+        <p id="rulesDesc"></p>
+      </div>
+      <div class="card panel rules">
+        <ul id="rulesList"></ul>
+        <p id="rulesFooter" style="margin-top:12px; color:var(--sub); font-weight:850;"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORTUNE -->
+  <section class="section" id="fortune">
+    <div class="h">
+      <h2>LUCK</h2>
+      <div class="jp" id="fortuneSub">今日の運勢</div>
+    </div>
+
+    <div class="card panel">
+      <div class="fortune-top">
+        <div>
+          <b style="font-size:12px; letter-spacing:.22em; text-transform:uppercase;" id="fortuneTitle">DAILY FORTUNE</b>
+          <p id="fortuneDesc"></p>
+        </div>
+        <div style="text-align:right;">
+          <div class="fortune-date" id="fortuneDate"></div>
+          <button id="fortuneBtn" class="pill" type="button" style="margin-top:10px;"></button>
+        </div>
+      </div>
+
+      <div class="fortune-result" id="fortuneResult" aria-live="polite"></div>
+
+      <div class="luck-wrap">
+        <div class="luck-label" id="luckLabel"></div>
+        <div class="luck-bar"><div class="luck-fill" id="luckFill"></div></div>
+      </div>
+
+      <p id="fortuneFooter" style="margin-top:12px; color:var(--sub); font-weight:850;"></p>
+    </div>
+  </section>
+
+  <!-- LORE / RP -->
+  <section class="section" id="lore">
+    <div class="h">
+      <h2>RP</h2>
+      <div class="jp" id="rpSub">設定</div>
+    </div>
+
+    <div class="grid2">
+      <div class="card panel">
+        <b style="font-size:12px; letter-spacing:.22em; text-transform:uppercase;" id="rpTitle">PROFILE</b>
+        <p class="rp-text" id="rpText"></p>
+        <p class="rp-text" id="rpStream" style="margin-top:12px; color:rgba(255,255,255,0.72);"></p>
+      </div>
+
+      <div class="card panel">
+        <b style="font-size:12px; letter-spacing:.22em; text-transform:uppercase;" id="formsTitle">FORMS</b>
+        <div class="avatars" style="margin-top:12px;">
+          <div class="avatar">
+            <div class="label"><span id="slimeLabel"></span><span>🟣</span></div>
+            <img src="slime.png" alt="Slime Form">
+          </div>
+          <div class="avatar">
+            <div class="label"><span id="humanLabel"></span><span>🌸</span></div>
+            <img src="human.png" alt="Human Form">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LINKS -->
+  <section class="section" id="links">
+    <div class="h">
+      <h2>LINKS</h2>
+      <div class="jp" id="linksSub">リンク</div>
+    </div>
+
+    <div class="card social">
+      <a href="https://discord.gg/HMEFa3CPc8" target="_blank" rel="noopener" title="Discord">💬</a>
+      <a href="https://www.youtube.com/@Even%EB%8B%A4%EC%8B%9C%EB%B3%B4%EA%B8%B0" target="_blank" rel="noopener" title="YouTube">▶️</a>
+      <a href="https://x.com/aven1166793?s=21" target="_blank" rel="noopener" title="X" class="x">𝕏</a>
+      <a href="https://toon.at/donate/aven" target="_blank" rel="noopener" title="Donate">💝</a>
+      <a href="https://fancim.me/celeb/profile.aspx?url=758954" target="_blank" rel="noopener" title="팬심">🎁</a>
+      <a href="https://comic.naver.com/community/u/Even77777?lastPage=Creators" target="_blank" rel="noopener" title="Naver Comic">🖋️</a>
+      <a href="https://cafe.naver.com/f-e/cafes/31529869/menus/0?t=1762537197544" target="_blank" rel="noopener" title="Cafe">☕</a>
+    </div>
+
+    <footer>© 2026 Irev. All Rights Reserved.</footer>
+  </section>
+</main>
 
 <script>
-/* Greeting */
-const greetings = {
-  ko: ["오늘도 찾아와줘서 고마워요 🌸", "Avenia 룸에 오신 걸 환영해요 💕"],
-  en: ["Welcome to Avenia’s Stream Room 💕", "Glad to see you again 🌸"],
-  ja: ["ようこそ、Aveniaの配信ルームへ 🌸", "今日も来てくれてありがとう 💕"]
-};
+/* =========================
+   ✅ DATA (Avenia -> Irev)
+   ========================= */
 
-/* HOME text */
-const homeData = {
-  ko: { title: "🌌 Avenia Room", desc: "우주의 균열에서 태어난 셀레노이드 젤, Avenia의 공간입니다." },
-  en: { title: "🌌 Avenia Room", desc: "Avenia’s space, a Selenoid Gel born from a cosmic rift." },
-  ja: { title: "🌌 Avenia Room", desc: "宇宙の亀裂から生まれたセレノイド・ジェル、Aveniaの空間です。" }
-};
-
-/* RULES */
-const rulesData = {
+const i18n = {
   ko: {
-    title: "📜 채팅 규칙",
-    desc: "기본적인 윤리는 지켜야 모두가 행복한 공간이 될 수 있습니다!.",
-    footer: "※ 어려운 규칙 아니니깐~ 지켜주세요~.",
-    list: [
-      '예의와 존중을 지켜주세요.',
-      '무례, 비하, 욕설은 허용되지 않습니다.',
-      '정치 / 종교 / 민감한 주제는 금지입니다.',
-      '스포일러 및 TMI 자제 바랍니다.',
-      '타인의 평판을 해치는 채팅은 금지입니다.'
-    ]
-  },
-  en: {
-    title: "📜 Chat Rules",
-    desc: "Basic ethics must be observed so that it can be a happy space for everyone!.",
-    footer: "※ Not difficult. Please follow it.",
-    list: [
-      'Please be polite and respectful.',
-      'Rudeness, insults, or profanity are not tolerated.',
-      'Politics, religion, and sensitive topics are prohibited.',
-      'Avoid spoilers or excessive personal sharing.',
-      'Do not post messages that harm others’ reputation.'
-    ]
-  },
-  ja: {
-    title: "📜 ルール",
-    desc: "基本的な倫理は守ってこそ、皆が幸せな空間になれます！",
-    footer: "※ 難しいルールではないので、守ってください。",
-    list: [
-      '礼儀と敬意を大切にしてください。',
-      '無礼、侮辱、暴言は禁止です。',
-      '政治、宗教、センシティブな話題は禁止です。',
-      'ネタバレやTMIは控えてください。',
-      '他人の評判を傷つける発言は禁止です。'
-    ]
-  }
-};
+    brandTop: "IREV",
+    brandSub: "OFFICIAL SITE",
+    scroll: "SCROLL",
+    heroTitle: "이래브 (Irev) OFFICIAL",
+    heroSub: "우주의 균열에서 태어난 셀레노이드 젤. 오늘도 “재미”로 살아남는다.",
+    meta1Title: "STREAM TIME",
+    meta1Body: "🟢 치지직 16:00–18:00 (KST)\n🟣 트위치 23:00–02:00 (KST)",
+    meta2Title: "CONCEPT",
+    meta2Body: "Selenoid Gel • Cosmic Rift • Nekomata Soul",
+    meta3Title: "NOTICE",
+    meta3Body: "2주 로테이션(A/B) 스케줄. 메뉴에서 바로 이동 가능.",
+    menu: {
+      top:"메인", news:"최신 소식", schedule:"방송 일정", rules:"채팅 규칙", luck:"운세", rp:"설정", links:"SNS"
+    },
+    subs: { news:"최신정보", schedule:"방송일정", rules:"규칙", fortune:"오늘의 운세", rp:"설정", links:"링크" },
 
-/* ✅ SCHEDULE (2-week rotation + platforms/time + LIVE NOW) */
-const scheduleData = {
-  ko: {
-    title: "🎙 방송 일정",
-    time: "🟢 치지직: 오후 4:00 ~ 오후 6:00 (KST)",
-    note1:"🟣 트위치: 오후 11:00 ~ 오전 2:00 (KST)",
-    footer:"※ 2주 로테이션. 위에서 A/B 주차 선택해서 보세요.",
-    labels:{ live:"방송", off:"휴방" },
-    liveDaysLabel:"방송 요일",
-    nowLabel:"LIVE NOW",
-    platform:{ chzzk:"치지직", twitch:"트위치" },
-    weekA:{ label:"🅰️ 1주차", note:"A Rotation",
-      days:[
-        { day:"월", state:"off" },
-        { day:"화", state:"live" },
-        { day:"수", state:"off" },
-        { day:"목", state:"live" },
-        { day:"금", state:"off" },
-        { day:"토", state:"live" },
-        { day:"일", state:"off" }
+    hotTicker: "Irev로 리브랜딩 완료. 링크/규칙/스케줄 업데이트.",
+
+    news: [
+      { tag:"UPDATE", title:"이래브(Irev)로 표기 통일", desc:"Aven/Avenia 표기를 전부 Irev/이래브로 변경했습니다." },
+      { tag:"SCHEDULE", title:"2주 로테이션 스케줄", desc:"A/B 주차 토글로 이번 주 방송/휴방을 확인할 수 있어요." },
+      { tag:"FUN", title:"오늘의 운세 오픈", desc:"기분 전환용 ‘균열 운세’. 마음에 안 들면 다시 뽑기 가능." }
+    ],
+
+    schedule: {
+      infoTitle:"INFO",
+      infoBody:"🟢 치지직: 오후 4:00 ~ 오후 6:00 (KST)\n🟣 트위치: 오후 11:00 ~ 오전 2:00 (KST)",
+      footer:"※ 2주 로테이션. A/B를 선택해서 확인하세요.",
+      labels:{ live:"방송", off:"휴방" },
+      now:"LIVE NOW",
+      platform:{ chzzk:"치지직", twitch:"트위치" },
+      weekA:{ label:"🅰️ 1주차", note:"A Rotation",
+        days:[
+          { day:"월", state:"off" },
+          { day:"화", state:"live" },
+          { day:"수", state:"off" },
+          { day:"목", state:"live" },
+          { day:"금", state:"off" },
+          { day:"토", state:"live" },
+          { day:"일", state:"off" }
+        ]
+      },
+      weekB:{ label:"🅱️ 2주차", note:"B Rotation",
+        days:[
+          { day:"월", state:"live" },
+          { day:"화", state:"off" },
+          { day:"수", state:"live" },
+          { day:"목", state:"off" },
+          { day:"금", state:"live" },
+          { day:"토", state:"off" },
+          { day:"일", state:"live" }
+        ]
+      }
+    },
+
+    rules: {
+      title:"CHAT RULES",
+      desc:"기본적인 윤리는 지켜야 모두가 편한 공간이 됩니다.",
+      footer:"※ 어려운 규칙 아니니깐~ 지켜주세요~.",
+      list:[
+        "예의와 존중을 지켜주세요.",
+        "무례, 비하, 욕설은 허용되지 않습니다.",
+        "정치 / 종교 / 민감한 주제는 금지입니다.",
+        "스포일러 및 TMI 자제 바랍니다.",
+        "타인의 평판을 해치는 채팅은 금지입니다."
       ]
     },
-    weekB:{ label:"🅱️ 2주차", note:"B Rotation",
-      days:[
-        { day:"월", state:"live" },
-        { day:"화", state:"off" },
-        { day:"수", state:"live" },
-        { day:"목", state:"off" },
-        { day:"금", state:"live" },
-        { day:"토", state:"off" },
-        { day:"일", state:"live" }
-      ]
-    }
-  },
 
-  en: {
-    title: "🎙 Stream Schedule",
-    time: "🟢 CHZZK: 4:00 PM ~ 6:00 PM (KST)",
-    note1:"🟣 Twitch: 11:00 PM ~ 2:00 AM (KST)",
-    footer:"※ 2-week rotation. Use the A/B toggle above.",
-    labels:{ live:"LIVE", off:"OFF" },
-    liveDaysLabel:"LIVE Days",
-    nowLabel:"LIVE NOW",
-    platform:{ chzzk:"CHZZK", twitch:"Twitch" },
-    weekA:{ label:"🅰️ Week A", note:"A Rotation",
-      days:[
-        { day:"Mon", state:"off" },
-        { day:"Tue", state:"live" },
-        { day:"Wed", state:"off" },
-        { day:"Thu", state:"live" },
-        { day:"Fri", state:"off" },
-        { day:"Sat", state:"live" },
-        { day:"Sun", state:"off" }
-      ]
+    fortune: {
+      title:"DAILY FORTUNE",
+      desc:"재미로만 보는 균열 운세. 마음에 안 들면 다시 뽑아도 됨.",
+      footer:"※ 진지하게 믿지 말 것. 재미는 OK.",
+      btn:"🔮 운세 뽑기",
+      luckLabel:"오늘의 운(%)"
     },
-    weekB:{ label:"🅱️ Week B", note:"B Rotation",
-      days:[
-        { day:"Mon", state:"live" },
-        { day:"Tue", state:"off" },
-        { day:"Wed", state:"live" },
-        { day:"Thu", state:"off" },
-        { day:"Fri", state:"live" },
-        { day:"Sat", state:"off" },
-        { day:"Sun", state:"live" }
-      ]
-    }
-  },
 
-  ja: {
-    title: "🎙 配信スケジュール",
-    time: "🟢 CHZZK：16:00～18:00（韓国時間）",
-    note1:"🟣 Twitch：23:00～02:00（韓国時間）",
-    footer:"※ 2週間ローテーション。上のA/Bで切り替えてください。",
-    labels:{ live:"配信", off:"休み" },
-    liveDaysLabel:"配信日",
-    nowLabel:"配信中",
-    platform:{ chzzk:"CHZZK", twitch:"Twitch" },
-    weekA:{ label:"🅰️ 1週目", note:"A Rotation",
-      days:[
-        { day:"月", state:"off" },
-        { day:"火", state:"live" },
-        { day:"水", state:"off" },
-        { day:"木", state:"live" },
-        { day:"金", state:"off" },
-        { day:"土", state:"live" },
-        { day:"日", state:"off" }
-      ]
-    },
-    weekB:{ label:"🅱️ 2週目", note:"B Rotation",
-      days:[
-        { day:"月", state:"live" },
-        { day:"火", state:"off" },
-        { day:"水", state:"live" },
-        { day:"木", state:"off" },
-        { day:"金", state:"live" },
-        { day:"土", state:"off" },
-        { day:"日", state:"live" }
-      ]
-    }
-  }
-};
-
-/* RP */
-const rpData = {
-  ko: {
-    title: "에이븐 (Avenia)",
-    badge: "RP / 소개",
-    slimeLabel: "슬라임 폼",
-    humanLabel: "인간 폼",
-    text:
-`이름 : 에이븐 (Avenia)
+    rp: {
+      title:"PROFILE",
+      forms:"FORMS",
+      slime:"슬라임 폼",
+      human:"인간 폼",
+      text:
+`이름 : 이래브 (Irev)
 종족 : 셀레노이드 젤 (Selenoid Gel)
 탄생 : 붕괴된 우주의 균열에서 태어남
 외형 : 슬라임 (젤리)
 
-설명 : 고양이가 네코마타로 변이한 이후, 그 영혼이 우주의 균열체와 융합된 존재.
+설명 : 고양이가 네코마타로 변이한 이후,
+그 영혼이 우주의 균열체와 융합된 존재.
 육체는 소멸했으나, 의식은 균열 속에서 새로운 형태로 재구성되었다.`,
-    streamSetting:
+      stream:
 `방송 중 설정:
 방송 중에는 인간 형태로 활동하지만,
 세계관상 본질은 항상 슬라임 상태로 유지된다.`
+    }
   },
+
   en: {
-    title: "Avenia",
-    badge: "RP / Lore",
-    slimeLabel: "Slime Form",
-    humanLabel: "Human Form",
-    text:
-`Name: Aven (Avenia)
+    brandTop: "IREV",
+    brandSub: "OFFICIAL SITE",
+    scroll: "SCROLL",
+    heroTitle: "Irev OFFICIAL",
+    heroSub: "A Selenoid Gel born from a cosmic rift. Surviving on “fun” today too.",
+    meta1Title: "STREAM TIME",
+    meta1Body: "🟢 CHZZK 16:00–18:00 (KST)\n🟣 Twitch 23:00–02:00 (KST)",
+    meta2Title: "CONCEPT",
+    meta2Body: "Selenoid Gel • Cosmic Rift • Nekomata Soul",
+    meta3Title: "NOTICE",
+    meta3Body: "2-week rotation schedule (A/B). Jump via MENU.",
+    menu: { top:"Top", news:"News", schedule:"Schedule", rules:"Rules", luck:"Luck", rp:"RP", links:"Links" },
+    subs: { news:"Latest", schedule:"Streaming", rules:"Rules", fortune:"Daily Fortune", rp:"Lore", links:"Links" },
+
+    hotTicker: "Rebrand done: Irev. Links/Rules/Schedule updated.",
+
+    news: [
+      { tag:"UPDATE", title:"Unified name as Irev", desc:"All Aven/Avenia labels changed to Irev." },
+      { tag:"SCHEDULE", title:"2-week rotation", desc:"Use A/B toggle to check LIVE/OFF days." },
+      { tag:"FUN", title:"Daily fortune", desc:"Rift fortune for fun. Roll again anytime." }
+    ],
+
+    schedule: {
+      infoTitle:"INFO",
+      infoBody:"🟢 CHZZK: 4:00 PM ~ 6:00 PM (KST)\n🟣 Twitch: 11:00 PM ~ 2:00 AM (KST)",
+      footer:"※ 2-week rotation. Use A/B toggle.",
+      labels:{ live:"LIVE", off:"OFF" },
+      now:"LIVE NOW",
+      platform:{ chzzk:"CHZZK", twitch:"Twitch" },
+      weekA:{ label:"🅰️ Week A", note:"A Rotation",
+        days:[{day:"Mon",state:"off"},{day:"Tue",state:"live"},{day:"Wed",state:"off"},{day:"Thu",state:"live"},{day:"Fri",state:"off"},{day:"Sat",state:"live"},{day:"Sun",state:"off"}]
+      },
+      weekB:{ label:"🅱️ Week B", note:"B Rotation",
+        days:[{day:"Mon",state:"live"},{day:"Tue",state:"off"},{day:"Wed",state:"live"},{day:"Thu",state:"off"},{day:"Fri",state:"live"},{day:"Sat",state:"off"},{day:"Sun",state:"live"}]
+      }
+    },
+
+    rules: {
+      title:"CHAT RULES",
+      desc:"Basic ethics keep the room comfortable for everyone.",
+      footer:"※ Simple rules. Please follow them.",
+      list:[
+        "Be polite and respectful.",
+        "No insults, slurs, or profanity.",
+        "No politics/religion/sensitive topics.",
+        "Avoid spoilers and excessive TMI.",
+        "Do not harm others’ reputation."
+      ]
+    },
+
+    fortune: {
+      title:"DAILY FORTUNE",
+      desc:"Just for fun. Don’t like it? Roll again.",
+      footer:"※ For fun only.",
+      btn:"🔮 Draw Fortune",
+      luckLabel:"Luck (%)"
+    },
+
+    rp: {
+      title:"PROFILE",
+      forms:"FORMS",
+      slime:"Slime Form",
+      human:"Human Form",
+      text:
+`Name: Irev
 Species: Selenoid Gel
 Birth: Born from a collapsing cosmic rift
 Form: Slime (jelly)
 
-Description: After a cat mutated into a Nekomata, its soul fused with a cosmic rift-entity.
-The body was lost, but the consciousness was reconstituted into a new form within the rift.`,
-    streamSetting:
+Description: After a cat mutated into a Nekomata,
+its soul fused with a rift-entity.
+The body was lost, but consciousness was rebuilt inside the rift.`,
+      stream:
 `Stream Setting:
-During streams, Avenia acts in a human form,
-but the true essence remains in a slime state within the lore.`
+During streams, Irev acts in a human form,
+but the true essence remains slime in the lore.`
+    }
   },
+
   ja: {
-    title: "エイヴン（Avenia）",
-    badge: "RP / 紹介",
-    slimeLabel: "スライム形態",
-    humanLabel: "人間形態",
-    text:
-`名前：エイヴン（Avenia）
+    brandTop: "IREV",
+    brandSub: "OFFICIAL SITE",
+    scroll: "SCROLL",
+    heroTitle: "イレヴ（Irev）OFFICIAL",
+    heroSub: "宇宙の亀裂から生まれたセレノイド・ジェル。今日も「楽しさ」で生き延びる。",
+    meta1Title: "STREAM TIME",
+    meta1Body: "🟢 CHZZK 16:00–18:00（韓国時間）\n🟣 Twitch 23:00–02:00（韓国時間）",
+    meta2Title: "CONCEPT",
+    meta2Body: "Selenoid Gel • Cosmic Rift • Nekomata Soul",
+    meta3Title: "NOTICE",
+    meta3Body: "2週間ローテ(A/B)。MENUから各セクションへ。",
+    menu: { top:"トップ", news:"最新情報", schedule:"配信予定", rules:"ルール", luck:"運勢", rp:"設定", links:"リンク" },
+    subs: { news:"最新情報", schedule:"配信スケジュール", rules:"ルール", fortune:"今日の運勢", rp:"設定", links:"リンク" },
+
+    hotTicker: "表記をIrevに統一。リンク/ルール/スケジュール更新。",
+
+    news: [
+      { tag:"UPDATE", title:"表記をIrevに統一", desc:"Aven/Avenia表記をIrev/イレヴに変更しました。" },
+      { tag:"SCHEDULE", title:"2週間ローテーション", desc:"A/B切り替えで配信日・休みが確認できます。" },
+      { tag:"FUN", title:"今日の運勢", desc:"気分転換の“亀裂占い”。気に入らなければ引き直しOK。" }
+    ],
+
+    schedule: {
+      infoTitle:"INFO",
+      infoBody:"🟢 CHZZK：16:00～18:00（韓国時間）\n🟣 Twitch：23:00～02:00（韓国時間）",
+      footer:"※ 2週間ローテーション。A/Bで切り替えてください。",
+      labels:{ live:"配信", off:"休み" },
+      now:"配信中",
+      platform:{ chzzk:"CHZZK", twitch:"Twitch" },
+      weekA:{ label:"🅰️ 1週目", note:"A Rotation",
+        days:[{day:"月",state:"off"},{day:"火",state:"live"},{day:"水",state:"off"},{day:"木",state:"live"},{day:"金",state:"off"},{day:"土",state:"live"},{day:"日",state:"off"}]
+      },
+      weekB:{ label:"🅱️ 2週目", note:"B Rotation",
+        days:[{day:"月",state:"live"},{day:"火",state:"off"},{day:"水",state:"live"},{day:"木",state:"off"},{day:"金",state:"live"},{day:"土",state:"off"},{day:"日",state:"live"}]
+      }
+    },
+
+    rules: {
+      title:"CHAT RULES",
+      desc:"基本的な倫理を守って、皆が快適な空間にしましょう。",
+      footer:"※ 難しいルールではないので守ってください。",
+      list:[
+        "礼儀と敬意を大切にしてください。",
+        "無礼・侮辱・暴言は禁止です。",
+        "政治・宗教・センシティブな話題は禁止です。",
+        "ネタバレやTMIは控えてください。",
+        "他人の評判を傷つける発言は禁止です。"
+      ]
+    },
+
+    fortune: {
+      title:"DAILY FORTUNE",
+      desc:"遊び用の“亀裂占い”。気に入らなければ引き直してOK。",
+      footer:"※ あくまで遊びです。",
+      btn:"🔮 運勢を引く",
+      luckLabel:"今日の運(%)"
+    },
+
+    rp: {
+      title:"PROFILE",
+      forms:"FORMS",
+      slime:"スライム形態",
+      human:"人間形態",
+      text:
+`名前：イレヴ（Irev）
 種族：セレノイド・ジェル（Selenoid Gel）
 誕生：崩壊した宇宙の亀裂から誕生
 外見：スライム（ゼリー状）
 
-説明：猫がネコマタへと変異した後、その魂が宇宙の亀裂体と融合した存在。
-肉体は失われたが、意識は亀裂の中で新たな形として再構築された。`,
-    streamSetting:
+説明：猫がネコマタへ変異した後、
+その魂が宇宙の亀裂体と融合した存在。
+肉体は失われたが、意識は亀裂の中で再構築された。`,
+      stream:
 `配信中の設定：
 配信中は人間形態で活動するが、
 世界観上の本質は常にスライムのままである。`
-  }
-};
-
-/* Fortune */
-const fortuneData = {
-  ko: {
-    title: "🔮 오늘의 운세",
-    desc: "재미로만 보는 균열 운세. 마음에 안 들면 다시 뽑아도 됨.",
-    hint: "버튼 눌러서 한 번 뽑아.",
-    footer: "※ 진지하게 믿지 말 것. 재미는 OK.",
-    luckLabel: "오늘의 운(%)",
-    roll: "🔮 운세 뽑기"
-  },
-  en: {
-    title: "🔮 Daily Fortune",
-    desc: "Just for fun. Rift fortune of the day. Don’t like it? Roll again.",
-    hint: "Tap the button and draw one.",
-    footer: "※ For fun only.",
-    luckLabel: "Luck (%)",
-    roll: "🔮 Draw Fortune"
-  },
-  ja: {
-    title: "🔮 今日の運勢",
-    desc: "遊び用の“亀裂占い”。気に入らなければ引き直してOK。",
-    hint: "ボタンで一回引いてみて。",
-    footer: "※ あくまで遊びです。",
-    luckLabel: "今日の運(%)",
-    roll: "🔮 運勢を引く"
+    }
   }
 };
 
@@ -1300,7 +1358,6 @@ const fortunes = {
   ]
 };
 
-/* BGM Tracks (local files) */
 const tracks = [
   { label: "Manipulate", file: "Manipulate.mp3" },
   { label: "himituno_osyaberi", file: "himituno_osyaberi.mp3" },
@@ -1309,386 +1366,335 @@ const tracks = [
   { label: "크리스마스 브금", file: "크리스마스 브금.wav" }
 ];
 
-/* DOM */
-const chips = document.querySelectorAll('.chip');
-const tabs = document.querySelectorAll('.tab');
-const clickSound = document.getElementById('clickSound');
-
-const bgm = document.getElementById('bgm');
-const bgmToggle = document.getElementById('bgm-toggle');
-const themeToggle = document.getElementById('theme-toggle');
-const trackSelect = document.getElementById('track-select');
-
-const greetingEl = document.getElementById('greeting');
-
-// Fortune DOM
-const fortuneTitleEl = document.getElementById('fortune-title');
-const fortuneDescEl = document.getElementById('fortune-desc');
-const fortuneDateEl = document.getElementById('fortune-date');
-const fortuneHintEl = document.getElementById('fortune-hint');
-const fortuneRollBtn = document.getElementById('fortune-roll');
-const fortuneResultEl = document.getElementById('fortune-result');
-const fortuneFooterEl = document.getElementById('fortune-footer');
-const luckLabelEl = document.getElementById('luck-label');
-const luckFillEl = document.getElementById('luck-fill');
-
-const sections = {
-  home: document.getElementById('section-home'),
-  rules: document.getElementById('section-rules'),
-  schedule: document.getElementById('section-schedule'),
-  fortune: document.getElementById('section-fortune'),
-  rp: document.getElementById('section-rp')
-};
-
-// ✅ Schedule DOM
-const weekABtn = document.getElementById('weekA-btn');
-const weekBBtn = document.getElementById('weekB-btn');
-const scheduleGridEl = document.getElementById('schedule-grid');
-
-let currentLang = 'ko';
-let currentWeek = localStorage.getItem('avenia_week') || 'A';
-
-/* Helpers */
-function playClick(){
+/* =========================
+   ✅ HELPERS
+   ========================= */
+const $ = (s)=>document.querySelector(s);
+const clickSound = $("#clickSound");
+function click(){
   clickSound.currentTime = 0;
   clickSound.play().catch(()=>{});
 }
 
-/* Tabs */
-function setTab(tabName){
-  tabs.forEach(t => t.classList.remove('active'));
-  document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
-
-  Object.values(sections).forEach(s => s.classList.remove('active'));
-  sections[tabName].classList.add('active');
-}
-
-tabs.forEach(t => {
-  t.addEventListener('click', () => {
-    playClick();
-    setTab(t.dataset.tab);
-  });
-});
-
-/* Render HOME */
-function renderHome(lang){
-  const h = homeData[lang];
-  document.getElementById('home-title').textContent = h.title;
-  document.getElementById('home-desc').textContent = h.desc;
-
-  const greet = greetings[lang][Math.floor(Math.random()*greetings[lang].length)];
-  greetingEl.textContent = greet;
-}
-
-/* Render RULES */
-function renderRules(lang){
-  const r = rulesData[lang];
-  document.getElementById('rules-title').textContent = r.title;
-  document.getElementById('rules-desc').textContent = r.desc;
-  document.getElementById('rules-footer').textContent = r.footer;
-  document.getElementById('rules').innerHTML = r.list.map(x => `<li>${x}</li>`).join('');
-}
-
-/* ✅ LIVE NOW 계산 (치지직 16-18, 트위치 23-02 / 00-02는 전날로 표시) */
-function getLiveNowInfo(weekObj){
-  const now = new Date();
-  const h = now.getHours();
-  const m = now.getMinutes();
-  const minutes = h * 60 + m;
-
-  // today index: Mon=0..Sun=6
-  const jsDay = now.getDay(); // 0=Sun..6=Sat
-  const todayIdx = (jsDay === 0) ? 6 : (jsDay - 1);
-  const prevIdx = (todayIdx + 6) % 7;
-
-  // CHZZK: 16:00~18:00 (today)
-  if(minutes >= 16*60 && minutes < 18*60){
-    if(weekObj.days[todayIdx]?.state === 'live'){
-      return { idx: todayIdx, platform: 'chzzk' };
-    }
-  }
-
-  // Twitch: 23:00~24:00 (today)
-  if(minutes >= 23*60){
-    if(weekObj.days[todayIdx]?.state === 'live'){
-      return { idx: todayIdx, platform: 'twitch' };
-    }
-  }
-
-  // Twitch: 00:00~02:00 (yesterday's stream)
-  if(minutes < 2*60){
-    if(weekObj.days[prevIdx]?.state === 'live'){
-      return { idx: prevIdx, platform: 'twitch' };
-    }
-  }
-
-  return null;
-}
-
-/* Render SCHEDULE (A/B toggle + today highlight + live summary + LIVE NOW) */
-function renderSchedule(lang){
-  const s = scheduleData[lang];
-
-  document.getElementById('schedule-title').textContent = s.title;
-  document.getElementById('schedule-time').textContent = s.time;
-  document.getElementById('schedule-note1').textContent = s.note1;
-  document.getElementById('schedule-footer').textContent = s.footer;
-
-  // Toggle labels + active
-  weekABtn.textContent = s.weekA.label;
-  weekBBtn.textContent = s.weekB.label;
-  weekABtn.classList.toggle('active', currentWeek === 'A');
-  weekBBtn.classList.toggle('active', currentWeek === 'B');
-
-  const weekObj = (currentWeek === 'B') ? s.weekB : s.weekA;
-
-  // Today index (Mon=0..Sun=6)
-  const now = new Date();
-  const jsDay = now.getDay();
-  const todayRowIndex = (jsDay === 0) ? 6 : (jsDay - 1);
-
-  // LIVE days summary
-  const liveDays = weekObj.days.filter(d => d.state === 'live').map(d => d.day).join(" · ");
-  const liveSummaryHTML = `<div class="live-summary">📌 ${s.liveDaysLabel}: ${liveDays || "-"}</div>`;
-
-  // LIVE NOW info
-  const liveNow = getLiveNowInfo(weekObj);
-
-  function rowHTML(d, idx){
-    const badgeText = s.labels[d.state];
-    const todayClass = (idx === todayRowIndex) ? "today" : "";
-    const isNow = liveNow && liveNow.idx === idx;
-    const nowBadge = isNow
-      ? `<div class="now-badge ${liveNow.platform === 'chzzk' ? 'now-chzzk' : 'now-twitch'}">
-           ${s.nowLabel} · ${s.platform[liveNow.platform]}
-         </div>`
-      : "";
-
-    return `
-      <div class="day-row ${todayClass}">
-        <div class="day-name">${d.day}</div>
-        <div class="day-badges">
-          <div class="day-badge ${d.state}">${badgeText}</div>
-          ${nowBadge}
-        </div>
-      </div>
-    `;
-  }
-
-  scheduleGridEl.innerHTML = `
-    <div class="week-card">
-      <div class="week-head">
-        <div class="week-chip">${weekObj.label}</div>
-        <div class="week-note">${weekObj.note}</div>
-      </div>
-      ${liveSummaryHTML}
-      ${weekObj.days.map(rowHTML).join('')}
-    </div>
-  `;
-}
-
-/* Render FORTUNE */
-function renderFortune(lang){
-  const f = fortuneData[lang];
-  fortuneTitleEl.textContent = f.title;
-  fortuneDescEl.textContent = f.desc;
-  fortuneHintEl.textContent = f.hint;
-  fortuneFooterEl.textContent = f.footer;
-  luckLabelEl.textContent = f.luckLabel;
-  fortuneRollBtn.textContent = f.roll;
-
-  const now = new Date();
-  const yyyy = now.getFullYear();
-  const mm = String(now.getMonth()+1).padStart(2,'0');
-  const dd = String(now.getDate()).padStart(2,'0');
-  fortuneDateEl.textContent = `${yyyy}-${mm}-${dd}`;
-
-  const key = `avenia_fortune_${lang}_${yyyy}-${mm}-${dd}`;
-  const saved = localStorage.getItem(key);
-  if(saved){
-    try{
-      const obj = JSON.parse(saved);
-      showFortune(obj);
-    }catch{}
-  } else {
-    fortuneResultEl.textContent = "";
-    luckFillEl.style.width = "0%";
-    luckLabelEl.textContent = `${fortuneData[lang].luckLabel} : 0%`;
-  }
-}
-
-// seeded RNG (deterministic-ish)
 function xmur3(str){
   let h = 1779033703 ^ str.length;
-  for (let i = 0; i < str.length; i++) {
+  for (let i=0;i<str.length;i++){
     h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
-    h = (h << 13) | (h >>> 19);
+    h = (h<<13) | (h>>>19);
   }
-  return function() {
-    h = Math.imul(h ^ (h >>> 16), 2246822507);
-    h = Math.imul(h ^ (h >>> 13), 3266489909);
-    h ^= h >>> 16;
-    return h >>> 0;
+  return function(){
+    h = Math.imul(h ^ (h>>>16), 2246822507);
+    h = Math.imul(h ^ (h>>>13), 3266489909);
+    h ^= h>>>16;
+    return h>>>0;
   }
 }
 function mulberry32(a){
   return function(){
     let t = a += 0x6D2B79F5;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    t = Math.imul(t ^ (t>>>15), t|1);
+    t ^= t + Math.imul(t ^ (t>>>7), t|61);
+    return ((t ^ (t>>>14))>>>0) / 4294967296;
   }
 }
 
-function pickFortune(lang){
+/* LIVE NOW calc */
+function getLiveNowInfo(weekObj){
+  const now = new Date();
+  const minutes = now.getHours()*60 + now.getMinutes();
+  const jsDay = now.getDay(); // 0=Sun..6=Sat
+  const todayIdx = (jsDay===0)?6:(jsDay-1);
+  const prevIdx = (todayIdx+6)%7;
+
+  // CHZZK 16-18
+  if(minutes >= 16*60 && minutes < 18*60){
+    if(weekObj.days[todayIdx]?.state === "live") return { idx: todayIdx, platform:"chzzk" };
+  }
+  // Twitch 23-24
+  if(minutes >= 23*60){
+    if(weekObj.days[todayIdx]?.state === "live") return { idx: todayIdx, platform:"twitch" };
+  }
+  // Twitch 00-02 (yesterday)
+  if(minutes < 2*60){
+    if(weekObj.days[prevIdx]?.state === "live") return { idx: prevIdx, platform:"twitch" };
+  }
+  return null;
+}
+
+/* =========================
+   ✅ RENDER
+   ========================= */
+let lang = localStorage.getItem("irev_lang") || "ko";
+let week = localStorage.getItem("irev_week") || "A";
+
+function setTheme(theme){
+  document.documentElement.setAttribute("data-theme", theme);
+  localStorage.setItem("irev_theme", theme);
+  $("#themeBtn").textContent = theme==="dark" ? "☀️" : "🌙";
+}
+
+function renderAll(){
+  const t = i18n[lang];
+
+  $("#brandTop").textContent = t.brandTop;
+  $("#brandSub").textContent = t.brandSub;
+  $("#scrollText").textContent = t.scroll;
+
+  $("#heroTitle").textContent = t.heroTitle;
+  $("#heroSub").textContent = t.heroSub;
+
+  $("#meta1Title").textContent = t.meta1Title;
+  $("#meta1Body").innerHTML = t.meta1Body.replaceAll("\n","<br>");
+  $("#meta2Title").textContent = t.meta2Title;
+  $("#meta2Body").textContent = t.meta2Body;
+  $("#meta3Title").textContent = t.meta3Title;
+  $("#meta3Body").textContent = t.meta3Body;
+
+  $("#hotTicker").textContent = t.hotTicker;
+
+  // menu
+  $("#mTop").textContent = t.menu.top;
+  $("#mNews").textContent = t.menu.news;
+  $("#mSchedule").textContent = t.menu.schedule;
+  $("#mRules").textContent = t.menu.rules;
+  $("#mLuck").textContent = t.menu.luck;
+  $("#mRp").textContent = t.menu.rp;
+  $("#mLinks").textContent = t.menu.links;
+
+  // subs
+  $("#newsSub").textContent = t.subs.news;
+  $("#scheduleSub").textContent = t.subs.schedule;
+  $("#rulesSub").textContent = t.subs.rules;
+  $("#fortuneSub").textContent = t.subs.fortune;
+  $("#rpSub").textContent = t.subs.rp;
+  $("#linksSub").textContent = t.subs.links;
+
+  // news
+  $("#newsList").innerHTML = t.news.map(n=>`
+    <li>
+      <div class="tag">${n.tag}</div>
+      <div>
+        <div class="title">${n.title}</div>
+        <div class="desc">${n.desc}</div>
+      </div>
+    </li>
+  `).join("");
+
+  // schedule info
+  $("#schInfoTitle").textContent = t.schedule.infoTitle;
+  $("#schInfoBody").innerHTML = t.schedule.infoBody.replaceAll("\n","<br>");
+  $("#schFooter").textContent = t.schedule.footer;
+  $("#schWeekTitle").textContent = "WEEK";
+
+  // week buttons
+  $("#weekA").textContent = t.schedule.weekA.label;
+  $("#weekB").textContent = t.schedule.weekB.label;
+  $("#weekA").classList.toggle("active", week==="A");
+  $("#weekB").classList.toggle("active", week==="B");
+
+  // schedule grid
+  const weekObj = (week==="B") ? t.schedule.weekB : t.schedule.weekA;
+  const now = new Date();
+  const jsDay = now.getDay();
+  const todayIdx = (jsDay===0)?6:(jsDay-1);
+  const liveNow = getLiveNowInfo(weekObj);
+
+  $("#scheduleGrid").innerHTML = weekObj.days.map((d, idx)=>{
+    const isToday = idx===todayIdx;
+    const isNow = liveNow && liveNow.idx===idx;
+    const stateLabel = t.schedule.labels[d.state];
+    const nowBadge = isNow ? `<span class="badge now">${t.schedule.now} · ${t.schedule.platform[liveNow.platform]}</span>` : "";
+    return `
+      <div class="day-row ${isToday?'today':''}">
+        <div class="day-name">${d.day}</div>
+        <div class="badges">
+          <span class="badge ${d.state}">${stateLabel}</span>
+          ${nowBadge}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  // rules
+  $("#rulesTitle").textContent = t.rules.title;
+  $("#rulesDesc").textContent = t.rules.desc;
+  $("#rulesList").innerHTML = t.rules.list.map(x=>`<li>${x}</li>`).join("");
+  $("#rulesFooter").textContent = t.rules.footer;
+
+  // fortune
+  $("#fortuneTitle").textContent = t.fortune.title;
+  $("#fortuneDesc").textContent = t.fortune.desc;
+  $("#fortuneFooter").textContent = t.fortune.footer;
+  $("#fortuneBtn").textContent = t.fortune.btn;
+
+  const ddd = new Date();
+  const yyyy = ddd.getFullYear();
+  const mm = String(ddd.getMonth()+1).padStart(2,"0");
+  const dd = String(ddd.getDate()).padStart(2,"0");
+  const dateKey = `${yyyy}-${mm}-${dd}`;
+  $("#fortuneDate").textContent = dateKey;
+
+  const savedKey = `irev_fortune_${lang}_${dateKey}`;
+  const saved = localStorage.getItem(savedKey);
+  if(saved){
+    try{ showFortune(JSON.parse(saved)); }catch{}
+  }else{
+    $("#fortuneResult").textContent = "";
+    $("#luckFill").style.width = "0%";
+    $("#luckLabel").textContent = `${t.fortune.luckLabel} : 0%`;
+  }
+
+  // rp
+  $("#rpTitle").textContent = t.rp.title;
+  $("#formsTitle").textContent = t.rp.forms;
+  $("#rpText").textContent = t.rp.text;
+  $("#rpStream").textContent = t.rp.stream;
+  $("#slimeLabel").textContent = t.rp.slime;
+  $("#humanLabel").textContent = t.rp.human;
+
+  // lang selector
+  $("#lang").value = lang;
+}
+
+/* Fortune */
+function pickFortune(){
   const now = new Date();
   const yyyy = now.getFullYear();
-  const mm = String(now.getMonth()+1).padStart(2,'0');
-  const dd = String(now.getDate()).padStart(2,'0');
-
-  const seedFn = xmur3(`${lang}-${yyyy}-${mm}-${dd}-Avenia`);
+  const mm = String(now.getMonth()+1).padStart(2,"0");
+  const dd = String(now.getDate()).padStart(2,"0");
+  const dateKey = `${yyyy}-${mm}-${dd}`;
+  const seedFn = xmur3(`${lang}-${dateKey}-Irev`);
   const rand = mulberry32(seedFn());
   const list = fortunes[lang];
   const idx = Math.floor(rand() * list.length);
-
   const base = list[idx].luck;
-  const jitter = Math.floor((rand()*12) - 6);
-  const luck = Math.max(5, Math.min(95, base + jitter));
-
-  return { ...list[idx], luck, date: `${yyyy}-${mm}-${dd}` };
+  const jitter = Math.floor((rand()*12)-6);
+  const luck = Math.max(5, Math.min(95, base+jitter));
+  return { ...list[idx], luck, date: dateKey };
 }
-
 function showFortune(obj){
-  fortuneResultEl.textContent = `${obj.e}  ${obj.t}\n${obj.d}`;
-  requestAnimationFrame(() => {
-    luckFillEl.style.width = `${obj.luck}%`;
-    luckLabelEl.textContent = `${fortuneData[currentLang].luckLabel} : ${obj.luck}%`;
+  $("#fortuneResult").textContent = `${obj.e}  ${obj.t}\n${obj.d}`;
+  requestAnimationFrame(()=>{
+    $("#luckFill").style.width = `${obj.luck}%`;
+    $("#luckLabel").textContent = `${i18n[lang].fortune.luckLabel} : ${obj.luck}%`;
   });
 }
-
-/* Render RP */
-function renderRP(lang){
-  const r = rpData[lang];
-  document.getElementById('rp-title').textContent = r.title;
-  document.getElementById('rp-badge').textContent = r.badge;
-  document.getElementById('rp-text').textContent = r.text;
-  document.getElementById('rp-stream-setting').textContent = r.streamSetting;
-  document.getElementById('label-slime').textContent = r.slimeLabel;
-  document.getElementById('label-human').textContent = r.humanLabel;
-}
-
-/* Week Toggle */
-function setWeek(w){
-  currentWeek = w;
-  localStorage.setItem('avenia_week', w);
-  renderSchedule(currentLang);
-}
-weekABtn.addEventListener('click', () => { playClick(); setWeek('A'); });
-weekBBtn.addEventListener('click', () => { playClick(); setWeek('B'); });
-
-/* Language Switch */
-chips.forEach(chip => {
-  chip.addEventListener('click', () => {
-    playClick();
-    chips.forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-
-    currentLang = chip.dataset.lang;
-    renderAll(currentLang);
-  });
-});
-
-function renderAll(lang){
-  renderHome(lang);
-  renderRules(lang);
-  renderSchedule(lang);
-  renderFortune(lang);
-  renderRP(lang);
-}
-
-/* Theme */
-function applyTheme(theme){
-  document.documentElement.setAttribute('data-theme', theme);
-  localStorage.setItem('avenia_theme', theme);
-  themeToggle.textContent = (theme === 'dark') ? "☀️ Day" : "🌙 Night";
-}
-
-themeToggle.addEventListener('click', () => {
-  playClick();
-  const cur = document.documentElement.getAttribute('data-theme') || 'light';
-  applyTheme(cur === 'dark' ? 'light' : 'dark');
-});
 
 /* BGM */
+const bgm = $("#bgm");
 bgm.volume = 0.28;
 
-// Populate tracks
 function populateTracks(){
-  trackSelect.innerHTML = tracks.map(t => `<option value="${t.file}">${t.label}</option>`).join('');
+  $("#track").innerHTML = tracks.map(t=>`<option value="${t.file}">${t.label}</option>`).join("");
 }
 function setTrack(file, autoplay=false){
   if(!file) return;
   bgm.src = file;
-  localStorage.setItem('avenia_track', file);
+  localStorage.setItem("irev_track", file);
   if(autoplay){
-    bgm.play().then(()=>{
-      bgmToggle.textContent = '🎵 BGM Off';
-    }).catch(()=>{
-      bgmToggle.textContent = '🎵 BGM On';
-    });
+    bgm.play().then(()=>{}).catch(()=>{});
   }
 }
 
-populateTracks();
-trackSelect.addEventListener('change', () => {
-  playClick();
-  setTrack(trackSelect.value, true);
+/* Menu */
+function openMenu(){
+  $("#menu").classList.add("open");
+  $("#menu").setAttribute("aria-hidden","false");
+}
+function closeMenu(){
+  $("#menu").classList.remove("open");
+  $("#menu").setAttribute("aria-hidden","true");
+}
+
+/* Scroll hint hide on scroll a bit */
+function updateScrollHint(){
+  const y = window.scrollY || 0;
+  $("#scrollHint").style.opacity = y > 120 ? "0" : "0.95";
+}
+
+/* =========================
+   ✅ EVENTS
+   ========================= */
+$("#menuBtn").addEventListener("click", ()=>{ click(); openMenu(); });
+$("#menuClose").addEventListener("click", ()=>{ click(); closeMenu(); });
+$("#menu").addEventListener("click", (e)=>{ if(e.target.id==="menu"){ closeMenu(); }});
+document.addEventListener("keydown",(e)=>{ if(e.key==="Escape") closeMenu(); });
+
+document.querySelectorAll(".menu-link").forEach(a=>{
+  a.addEventListener("click", ()=>{ closeMenu(); });
 });
 
-window.addEventListener('load', async () => {
-  const savedTheme = localStorage.getItem('avenia_theme');
-  applyTheme(savedTheme || 'light');
+$("#lang").addEventListener("change", ()=>{
+  click();
+  lang = $("#lang").value;
+  localStorage.setItem("irev_lang", lang);
+  renderAll();
+});
 
-  renderAll(currentLang);
+$("#weekA").addEventListener("click", ()=>{
+  click(); week="A"; localStorage.setItem("irev_week", week); renderAll();
+});
+$("#weekB").addEventListener("click", ()=>{
+  click(); week="B"; localStorage.setItem("irev_week", week); renderAll();
+});
 
-  const savedTrack = localStorage.getItem('avenia_track') || tracks[0].file;
-  trackSelect.value = savedTrack;
+$("#fortuneBtn").addEventListener("click", ()=>{
+  click();
+  const obj = pickFortune();
+  showFortune(obj);
+  localStorage.setItem(`irev_fortune_${lang}_${obj.date}`, JSON.stringify(obj));
+});
+
+$("#themeBtn").addEventListener("click", ()=>{
+  click();
+  const cur = document.documentElement.getAttribute("data-theme") || "dark";
+  setTheme(cur==="dark" ? "light" : "dark");
+});
+
+populateTracks();
+$("#track").addEventListener("change", ()=>{
+  click();
+  setTrack($("#track").value, true);
+});
+
+$("#bgmBtn").addEventListener("click", ()=>{
+  click();
+  if(bgm.paused){
+    bgm.play().catch(()=>{});
+  }else{
+    bgm.pause();
+  }
+});
+
+/* =========================
+   ✅ INIT
+   ========================= */
+window.addEventListener("load", async ()=>{
+  // theme
+  const savedTheme = localStorage.getItem("irev_theme") || "dark";
+  setTheme(savedTheme);
+
+  // tracks
+  const savedTrack = localStorage.getItem("irev_track") || tracks[0].file;
+  $("#track").value = savedTrack;
   setTrack(savedTrack, false);
 
-  // Fortune roll
-  fortuneRollBtn.addEventListener('click', () => {
-    playClick();
-    const obj = pickFortune(currentLang);
-    showFortune(obj);
-    const key = `avenia_fortune_${currentLang}_${obj.date}`;
-    localStorage.setItem(key, JSON.stringify(obj));
-  });
+  // render
+  renderAll();
 
-  // Auto BGM
-  try{
-    await bgm.play();
-    bgmToggle.textContent = '🎵 BGM Off';
-  }catch{
-    bgmToggle.textContent = '🎵 BGM On';
-  }
+  // loader out
+  setTimeout(()=> $("#loader").classList.add("hide"), 220);
 
-  // ✅ LIVE NOW 갱신(1분마다)
-  setInterval(() => {
-    renderSchedule(currentLang);
-  }, 60 * 1000);
+  // try autoplay (may be blocked)
+  try{ await bgm.play(); }catch(e){}
+
+  // live now refresh
+  setInterval(renderAll, 60*1000);
+
+  // scroll hint
+  updateScrollHint();
 });
-
-bgmToggle.addEventListener('click', () => {
-  playClick();
-  if (bgm.paused){
-    bgm.play().catch(()=>{});
-    bgmToggle.textContent = '🎵 BGM Off';
-  } else {
-    bgm.pause();
-    bgmToggle.textContent = '🎵 BGM On';
-  }
-});
+window.addEventListener("scroll", updateScrollHint);
 </script>
-
 </body>
 </html>
