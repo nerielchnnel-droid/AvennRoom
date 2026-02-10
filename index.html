@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Irev Official</title>
+  <!--
+    This page combines the simple hero-and-card aesthetic from the previous index
+    with all of the dynamic functionality from the full profile site.  The
+    markup retains the IDs expected by the original JavaScript so that
+    translation, schedule toggles, fortune drawing and other features work
+    seamlessly.  Styles have been rewritten to use a darker, pastel palette
+    similar to the uploaded "summer night" theme and to improve readability.
+  -->
+  <style>
+    :root {
+      /* Base colours for dark mode */
+      --bg: #0f172a;
+      --card-bg: rgba(31, 45, 77, 0.85);
+      --border: 1px solid #334155;
+      --text: #f8fafc;
+      --sub: #94a3b8;
+      --accent1: #6d28d9;
+      --accent2: #818cf8;
+      --accent3: #a78bfa;
+      --radius: 14px;
+    }
+
+    html[data-theme="light"] {
+      /* Light theme overrides */
+      --bg: #ffffff;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --border: 1px solid #e2e8f0;
+      --text: #0f172a;
+      --sub: #475569;
+      --accent1: #818cf8;
+      --accent2: #a78bfa;
+      --accent3: #c4b5fd;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Pretendard', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Loader overlay shown while scripts initialise */
+    #loader {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.75);
+      color: var(--text);
+      z-index: 9999;
+      transition: opacity 0.45s ease, visibility 0.45s ease;
+    }
+    #loader.hide {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .loader-inner {
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+    }
+    .loader-bar {
+      margin-top: 12px;
+      width: 200px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .loader-bar > span {
+      display: block;
+      height: 100%;
+      width: 40%;
+      background: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3));
+      border-radius: 999px;
+      animation: loadAnim 1.1s infinite;
+    }
+    @keyframes loadAnim {
+      0% { transform: translateX(-120%); }
+      100% { transform: translateX(260%); }
+    }
+
+    /* Hero header */
+    header {
+      position: relative;
+      min-height: 70vh;
+      padding: 60px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(rgba(15, 23, 42, 0.78), rgba(15, 23, 42, 0.78)), url('배너.png');
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* Language, theme and BGM controls */
+    .controls {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .controls select,
+    .controls button {
+      background: var(--card-bg);
+      color: var(--text);
+      border: var(--border);
+      border-radius: 8px;
+      padding: 6px 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      appearance: none;
+    }
+    .controls button {
+      line-height: 1;
+    }
+
+    /* Hero title and subtitle */
+    #heroTitle {
+      font-size: 3rem;
+      margin: 0;
+      background: linear-gradient(to right, var(--accent1), var(--accent2), var(--accent3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    #heroSub {
+      font-size: 1.2rem;
+      color: var(--sub);
+      margin-top: 12px;
+      max-width: 700px;
+    }
+    .cta-button {
+      margin-top: 2rem;
+      padding: 12px 30px;
+      background-color: var(--accent1);
+      color: white;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: bold;
+      transition: 0.3s;
+      display: inline-block;
+    }
+    .cta-button:hover {
+      background-color: var(--accent2);
+      transform: translateY(-4px);
+    }
+
+    /* Scroll hint at bottom of hero */
+    .scrollhint {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0.9;
+      transition: opacity 0.3s;
+    }
+    .scrollhint .dot {
+      width: 6px;
+      height: 6px;
+      margin-bottom: 6px;
+      border-radius: 50%;
+      background: var(--accent1);
+      animation: bounce 1.2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); opacity: 0.8; }
+      50% { transform: translateY(8px); opacity: 0.4; }
+    }
+
+    .scrollhint span {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--sub);
+    }
+
+    /* Container and grids */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.6rem;
+    }
+
+    /* Card styling */
+    .card {
+      background: var(--card-bg);
+      border: var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+    .card h3,
+    .card h4 {
+      margin-top: 0;
+      margin-bottom: 0.8rem;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent2);
+    }
+    .card p {
+      margin-top: 0;
+      margin-bottom: 0.6rem;
+    }
+
+    /* Section headings */
+    section > h2 {
+      margin-top: 3rem;
+      margin-bottom: 0.3rem;
+      font-size: 1.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: linear-gradient(to right, var(--accent1), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .sub {
+      margin-top: 0;
+      margin-bottom: 1.2rem;
+      font-size: 0.9rem;
+      color: var(--sub);
+    }
+
+    /* News list */
+    .news-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .news-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .news-list li:last-child {
+      border-bottom: none;
+    }
+    .news-list .tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: var(--accent1);
+      color: #fff;
+      flex-shrink: 0;
+      align-self: center;
+    }
+    .news-list .title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+    }
+    .news-list .desc {
+      font-size: 0.85rem;
+      color: var(--sub);
+    }
+
+    /* Schedule section */
+    .schedule {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    @media (min-width: 600px) {
+      .schedule {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .week-toggle {
+      display: flex;
+      gap: 10px;
+      margin-top: 1rem;
+    }
+    .week-btn {
+      flex: 1;
+      padding: 6px 10px;
+      border: var(--border);
+      background: var(--card-bg);
+      color: var(--text);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .week-btn.active {
+      background: var(--accent1);
+      border-color: var(--accent1);
+      color: #fff;
+    }
+
+    .schedule-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 0.8rem;
+    }
+    .day-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .day-row:last-child {
+      border-bottom: none;
+    }
+    .day-row.today {
+      font-weight: 700;
+    }
+    .day-name {
+      width: 50px;
+    }
+    .badges {
+      display: flex;
+      gap: 6px;
+    }
+    .badge {
+      font-size: 0.7rem;
+      padding: 3px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      color: var(--sub);
+    }
+    .badge.live {
+      border-color: var(--accent1);
+      color: var(--accent1);
+    }
+    .badge.off {
+      border-color: rgba(100, 116, 139, 0.5);
+      color: rgba(100, 116, 139, 0.8);
+    }
+    .badge.now {
+      border-color: var(--accent2);
+      color: var(--accent2);
+    }
+
+    /* Rules list */
+    .rules-list {
+      list-style: disc;
+      padding-left: 1.2rem;
+      margin-top: 0.6rem;
+      color: var(--text);
+    }
+    .rules-list li {
+      margin-bottom: 0.4rem;
+      font-size: 0.85rem;
+    }
+
+    /* Fortune section */
+    .fortune-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .fortune-controls {
+      text-align: right;
+    }
+    .pill {
+      padding: 6px 12px;
+      background: var(--accent1);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .pill:hover {
+      background: var(--accent2);
+    }
+    .fortune-result {
+      white-space: pre-wrap;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+    .luck-bar-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 1rem;
+    }
+    .luck-bar {
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .luck-fill {
+      height: 100%;
+      width: 0;
+      background: var(--accent2);
+      transition: width 0.6s ease;
+    }
+    .luck-label {
+      font-size: 0.8rem;
+      color: var(--sub);
+    }
+
+    /* Profile section */
+    .rp-text {
+      white-space: pre-wrap;
+      font-size: 0.9rem;
+      margin-bottom: 0.8rem;
+    }
+    .avatar-grid {
+      display: flex;
+      gap: 20px;
+      margin-top: 1rem;
+    }
+    .avatar {
+      text-align: center;
+      flex: 1;
+    }
+    .avatar img {
+      width: 100%;
+      max-width: 140px;
+      border-radius: 50%;
+      margin-top: 8px;
+      border: var(--border);
+    }
+    .avatar .label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      color: var(--accent1);
+    }
+
+    /* Links section */
+    .links a {
+      font-size: 1.6rem;
+      margin-right: 14px;
+      text-decoration: none;
+      color: var(--accent2);
+      transition: color 0.2s;
+    }
+    .links a:hover {
+      color: var(--accent3);
+    }
+
+    /* Menu overlay (hidden by default but functional for script compatibility) */
+    #menu {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 100;
+    }
+    #menu.open {
+      visibility: visible;
+      opacity: 1;
+    }
+    #menu .menu-card {
+      background: var(--card-bg);
+      border: var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      width: 90%;
+      max-width: 320px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    #menu .menu-card a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    #menu .menu-card a:last-child {
+      border-bottom: none;
+    }
+    #menu .menu-card .close-btn {
+      align-self: flex-end;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      color: var(--sub);
+      cursor: pointer;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.8rem;
+      color: var(--sub);
+    }
+  </style>
+</head>
+<body>
+  <!-- Loader displayed until scripts finish initialising -->
+  <div id="loader">
+    <div class="loader-inner">
+      LOADING
+      <div class="loader-bar"><span></span></div>
+    </div>
+  </div>
+
+  <!-- Audio elements for click feedback and background music -->
+  <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+  <audio id="bgm" loop></audio>
+
+  <!-- Header with hero content and controls -->
+  <header>
+    <!-- top controls: language, theme, track selection, BGM toggle, menu button -->
+    <div class="controls">
+      <select id="lang">
+        <option value="ko">KO</option>
+        <option value="en">EN</option>
+        <option value="ja">JA</option>
+      </select>
+      <button id="themeBtn">🌙</button>
+      <select id="track"></select>
+      <button id="bgmBtn">🔈</button>
+      <!-- menu button intentionally hidden off-screen but present for script -->
+      <button id="menuBtn" style="display:none;">☰</button>
+    </div>
+    <!-- brand text placeholders for script compatibility (hidden) -->
+    <div style="display:none;">
+      <span id="brandTop"></span>
+      <span id="brandSub"></span>
+    </div>
+    <h1 id="heroTitle">이래브 OFFICIAL</h1>
+    <p id="heroSub">우주의 균열에서 태어난 셀레노이드 젤. 오늘도 “재미”로 살아남는다.</p>
+    <a href="#mainContent" class="cta-button">더 알아보기</a>
+    <!-- scroll hint -->
+    <div class="scrollhint" id="scrollHint">
+      <span class="dot"></span>
+      <span id="scrollText">SCROLL</span>
+    </div>
+    <!-- hot ticker placeholder (hidden) -->
+    <div id="hotTicker" style="display:none;"></div>
+  </header>
+
+  <!-- Menu overlay (hidden by default) -->
+  <nav id="menu" aria-hidden="true">
+    <div class="menu-card">
+      <button id="menuClose" class="close-btn">×</button>
+      <!-- Menu links use IDs defined in script for translation -->
+      <a href="#" class="menu-link" id="mTop">TOP</a>
+      <a href="#news" class="menu-link" id="mNews">NEWS</a>
+      <a href="#schedule" class="menu-link" id="mSchedule">SCHEDULE</a>
+      <a href="#rules" class="menu-link" id="mRules">RULES</a>
+      <a href="#fortune" class="menu-link" id="mLuck">LUCK</a>
+      <a href="#rp" class="menu-link" id="mRp">RP</a>
+      <a href="#links" class="menu-link" id="mLinks">LINKS</a>
+    </div>
+  </nav>
+
+  <!-- Main content begins here -->
+  <main id="mainContent">
+    <div class="container">
+      <!-- Meta information cards (stream time, concept, notice) -->
+      <div class="grid">
+        <div class="card">
+          <h4 id="meta1Title">STREAM TIME</h4>
+          <p id="meta1Body">🟢 치지직 16:00–18:00 (KST)<br>🟣 트위치 23:00–02:00 (KST)</p>
+        </div>
+        <div class="card">
+          <h4 id="meta2Title">CONCEPT</h4>
+          <p id="meta2Body">Selenoid Gel • Cosmic Rift • Nekomata Soul</p>
+        </div>
+        <div class="card">
+          <h4 id="meta3Title">NOTICE</h4>
+          <p id="meta3Body">2주 로테이션(A/B) 스케줄. 메뉴에서 바로 이동 가능.</p>
+        </div>
+      </div>
+
+      <!-- News Section -->
+      <section id="news">
+        <h2>NEWS</h2>
+        <p id="newsSub" class="sub">최신정보</p>
+        <div class="card">
+          <ul id="newsList" class="news-list"></ul>
+        </div>
+      </section>
+
+      <!-- Schedule Section -->
+      <section id="schedule">
+        <h2>SCHEDULE</h2>
+        <p id="scheduleSub" class="sub">방송일정</p>
+        <div class="card schedule">
+          <div class="sch-info">
+            <h4 id="schInfoTitle">INFO</h4>
+            <p id="schInfoBody">🟢 치지직: 오후 4:00 ~ 오후 6:00 (KST)<br>🟣 트위치: 오후 11:00 ~ 오전 2:00 (KST)</p>
+            <div class="week-toggle">
+              <button id="weekA" class="week-btn">A</button>
+              <button id="weekB" class="week-btn">B</button>
+            </div>
+            <p id="schFooter" class="footnote"></p>
+          </div>
+          <div class="sch-week">
+            <h4 id="schWeekTitle">WEEK</h4>
+            <div id="scheduleGrid" class="schedule-grid"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Rules Section -->
+      <section id="rules">
+        <h2>RULES</h2>
+        <p id="rulesSub" class="sub">규칙</p>
+        <div class="card">
+          <h4 id="rulesTitle">CHAT RULES</h4>
+          <p id="rulesDesc"></p>
+          <ul id="rulesList" class="rules-list"></ul>
+          <p id="rulesFooter" class="footnote"></p>
+        </div>
+      </section>
+
+      <!-- Fortune Section -->
+      <section id="fortune">
+        <h2>FORTUNE</h2>
+        <p id="fortuneSub" class="sub">오늘의 운세</p>
+        <div class="card">
+          <div class="fortune-header">
+            <div>
+              <h4 id="fortuneTitle">DAILY FORTUNE</h4>
+              <p id="fortuneDesc"></p>
+            </div>
+            <div class="fortune-controls">
+              <div id="fortuneDate" class="fortune-date"></div>
+              <button id="fortuneBtn" class="pill">🔮</button>
+            </div>
+          </div>
+          <div id="fortuneResult" class="fortune-result"></div>
+          <div class="luck-bar-wrapper">
+            <span id="luckLabel" class="luck-label"></span>
+            <div class="luck-bar">
+              <div id="luckFill" class="luck-fill"></div>
+            </div>
+          </div>
+          <p id="fortuneFooter" class="footnote"></p>
+        </div>
+      </section>
+
+      <!-- Profile / RP Section -->
+      <section id="rp">
+        <h2>RP</h2>
+        <p id="rpSub" class="sub">설정</p>
+        <div class="card">
+          <h4 id="rpTitle">PROFILE</h4>
+          <p id="rpText" class="rp-text"></p>
+          <p id="rpStream" class="rp-text"></p>
+        </div>
+        <div class="card">
+          <h4 id="formsTitle">FORMS</h4>
+          <div class="avatar-grid">
+            <div class="avatar">
+              <div class="label"><span id="slimeLabel"></span><span>🟣</span></div>
+              <img src="slime.png" alt="Slime Form" onerror="this.style.display='none';" />
+            </div>
+            <div class="avatar">
+              <div class="label"><span id="humanLabel"></span><span>🌸</span></div>
+              <img src="human.png" alt="Human Form" onerror="this.style.display='none';" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Links Section -->
+      <section id="links">
+        <h2>LINKS</h2>
+        <p id="linksSub" class="sub">링크</p>
+        <div class="card links">
+          <a href="https://discord.gg/amqfjt68nw" target="_blank" rel="noopener" title="Discord">💬</a>
+          <a href="https://www.youtube.com/@Even%EB%8B%A4%EC%8B%9C%EB%B3%B4%EA%B8%B0" target="_blank" rel="noopener" title="YouTube">▶️</a>
+          <a href="https://x.com/aven1166793?s=21" target="_blank" rel="noopener" title="X" class="x">𝕏</a>
+          <a href="https://toon.at/donate/aven" target="_blank" rel="noopener" title="Donate">💝</a>
+          <a href="https://fancim.me/celeb/profile.aspx?url=758954" target="_blank" rel="noopener" title="팬심">🎁</a>
+          <a href="https://comic.naver.com/community/u/Even77777?lastPage=Creators" target="_blank" rel="noopener" title="Naver Comic">🖋️</a>
+          <a href="https://cafe.naver.com/f-e/cafes/31529869/menus/0?t=1762537197544" target="_blank" rel="noopener" title="Cafe">☕</a>
+        </div>
+      </section>
+
+    </div> <!-- container -->
+  </main>
+
+  <footer>
+    © 2026 Irev. All Rights Reserved.
+  </footer>
+
+  <!-- Include the original script for dynamic functionality.  Slight modifications
+       have been applied to gracefully handle missing menu elements and to work
+       with the simplified layout. -->
+  <script>
+    /* =========================
+       ✅ DATA (Avenia -> Irev)
+       ========================= */
+
+    const i18n = {
+      ko: {
+        brandTop: "IREV",
+        brandSub: "OFFICIAL SITE",
+        scroll: "SCROLL",
+        heroTitle: "이래브 (Irev) OFFICIAL",
+        heroSub: "우주의 균열에서 태어난 셀레노이드 젤. 오늘도 “재미”로 살아남는다.",
+        meta1Title: "STREAM TIME",
+        meta1Body: "🟢 치지직 16:00–18:00 (KST)\n🟣 트위치 23:00–02:00 (KST)",
+        meta2Title: "CONCEPT",
+        meta2Body: "Selenoid Gel • Cosmic Rift • Nekomata Soul",
+        meta3Title: "NOTICE",
+        meta3Body: "2주 로테이션(A/B) 스케줄. 메뉴에서 바로 이동 가능.",
+        menu: {
+          top: "메인", news: "최신 소식", schedule: "방송 일정", rules: "채팅 규칙", luck: "운세", rp: "설정", links: "SNS"
+        },
+        subs: { news: "최신정보", schedule: "방송일정", rules: "규칙", fortune: "오늘의 운세", rp: "설정", links: "링크" },
+        hotTicker: "Irev로 리브랜딩 완료. 링크/규칙/스케줄 업데이트.",
+        news: [
+          { tag: "UPDATE", title: "이래브(Irev)로 표기 통일", desc: "Aven/Avenia 표기를 전부 Irev/이래브로 변경했습니다." },
+          { tag: "SCHEDULE", title: "2주 로테이션 스케줄", desc: "A/B 주차 토글로 이번 주 방송/휴방을 확인할 수 있어요." },
+          { tag: "FUN", title: "오늘의 운세 오픈", desc: "기분 전환용 ‘균열 운세’. 마음에 안 들면 다시 뽑기 가능." }
+        ],
+        schedule: {
+          infoTitle: "INFO",
+          infoBody: "🟢 치지직: 오후 4:00 ~ 오후 6:00 (KST)\n🟣 트위치: 오후 11:00 ~ 오전 2:00 (KST)",
+          footer: "※ 2주 로테이션. A/B를 선택해서 확인하세요.",
+          labels: { live: "방송", off: "휴방" },
+          now: "LIVE NOW",
+          platform: { chzzk: "치지직", twitch: "트위치" },
+          weekA: { label: "🅰️ 1주차", note: "A Rotation",
+            days: [
+              { day: "월", state: "off" }, { day: "화", state: "live" }, { day: "수", state: "off" },
+              { day: "목", state: "live" }, { day: "금", state: "off" }, { day: "토", state: "live" }, { day: "일", state: "off" }
+            ]
+          },
+          weekB: { label: "🅱️ 2주차", note: "B Rotation",
+            days: [
+              { day: "월", state: "live" }, { day: "화", state: "off" }, { day: "수", state: "live" },
+              { day: "목", state: "off" }, { day: "금", state: "live" }, { day: "토", state: "off" }, { day: "일", state: "live" }
+            ]
+          }
+        },
+        rules: {
+          title: "CHAT RULES",
+          desc: "기본적인 윤리는 지켜야 모두가 편한 공간이 됩니다.",
+          footer: "※ 어려운 규칙 아니니깐~ 지켜주세요~.",
+          list: [
+            "예의와 존중을 지켜주세요.",
+            "무례, 비하, 욕설은 허용되지 않습니다.",
+            "정치 / 종교 / 민감한 주제는 금지입니다.",
+            "스포일러 및 TMI 자제 바랍니다.",
+            "타인의 평판을 해치는 채팅은 금지입니다."
+          ]
+        },
+        fortune: {
+          title: "DAILY FORTUNE",
+          desc: "재미로만 보는 균열 운세. 마음에 안 들면 다시 뽑아도 됨.",
+          footer: "※ 진지하게 믿지 말 것. 재미는 OK.",
+          btn: "🔮 운세 뽑기",
+          luckLabel: "오늘의 운(%)"
+        },
+        rp: {
+          title: "PROFILE",
+          forms: "FORMS",
+          slime: "슬라임 폼",
+          human: "인간 폼",
+          text:
+`이름 : 이래브 (Irev)
+종족 : 셀레노이드 젤 (Selenoid Gel)
+탄생 : 붕괴된 우주의 균열에서 태어남
+외형 : 슬라임 (젤리)
+
+설명 : 고양이가 네코마타로 변이한 이후,
+그 영혼이 우주의 균열체와 융합된 존재.
+육체는 소멸했으나, 의식은 균열 속에서 새로운 형태로 재구성되었다.`,
+          stream:
+`방송 중 설정:
+방송 중에는 인간 형태로 활동하지만,
+세계관상 본질은 항상 슬라임 상태로 유지된다.`
+        }
+      },
+      en: {
+        brandTop: "IREV",
+        brandSub: "OFFICIAL SITE",
+        scroll: "SCROLL",
+        heroTitle: "Irev OFFICIAL",
+        heroSub: "A Selenoid Gel born from a cosmic rift. Surviving on “fun” today too.",
+        meta1Title: "STREAM TIME",
+        meta1Body: "🟢 CHZZK 16:00–18:00 (KST)\n🟣 Twitch 23:00–02:00 (KST)",
+        meta2Title: "CONCEPT",
+        meta2Body: "Selenoid Gel • Cosmic Rift • Nekomata Soul",
+        meta3Title: "NOTICE",
+        meta3Body: "2-week rotation schedule (A/B). Jump via MENU.",
+        menu: { top: "Top", news: "News", schedule: "Schedule", rules: "Rules", luck: "Luck", rp: "RP", links: "Links" },
+        subs: { news: "Latest", schedule: "Streaming", rules: "Rules", fortune: "Daily Fortune", rp: "Lore", links: "Links" },
+        hotTicker: "Rebrand done: Irev. Links/Rules/Schedule updated.",
+        news: [
+          { tag: "UPDATE", title: "Unified name as Irev", desc: "All Aven/Avenia labels changed to Irev." },
+          { tag: "SCHEDULE", title: "2-week rotation", desc: "Use A/B toggle to check LIVE/OFF days." },
+          { tag: "FUN", title: "Daily fortune", desc: "Rift fortune for fun. Roll again anytime." }
+        ],
+        schedule: {
+          infoTitle: "INFO",
+          infoBody: "🟢 CHZZK: 4:00 PM ~ 6:00 PM (KST)\n🟣 Twitch: 11:00 PM ~ 2:00 AM (KST)",
+          footer: "※ 2-week rotation. Use A/B toggle.",
+          labels: { live: "LIVE", off: "OFF" },
+          now: "LIVE NOW",
+          platform: { chzzk: "CHZZK", twitch: "Twitch" },
+          weekA: { label: "🅰️ Week A", note: "A Rotation",
+            days: [ { day: "Mon", state: "off" }, { day: "Tue", state: "live" }, { day: "Wed", state: "off" }, { day: "Thu", state: "live" }, { day: "Fri", state: "off" }, { day: "Sat", state: "live" }, { day: "Sun", state: "off" } ]
+          },
+          weekB: { label: "🅱️ Week B", note: "B Rotation",
+            days: [ { day: "Mon", state: "live" }, { day: "Tue", state: "off" }, { day: "Wed", state: "live" }, { day: "Thu", state: "off" }, { day: "Fri", state: "live" }, { day: "Sat", state: "off" }, { day: "Sun", state: "live" } ]
+          }
+        },
+        rules: {
+          title: "CHAT RULES",
+          desc: "Basic ethics keep the room comfortable for everyone.",
+          footer: "※ Simple rules. Please follow them.",
+          list: [
+            "Be polite and respectful.",
+            "No insults, slurs, or profanity.",
+            "No politics/religion/sensitive topics.",
+            "Avoid spoilers and excessive TMI.",
+            "Do not harm others’ reputation."
+          ]
+        },
+        fortune: {
+          title: "DAILY FORTUNE",
+          desc: "Just for fun. Don’t like it? Roll again.",
+          footer: "※ For fun only.",
+          btn: "🔮 Draw Fortune",
+          luckLabel: "Luck (%)"
+        },
+        rp: {
+          title: "PROFILE",
+          forms: "FORMS",
+          slime: "Slime Form",
+          human: "Human Form",
+          text:
+`Name: Irev
+Species: Selenoid Gel
+Birth: Born from a collapsing cosmic rift
+Form: Slime (jelly)
+
+Description: After a cat mutated into a Nekomata,
+its soul fused with a rift-entity.
+The body was lost, but consciousness was rebuilt inside the rift.`,
+          stream:
+`Stream Setting:
+During streams, Irev acts in a human form,
+but the true essence remains slime in the lore.`
+        }
+      },
+      ja: {
+        brandTop: "IREV",
+        brandSub: "OFFICIAL SITE",
+        scroll: "SCROLL",
+        heroTitle: "イレヴ（Irev）OFFICIAL",
+        heroSub: "宇宙の亀裂から生まれたセレノイド・ジェル。今日も「楽しさ」で生き延びる。",
+        meta1Title: "STREAM TIME",
+        meta1Body: "🟢 CHZZK 16:00–18:00（韓国時間）\n🟣 Twitch 23:00–02:00（韓国時間）",
+        meta2Title: "CONCEPT",
+        meta2Body: "Selenoid Gel • Cosmic Rift • Nekomata Soul",
+        meta3Title: "NOTICE",
+        meta3Body: "2週間ローテ(A/B)。MENUから各セクションへ。",
+        menu: { top: "トップ", news: "最新情報", schedule: "配信予定", rules: "ルール", luck: "運勢", rp: "設定", links: "リンク" },
+        subs: { news: "最新情報", schedule: "配信スケジュール", rules: "ルール", fortune: "今日の運勢", rp: "設定", links: "リンク" },
+        hotTicker: "表記をIrevに統一。リンク/ルール/スケジュール更新。",
+        news: [
+          { tag: "UPDATE", title: "表記をIrevに統一", desc: "Aven/Avenia表記をIrev/イレヴに変更しました。" },
+          { tag: "SCHEDULE", title: "2週間ローテーション", desc: "A/B切り替えで配信日・休みが確認できます。" },
+          { tag: "FUN", title: "今日の運勢", desc: "気分転換の“亀裂占い”。気に入らなければ引き直しOK。" }
+        ],
+        schedule: {
+          infoTitle: "INFO",
+          infoBody: "🟢 CHZZK：16:00～18:00（韓国時間）\n🟣 Twitch：23:00～02:00（韓国時間）",
+          footer: "※ 2週間ローテーション。A/Bで切り替えてください。",
+          labels: { live: "配信", off: "休み" },
+          now: "配信中",
+          platform: { chzzk: "CHZZK", twitch: "Twitch" },
+          weekA: { label: "🅰️ 1週目", note: "A Rotation",
+            days: [ { day: "月", state: "off" }, { day: "火", state: "live" }, { day: "水", state: "off" }, { day: "木", state: "live" }, { day: "金", state: "off" }, { day: "土", state: "live" }, { day: "日", state: "off" } ]
+          },
+          weekB: { label: "🅱️ 2週目", note: "B Rotation",
+            days: [ { day: "月", state: "live" }, { day: "火", state: "off" }, { day: "水", state: "live" }, { day: "木", state: "off" }, { day: "金", state: "live" }, { day: "土", state: "off" }, { day: "日", state: "live" } ]
+          }
+        },
+        rules: {
+          title: "CHAT RULES",
+          desc: "基本的な倫理を守って、皆が快適な空間にしましょう。",
+          footer: "※ 難しいルールではないので守ってください。",
+          list: [
+            "礼儀と敬意を大切にしてください。",
+            "無礼・侮辱・暴言は禁止です。",
+            "政治・宗教・センシティブな話題は禁止です。",
+            "ネタバレやTMIは控えてください。",
+            "他人の評判を傷つける発言は禁止です。"
+          ]
+        },
+        fortune: {
+          title: "DAILY FORTUNE",
+          desc: "遊び用の“亀裂占い”。気に入らなければ引き直してOK。",
+          footer: "※ あくまで遊びです。",
+          btn: "🔮 運勢を引く",
+          luckLabel: "今日の運(%)"
+        },
+        rp: {
+          title: "PROFILE",
+          forms: "FORMS",
+          slime: "スライム形態",
+          human: "人間形態",
+          text:
+`名前：イレヴ（Irev）
+種族：セレノイド・ジェル（Selenoid Gel）
+誕生：崩壊した宇宙の亀裂から誕生
+外見：スライム（ゼリー状）
+
+説明：猫がネコマタへ変異した後、
+その魂が宇宙の亀裂体と融合した存在。
+肉体は失われたが、意識は亀裂の中で再構築された。`,
+          stream:
+`配信中の設定：
+配信中は人間形態で活動するが、
+世界観上の本質は常にスライムのままである。`
+        }
+      }
+    };
+
+    const fortunes = {
+      ko: [
+        { t: "균열이 미소 짓는 날", d: "작은 선택이 큰 결과로 튄다. 오늘은 ‘바로 하기’가 이긴다.", luck: 82, e: "🌌" },
+        { t: "젤리 멘탈 강화", d: "감정 낭비 줄이면 체력 남는다. 말은 짧게, 결정은 빠르게.", luck: 68, e: "🟣" },
+        { t: "네코마타의 촉", d: "눈치가 미친다. 이상한 낌새 느끼면 그쪽이 정답.", luck: 74, e: "🐾" },
+        { t: "반짝 운빨", d: "가챠/뽑기/랜덤은 오늘 유리. 단, 과몰입 금지.", luck: 79, e: "✨" },
+        { t: "조용한 회복", d: "무리하면 깨진다. 컨디션 관리가 최우선.", luck: 61, e: "🫧" },
+        { t: "대화운", d: "한 마디가 사람 붙인다. 고정 멘트 하나 준비해.", luck: 70, e: "💬" },
+        { t: "집중 모드", d: "한 번 붙으면 길게 간다. 정리/작업/개발에 강함.", luck: 76, e: "🧠" },
+        { t: "스포트라이트", d: "사람이 모인다. 대신 말실수만 조심.", luck: 73, e: "🎙️" }
+      ],
+      en: [
+        { t: "The Rift Smiles", d: "Small choices snowball. ‘Do it now’ wins today.", luck: 82, e: "🌌" },
+        { t: "Gel Mind, Strong", d: "Save your energy. Short words, quick decisions.", luck: 68, e: "🟣" },
+        { t: "Nekomata Instinct", d: "Your gut is sharp. If something feels off, it is.", luck: 74, e: "🐾" },
+        { t: "Spark Luck", d: "Random pulls favor you. Don’t overdo it.", luck: 79, e: "✨" },
+        { t: "Quiet Recovery", d: "Don’t push too hard. Protect your condition.", luck: 61, e: "🫧" },
+        { t: "Talk Luck", d: "One line can hook people. Prepare a signature phrase.", luck: 70, e: "💬" },
+        { t: "Focus Mode", d: "Deep work goes well. Organize, build, ship.", luck: 76, e: "🧠" },
+        { t: "Spotlight", d: "Eyes on you today. Avoid careless slips.", luck: 73, e: "🎙️" }
+      ],
+      ja: [
+        { t: "亀裂が微笑む日", d: "小さな選択が大きく跳ねる。「今やる」が勝つ。", luck: 82, e: "🌌" },
+        { t: "ジェル精神強化", d: "感情の無駄遣いを減らすと楽。短く話して、早く決める。", luck: 68, e: "🟣" },
+        { t: "ネコマタの勘", d: "直感が冴える。違和感があったらそっちが正解。", luck: 74, e: "🐾" },
+        { t: "キラ運", d: "ガチャ運よし。やりすぎ注意。", luck: 79, e: "✨" },
+        { t: "静かな回復", d: "無理すると崩れる。コンディション最優先。", luck: 61, e: "🫧" },
+        { t: "会話運", d: "一言で人が集まる。決め台詞を用意すると強い。", luck: 70, e: "💬" },
+        { t: "集中モード", d: "作業が伸びる日。整理・制作・開発が進む。", luck: 76, e: "🧠" },
+        { t: "スポットライト", d: "注目が集まる。うっかり発言だけ注意。", luck: 73, e: "🎙️" }
+      ]
+    };
+
+    const tracks = [
+      { label: "Manipulate", file: "Manipulate.mp3" },
+      { label: "himituno_osyaberi", file: "himituno_osyaberi.mp3" },
+      { label: "よふかしは00_59まで", file: "よふかしは00_59まで.wav" },
+      { label: "チアフルデイズ", file: "チアフルデイズ.wav" },
+      { label: "크리스마스 브금", file: "크리스마스 브금.wav" }
+    ];
+
+    /* =========================
+       ✅ HELPERS
+       ========================= */
+    const $ = (s) => document.querySelector(s);
+    const clickSound = $("#clickSound");
+    function click() {
+      if (!clickSound) return;
+      clickSound.currentTime = 0;
+      clickSound.play().catch(() => {});
+    }
+    function xmur3(str) {
+      let h = 1779033703 ^ str.length;
+      for (let i = 0; i < str.length; i++) {
+        h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
+        h = (h << 13) | (h >>> 19);
+      }
+      return function () {
+        h = Math.imul(h ^ (h >>> 16), 2246822507);
+        h = Math.imul(h ^ (h >>> 13), 3266489909);
+        h ^= h >>> 16;
+        return h >>> 0;
+      };
+    }
+    function mulberry32(a) {
+      return function () {
+        let t = (a += 0x6D2B79F5);
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    /* LIVE NOW calc */
+    function getLiveNowInfo(weekObj) {
+      const now = new Date();
+      const minutes = now.getHours() * 60 + now.getMinutes();
+      const jsDay = now.getDay(); // 0=Sun..6=Sat
+      const todayIdx = jsDay === 0 ? 6 : jsDay - 1;
+      const prevIdx = (todayIdx + 6) % 7;
+      // CHZZK 16-18
+      if (minutes >= 16 * 60 && minutes < 18 * 60) {
+        if (weekObj.days[todayIdx]?.state === "live") return { idx: todayIdx, platform: "chzzk" };
+      }
+      // Twitch 23-24
+      if (minutes >= 23 * 60) {
+        if (weekObj.days[todayIdx]?.state === "live") return { idx: todayIdx, platform: "twitch" };
+      }
+      // Twitch 00-02 (yesterday)
+      if (minutes < 2 * 60) {
+        if (weekObj.days[prevIdx]?.state === "live") return { idx: prevIdx, platform: "twitch" };
+      }
+      return null;
+    }
+
+    /* =========================
+       ✅ RENDER
+       ========================= */
+    let lang = localStorage.getItem("irev_lang") || "ko";
+    let week = localStorage.getItem("irev_week") || "A";
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("irev_theme", theme);
+      const btn = $("#themeBtn");
+      if (btn) btn.textContent = theme === "dark" ? "☀️" : "🌙";
+    }
+
+    function renderAll() {
+      const t = i18n[lang];
+      if (!t) return;
+      // hero text
+      const heroTitle = $("#heroTitle");
+      const heroSub = $("#heroSub");
+      if (heroTitle) heroTitle.textContent = t.heroTitle;
+      if (heroSub) heroSub.textContent = t.heroSub;
+      // meta boxes
+      $("#meta1Title").textContent = t.meta1Title;
+      $("#meta1Body").innerHTML = t.meta1Body.replaceAll("\n", "<br>");
+      $("#meta2Title").textContent = t.meta2Title;
+      $("#meta2Body").textContent = t.meta2Body;
+      $("#meta3Title").textContent = t.meta3Title;
+      $("#meta3Body").textContent = t.meta3Body;
+      // brand (unused in this layout but kept for script compat)
+      if ($("#brandTop")) $("#brandTop").textContent = t.brandTop;
+      if ($("#brandSub")) $("#brandSub").textContent = t.brandSub;
+      // scroll hint
+      if ($("#scrollText")) $("#scrollText").textContent = t.scroll;
+      // hot ticker (hidden)
+      if ($("#hotTicker")) $("#hotTicker").textContent = t.hotTicker;
+      // menu labels
+      const menuIds = ["mTop","mNews","mSchedule","mRules","mLuck","mRp","mLinks"];
+      if (t.menu) {
+        menuIds.forEach((idKey) => {
+          const el = $("#" + idKey);
+          if (el) {
+            const key = idKey.replace(/^m/, "").toLowerCase();
+            el.textContent = t.menu[key] || el.textContent;
+          }
+        });
+      }
+      // subtitles
+      $("#newsSub").textContent = t.subs.news;
+      $("#scheduleSub").textContent = t.subs.schedule;
+      $("#rulesSub").textContent = t.subs.rules;
+      $("#fortuneSub").textContent = t.subs.fortune;
+      $("#rpSub").textContent = t.subs.rp;
+      $("#linksSub").textContent = t.subs.links;
+      // news list
+      $("#newsList").innerHTML = t.news.map(n => `
+        <li>
+          <div class="tag">${n.tag}</div>
+          <div>
+            <div class="title">${n.title}</div>
+            <div class="desc">${n.desc}</div>
+          </div>
+        </li>
+      `).join("");
+      // schedule info
+      $("#schInfoTitle").textContent = t.schedule.infoTitle;
+      $("#schInfoBody").innerHTML = t.schedule.infoBody.replaceAll("\n", "<br>");
+      $("#schFooter").textContent = t.schedule.footer;
+      $("#schWeekTitle").textContent = "WEEK";
+      // week buttons
+      $("#weekA").textContent = t.schedule.weekA.label;
+      $("#weekB").textContent = t.schedule.weekB.label;
+      $("#weekA").classList.toggle("active", week === "A");
+      $("#weekB").classList.toggle("active", week === "B");
+      // schedule grid
+      const weekObj = week === "B" ? t.schedule.weekB : t.schedule.weekA;
+      const liveNow = getLiveNowInfo(weekObj);
+      $("#scheduleGrid").innerHTML = weekObj.days.map((d, idx) => {
+        const nowDate = new Date();
+        const jsDay = nowDate.getDay();
+        const todayIdx = jsDay === 0 ? 6 : jsDay - 1;
+        const isToday = idx === todayIdx;
+        const isNow = liveNow && liveNow.idx === idx;
+        const stateLabel = t.schedule.labels[d.state];
+        const nowBadge = isNow ? `<span class="badge now">${t.schedule.now} · ${t.schedule.platform[liveNow.platform]}</span>` : "";
+        return `
+          <div class="day-row ${isToday ? 'today' : ''}">
+            <div class="day-name">${d.day}</div>
+            <div class="badges">
+              <span class="badge ${d.state}">${stateLabel}</span>
+              ${nowBadge}
+            </div>
+          </div>
+        `;
+      }).join("");
+      // rules
+      $("#rulesTitle").textContent = t.rules.title;
+      $("#rulesDesc").textContent = t.rules.desc;
+      $("#rulesList").innerHTML = t.rules.list.map(x => `<li>${x}</li>`).join("");
+      $("#rulesFooter").textContent = t.rules.footer;
+      // fortune
+      $("#fortuneTitle").textContent = t.fortune.title;
+      $("#fortuneDesc").textContent = t.fortune.desc;
+      $("#fortuneFooter").textContent = t.fortune.footer;
+      $("#fortuneBtn").textContent = t.fortune.btn;
+      // date
+      const ddd = new Date();
+      const yyyy = ddd.getFullYear();
+      const mm = String(ddd.getMonth() + 1).padStart(2, "0");
+      const dd = String(ddd.getDate()).padStart(2, "0");
+      const dateKey = `${yyyy}-${mm}-${dd}`;
+      $("#fortuneDate").textContent = dateKey;
+      // saved fortune
+      const savedKey = `irev_fortune_${lang}_${dateKey}`;
+      const saved = localStorage.getItem(savedKey);
+      if (saved) {
+        try { showFortune(JSON.parse(saved)); } catch {}
+      } else {
+        $("#fortuneResult").textContent = "";
+        $("#luckFill").style.width = "0%";
+        $("#luckLabel").textContent = `${t.fortune.luckLabel} : 0%`;
+      }
+      // rp
+      $("#rpTitle").textContent = t.rp.title;
+      $("#formsTitle").textContent = t.rp.forms;
+      $("#rpText").textContent = t.rp.text;
+      $("#rpStream").textContent = t.rp.stream;
+      $("#slimeLabel").textContent = t.rp.slime;
+      $("#humanLabel").textContent = t.rp.human;
+      // update lang select
+      const langSelect = $("#lang");
+      if (langSelect) langSelect.value = lang;
+    }
+
+    /* Fortune functions */
+    function pickFortune() {
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, "0");
+      const dd = String(now.getDate()).padStart(2, "0");
+      const dateKey = `${yyyy}-${mm}-${dd}`;
+      const seedFn = xmur3(`${lang}-${dateKey}-Irev`);
+      const rand = mulberry32(seedFn());
+      const list = fortunes[lang];
+      const idx = Math.floor(rand() * list.length);
+      const base = list[idx].luck;
+      const jitter = Math.floor(rand() * 12 - 6);
+      const luck = Math.max(5, Math.min(95, base + jitter));
+      return { ...list[idx], luck, date: dateKey };
+    }
+    function showFortune(obj) {
+      $("#fortuneResult").textContent = `${obj.e}  ${obj.t}\n${obj.d}`;
+      requestAnimationFrame(() => {
+        $("#luckFill").style.width = `${obj.luck}%`;
+        $("#luckLabel").textContent = `${i18n[lang].fortune.luckLabel} : ${obj.luck}%`;
+      });
+    }
+
+    /* BGM */
+    const bgm = $("#bgm");
+    if (bgm) bgm.volume = 0.28;
+    function populateTracks() {
+      const trackSel = $("#track");
+      if (!trackSel) return;
+      trackSel.innerHTML = tracks.map(t => `<option value="${t.file}">${t.label}</option>`).join("");
+    }
+    function setTrack(file, autoplay = false) {
+      if (!file) return;
+      bgm.src = file;
+      localStorage.setItem("irev_track", file);
+      if (autoplay) {
+        bgm.play().then(() => {}).catch(() => {});
+      }
+    }
+
+    /* Menu functions (no-op if menu elements absent) */
+    function openMenu() {
+      const m = $("#menu");
+      if (m) {
+        m.classList.add("open");
+        m.setAttribute("aria-hidden", "false");
+      }
+    }
+    function closeMenu() {
+      const m = $("#menu");
+      if (m) {
+        m.classList.remove("open");
+        m.setAttribute("aria-hidden", "true");
+      }
+    }
+
+    /* Scroll hint hide on scroll */
+    function updateScrollHint() {
+      const y = window.scrollY || 0;
+      const hint = $("#scrollHint");
+      if (hint) hint.style.opacity = y > 120 ? "0" : "0.95";
+    }
+
+    /* =========================
+       ✅ EVENTS
+       ========================= */
+    // Menu open/close
+    const menuBtn = $("#menuBtn");
+    if (menuBtn) menuBtn.addEventListener("click", () => { click(); openMenu(); });
+    const menuClose = $("#menuClose");
+    if (menuClose) menuClose.addEventListener("click", () => { click(); closeMenu(); });
+    const menuOverlay = $("#menu");
+    if (menuOverlay) menuOverlay.addEventListener("click", (e) => { if (e.target.id === "menu") closeMenu(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
+    document.querySelectorAll(".menu-link").forEach(a => {
+      a.addEventListener("click", () => { closeMenu(); });
+    });
+    // Language change
+    const langSelectElement = $("#lang");
+    if (langSelectElement) langSelectElement.addEventListener("change", () => {
+      click();
+      lang = langSelectElement.value;
+      localStorage.setItem("irev_lang", lang);
+      renderAll();
+    });
+    // Week toggles
+    const btnA = $("#weekA");
+    if (btnA) btnA.addEventListener("click", () => {
+      click(); week = "A"; localStorage.setItem("irev_week", week); renderAll();
+    });
+    const btnB = $("#weekB");
+    if (btnB) btnB.addEventListener("click", () => {
+      click(); week = "B"; localStorage.setItem("irev_week", week); renderAll();
+    });
+    // Fortune button
+    const fortuneButton = $("#fortuneBtn");
+    if (fortuneButton) fortuneButton.addEventListener("click", () => {
+      click();
+      const obj = pickFortune();
+      showFortune(obj);
+      localStorage.setItem(`irev_fortune_${lang}_${obj.date}`, JSON.stringify(obj));
+    });
+    // Theme toggle
+    const themeButton = $("#themeBtn");
+    if (themeButton) themeButton.addEventListener("click", () => {
+      click();
+      const cur = document.documentElement.getAttribute("data-theme") || "dark";
+      setTheme(cur === "dark" ? "light" : "dark");
+    });
+    // Track selection
+    populateTracks();
+    const trackSelect = $("#track");
+    if (trackSelect) trackSelect.addEventListener("change", () => {
+      click();
+      setTrack(trackSelect.value, true);
+    });
+    // BGM toggle
+    const bgmBtn = $("#bgmBtn");
+    if (bgmBtn) bgmBtn.addEventListener("click", () => {
+      click();
+      if (bgm.paused) {
+        bgm.play().catch(() => {});
+      } else {
+        bgm.pause();
+      }
+    });
+    /* =========================
+       ✅ INIT
+       ========================= */
+    window.addEventListener("load", async () => {
+      // theme
+      const savedTheme = localStorage.getItem("irev_theme") || "dark";
+      setTheme(savedTheme);
+      // tracks
+      const savedTrack = localStorage.getItem("irev_track") || tracks[0].file;
+      const trackSel = $("#track");
+      if (trackSel) trackSel.value = savedTrack;
+      setTrack(savedTrack, false);
+      // render content
+      renderAll();
+      // hide loader
+      setTimeout(() => $("#loader").classList.add("hide"), 220);
+      // autoplay BGM (may fail due to browser restrictions)
+      try { await bgm.play(); } catch (e) {}
+      // refresh live now every minute
+      setInterval(renderAll, 60 * 1000);
+      // scroll hint update
+      updateScrollHint();
+    });
+    window.addEventListener("scroll", updateScrollHint);
+  </script>
+</body>
+</html>
