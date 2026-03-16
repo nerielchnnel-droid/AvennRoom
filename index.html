@@ -1,904 +1,745 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="dark">
+<html lang="ko" class="dark scroll-smooth">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Irev</title>
+  <meta name="description" content="Irev official stream profile" />
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;700;800;900&display=swap');
+
     :root {
-      --bg: #0a0a12;
-      --bg-soft: #12101d;
-      --card: rgba(22, 18, 34, 0.84);
-      --card-strong: #181325;
-      --text: #f3efff;
-      --sub: #b2a8c9;
-      --line: rgba(255,255,255,0.08);
-      --accent: #9f5cff;
-      --accent-soft: #d0b3ff;
-      --button-text: #ffffff;
-      --shadow: 0 18px 60px rgba(0,0,0,0.34);
-      --radius-xl: 28px;
-      --radius-lg: 20px;
-      --radius-md: 14px;
-      --max: 1120px;
+      --bg: #09080f;
+      --panel: rgba(18, 16, 29, 0.78);
+      --panel-2: rgba(255, 255, 255, 0.06);
+      --line: rgba(255, 255, 255, 0.11);
+      --text: #f5f1ff;
+      --muted: #baaee0;
+      --violet: 159 92 255;
+      --violet-2: 213 162 255;
+      --pink: 244 114 182;
+      --good: 16 185 129;
+      --bad: 99 102 241;
     }
 
-    html[data-theme="light"] {
-      color-scheme: light;
-      --bg: #faf7ff;
-      --bg-soft: #f2ecff;
-      --card: rgba(255,255,255,0.96);
-      --card-strong: #ffffff;
-      --text: #171226;
-      --sub: #5a5073;
-      --line: rgba(23,18,38,0.10);
-      --accent: #884dff;
-      --accent-soft: #b48cff;
-      --button-text: #ffffff;
-      --shadow: 0 18px 50px rgba(77, 62, 116, 0.14);
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Pretendard', system-ui, sans-serif;
     }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
 
     body {
-      margin: 0;
-      font-family: Pretendard, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at top, rgba(159,92,255,0.18), transparent 34%),
-        linear-gradient(180deg, var(--bg-soft) 0%, var(--bg) 34%, var(--bg) 100%);
-      color: var(--text);
-      line-height: 1.6;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(159,92,255,0.18), transparent 22%),
+        radial-gradient(circle at 90% 10%, rgba(56,189,248,0.11), transparent 24%),
+        radial-gradient(circle at 50% 80%, rgba(236,72,153,0.08), transparent 26%),
+        linear-gradient(180deg, #0a0911 0%, #07070d 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    a { color: inherit; }
-
-    .shell {
-      width: min(calc(100% - 32px), var(--max));
-      margin: 0 auto;
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.12;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(circle at center, black 45%, transparent 100%);
+      z-index: 0;
     }
 
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      backdrop-filter: blur(18px);
-      background: color-mix(in oklab, var(--bg) 74%, transparent);
-      border-bottom: 1px solid var(--line);
+    .dark {
+      color-scheme: dark;
     }
 
-    .topbar-inner {
-      width: min(calc(100% - 32px), var(--max));
-      margin: 0 auto;
-      min-height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+    .light {
+      color-scheme: light;
     }
 
-    .brand {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
+    .light body,
+    html.light body {
+      --bg: #f6f3ff;
+      --panel: rgba(255, 255, 255, 0.82);
+      --panel-2: rgba(17, 24, 39, 0.04);
+      --line: rgba(17, 24, 39, 0.10);
+      --text: #17131f;
+      --muted: #5a4d77;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(159,92,255,0.11), transparent 22%),
+        radial-gradient(circle at 90% 10%, rgba(56,189,248,0.10), transparent 24%),
+        radial-gradient(circle at 50% 80%, rgba(236,72,153,0.06), transparent 26%),
+        linear-gradient(180deg, #fbf9ff 0%, #f3efff 100%);
     }
 
-    .brand strong {
-      font-size: 0.98rem;
-      letter-spacing: 0.08em;
-    }
-
-    .brand span {
-      font-size: 0.78rem;
-      color: var(--sub);
-    }
-
-    .toolbar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    select, button {
+    .panel {
+      background: var(--panel);
       border: 1px solid var(--line);
-      background: var(--card);
-      color: var(--text);
-      border-radius: 12px;
-      padding: 9px 12px;
-      font: inherit;
+      box-shadow:
+        0 18px 50px rgba(0,0,0,0.28),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+      backdrop-filter: blur(18px);
     }
 
-    button {
-      cursor: pointer;
-      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    .soft-panel {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(14px);
     }
 
-    button:hover { transform: translateY(-1px); }
-
-    .hero {
-      padding: 56px 0 30px;
+    .neon-text {
+      text-shadow:
+        0 0 10px rgba(159, 92, 255, 0.75),
+        0 0 26px rgba(159, 92, 255, 0.42),
+        0 0 58px rgba(208, 179, 255, 0.2);
     }
 
-    .hero-card {
+    .hero-shell {
       position: relative;
       overflow: hidden;
-      border: 1px solid var(--line);
+      isolation: isolate;
       background:
-        linear-gradient(135deg, rgba(159,92,255,0.20), rgba(159,92,255,0.04)),
-        linear-gradient(rgba(12, 9, 20, 0.54), rgba(12, 9, 20, 0.64)),
-        url('PIA14415~orig.jpg') center/cover;
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow);
-      min-height: 430px;
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 24px;
-      padding: 34px;
-      align-items: end;
-      color: #f7f1ff;
+        linear-gradient(115deg, rgba(159,92,255,0.16) 0%, rgba(159,92,255,0.07) 35%, rgba(255,255,255,0) 70%),
+        linear-gradient(180deg, rgba(4,2,12,0.08) 0%, rgba(4,2,12,0.46) 100%),
+        url('PIA14415~orig.jpg') center/cover no-repeat;
     }
 
-    .hero-card::before {
+    .hero-shell::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        90deg,
-        rgba(10, 8, 18, 0.50) 0%,
-        rgba(10, 8, 18, 0.28) 45%,
-        rgba(10, 8, 18, 0.46) 100%
-      );
-      pointer-events: none;
+      background:
+        radial-gradient(circle at 20% 28%, rgba(159,92,255,0.25), transparent 25%),
+        radial-gradient(circle at 80% 18%, rgba(56,189,248,0.16), transparent 22%),
+        radial-gradient(circle at 72% 75%, rgba(236,72,153,0.12), transparent 24%);
+      mix-blend-mode: screen;
+      z-index: -1;
     }
 
-    .hero-card::after {
+    .hero-shell::after {
       content: "";
       position: absolute;
-      inset: auto -80px -80px auto;
-      width: 240px;
-      height: 240px;
-      background: radial-gradient(circle, rgba(208,179,255,0.24), transparent 70%);
-      pointer-events: none;
-    }
-
-    .hero-copy {
-      position: relative;
-      z-index: 1;
-      max-width: 640px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(10, 8, 18, 0.42);
-      border: 1px solid rgba(255,255,255,0.10);
-      color: #f1e6ff;
-      font-size: 0.85rem;
-      margin-bottom: 14px;
-      text-shadow: 0 2px 16px rgba(0,0,0,0.22);
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(2.2rem, 5vw, 4.5rem);
-      line-height: 0.96;
-      letter-spacing: -0.04em;
-    }
-
-    .hero-copy h1 {
-      color: #ffffff;
-      text-shadow: 0 4px 22px rgba(0,0,0,0.28);
-    }
-
-    .hero-copy p {
-      margin: 16px 0 0;
-      font-size: 1.02rem;
-      max-width: 560px;
-      color: #f3eefe;
-      text-shadow: 0 2px 16px rgba(0,0,0,0.22);
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 24px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 46px;
-      padding: 0 18px;
-      border-radius: 999px;
-      text-decoration: none;
-      font-weight: 700;
-      border: 1px solid transparent;
-    }
-
-    .btn.primary {
-      background: var(--accent);
-      color: var(--button-text);
-      box-shadow: 0 12px 28px rgba(159,92,255,0.28);
-    }
-
-    .btn.secondary {
-      background: rgba(9, 8, 16, 0.38);
-      border-color: rgba(255,255,255,0.12);
-      color: #f8f5ff;
-    }
-
-    .hero-side {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      gap: 14px;
-      align-self: stretch;
-      align-content: end;
-    }
-
-    .mini-card {
-      background: rgba(11, 9, 19, 0.44);
-      border: 1px solid rgba(255,255,255,0.10);
-      border-radius: 18px;
-      padding: 16px;
-      backdrop-filter: blur(10px);
-    }
-
-    .mini-card h2 {
-      margin: 0 0 8px;
-      font-size: 0.84rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #d3b5ff;
-    }
-
-    .mini-card p {
-      margin: 0;
-      font-size: 0.95rem;
-      color: #f3eefe;
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .chip {
-      border-radius: 999px;
-      padding: 7px 10px;
-      font-size: 0.82rem;
-      color: #f0e6ff;
-      background: rgba(159,92,255,0.16);
-      border: 1px solid rgba(208,179,255,0.26);
-    }
-
-    .section {
-      padding: 18px 0;
-    }
-
-    .section-head {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 14px;
-      margin: 0 0 16px;
-    }
-
-    .section-head h2 {
-      margin: 0;
-      font-size: 1.4rem;
-      letter-spacing: -0.02em;
-    }
-
-    .section-head p {
-      margin: 0;
-      color: var(--sub);
-      font-size: 0.95rem;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow);
-    }
-
-    .schedule-card {
-      padding: 22px;
-    }
-
-    .schedule-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-    }
-
-    .schedule-summary {
-      display: grid;
-      gap: 3px;
-    }
-
-    .schedule-summary strong { font-size: 1.08rem; }
-    .schedule-summary span { color: var(--sub); font-size: 0.94rem; }
-
-    .toggle {
-      display: inline-flex;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--line);
-      padding: 4px;
-      border-radius: 999px;
-      gap: 4px;
-    }
-
-    .toggle button {
-      border: 0;
-      min-width: 96px;
-      border-radius: 999px;
-      background: transparent;
-      color: var(--sub);
-      font-weight: 700;
-    }
-
-    .toggle button.active {
-      background: var(--accent);
-      color: #fff;
-    }
-
-    .week-grid {
-      display: grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .day {
-      background: color-mix(in oklab, var(--card-strong) 82%, transparent);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 14px;
-      min-height: 132px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .day.today {
-      outline: 2px solid rgba(159,92,255,0.42);
-      outline-offset: -2px;
-    }
-
-    .day-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .day-name {
-      font-weight: 800;
-      font-size: 0.95rem;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(8,8,14,0.86) 0%, rgba(8,8,14,0.44) 46%, rgba(8,8,14,0.74) 100%);
+      z-index: -1;
     }
 
     .tag {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 28px;
-      border-radius: 999px;
-      padding: 0 10px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      border: 1px solid var(--line);
-      color: var(--sub);
-      white-space: nowrap;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(10px);
     }
 
-    .tag.live {
-      border-color: rgba(159,92,255,0.34);
-      background: rgba(159,92,255,0.14);
-      color: #f0e6ff;
+    .hero-orbit,
+    .hero-orbit-2,
+    .hero-orbit-3 {
+      position: absolute;
+      border-radius: 9999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      pointer-events: none;
     }
 
-    .tag.now {
-      border-color: rgba(236,72,153,0.38);
-      background: rgba(236,72,153,0.14);
-      color: #ffd6eb;
+    .hero-orbit {
+      width: 540px;
+      height: 540px;
+      right: -120px;
+      top: -120px;
+      animation: spin 26s linear infinite;
     }
 
-    .day-body {
-      display: grid;
-      gap: 8px;
-      color: var(--sub);
-      font-size: 0.86rem;
+    .hero-orbit-2 {
+      width: 340px;
+      height: 340px;
+      right: -24px;
+      top: -18px;
+      animation: spinReverse 18s linear infinite;
     }
 
-    .meta-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 18px;
-      margin-top: 18px;
+    .hero-orbit-3 {
+      width: 720px;
+      height: 720px;
+      right: -220px;
+      bottom: -320px;
+      opacity: 0.45;
+      animation: drift 10s ease-in-out infinite;
     }
 
-    .profile-card, .link-card {
-      padding: 22px;
+    .orb-dot::before,
+    .orb-dot::after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 9999px;
+      background: radial-gradient(circle, rgba(255,255,255,0.92), rgba(159,92,255,0.82));
+      box-shadow: 0 0 24px rgba(159,92,255,0.9);
     }
 
-    .profile-card p {
-      margin: 0;
-      color: var(--text);
-      white-space: pre-line;
+    .orb-dot::before {
+      top: 12%;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
-    .profile-note {
-      margin-top: 14px;
-      padding-top: 14px;
-      border-top: 1px solid var(--line);
-      color: var(--sub);
+    .orb-dot::after {
+      bottom: 10%;
+      right: 16%;
     }
 
-    .forms {
-      margin-top: 18px;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+    .glow-ring {
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.05),
+        0 0 0 8px rgba(159,92,255,0.04),
+        0 18px 50px rgba(0,0,0,0.25);
     }
 
-    .form-box {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 14px;
-      text-align: center;
+    .card-glow {
+      box-shadow:
+        0 0 24px rgba(159,92,255,0.08),
+        0 22px 54px rgba(0,0,0,0.24);
     }
 
-    .form-box strong {
-      display: block;
-      margin-bottom: 10px;
+    .week-chip.active {
+      background: linear-gradient(135deg, rgb(159 92 255) 0%, rgb(123 58 237) 100%);
+      color: white;
+      box-shadow: 0 10px 30px rgba(159,92,255,0.34);
     }
 
-    .form-box img {
-      width: 100%;
-      max-width: 170px;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      border-radius: 22px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.03);
+    .sched-card {
+      transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
     }
 
-    .links-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
+    .sched-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(159,92,255,0.42);
+      box-shadow: 0 16px 42px rgba(0,0,0,0.24);
     }
 
-    .link-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 14px 16px;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--line);
-      text-decoration: none;
+    .today-ring {
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.06),
+        0 0 0 2px rgba(159,92,255,0.64),
+        0 0 40px rgba(159,92,255,0.14);
     }
 
-    .link-item span:first-child {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
+    .live-badge {
+      animation: pulseRing 2s infinite ease-in-out;
     }
 
-    .link-arrow {
-      color: var(--sub);
-      font-size: 0.92rem;
+    .link-card:hover .link-arrow {
+      transform: translate(4px, -4px);
     }
 
-    footer {
-      padding: 34px 0 48px;
-      color: var(--sub);
-      font-size: 0.84rem;
+    .form-frame img {
+      transition: transform 0.35s ease, filter 0.35s ease;
     }
 
-    .intro-loader {
-      position: fixed;
-      inset: 0;
-      z-index: 99999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background:
-        radial-gradient(circle at center, rgba(159,92,255,0.12), transparent 34%),
-        rgba(8, 7, 14, 0.94);
-      backdrop-filter: blur(12px);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.35s ease, visibility 0.35s ease;
+    .form-frame:hover img {
+      transform: scale(1.03) rotate(1.2deg);
+      filter: saturate(1.08);
     }
 
-    .intro-loader.show {
-      opacity: 1;
-      visibility: visible;
+    .form-frame.alt:hover img {
+      transform: scale(1.03) rotate(-1.2deg);
     }
 
-    .intro-loader__inner {
-      width: min(88vw, 460px);
-      text-align: center;
-      padding: 28px 24px;
+    .loader-logo {
+      background: linear-gradient(90deg, rgba(159,92,255,1), rgba(244,114,182,1), rgba(159,92,255,1));
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shine 2.4s linear infinite;
     }
 
-    .intro-loader__logo {
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      font-weight: 900;
-      letter-spacing: 0.28em;
-      color: #ffffff;
-      margin-bottom: 20px;
-      text-shadow: 0 0 20px rgba(159,92,255,0.35);
+    .progress-bar {
+      background: linear-gradient(90deg, rgba(139,92,246,1), rgba(217,70,239,1), rgba(96,165,250,1));
+      background-size: 200% 100%;
+      animation: shine 1.8s linear infinite;
     }
 
-    .intro-loader__bar {
-      width: 100%;
-      height: 6px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.12);
-      overflow: hidden;
-      margin-bottom: 16px;
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
-    .intro-loader__bar > span {
-      display: block;
-      width: 0%;
-      height: 100%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, #7c3aed 0%, #a855f7 45%, #d8b4fe 100%);
-      transition: width 1s linear;
+    @keyframes spinReverse {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
     }
 
-    .intro-loader__count {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: #e9d5ff;
-      margin-bottom: 6px;
+    @keyframes drift {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
     }
 
-    .intro-loader__sub {
-      font-size: 0.94rem;
-      color: #c4b5fd;
-      letter-spacing: 0.04em;
-    }
-
-    html[data-theme="light"] .hero-card::before {
-      background: linear-gradient(
-        90deg,
-        rgba(10, 8, 18, 0.60) 0%,
-        rgba(10, 8, 18, 0.42) 45%,
-        rgba(10, 8, 18, 0.58) 100%
-      );
-    }
-
-    html[data-theme="light"] .mini-card {
-      background: rgba(16, 10, 28, 0.58);
-      border-color: rgba(255,255,255,0.12);
-    }
-
-    html[data-theme="light"] .section-head p,
-    html[data-theme="light"] .schedule-summary span,
-    html[data-theme="light"] .profile-note,
-    html[data-theme="light"] .link-arrow,
-    html[data-theme="light"] #linksSub,
-    html[data-theme="light"] #scheduleSub {
-      color: #5f5774;
-    }
-
-    @media (max-width: 980px) {
-      .hero-card,
-      .meta-grid {
-        grid-template-columns: 1fr;
+    @keyframes pulseRing {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(217,70,239,0.5);
       }
-      .week-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      70% {
+        box-shadow: 0 0 0 12px rgba(217,70,239,0);
+      }
     }
 
-    @media (max-width: 640px) {
-      .topbar-inner { padding: 8px 0; }
-      .hero { padding-top: 26px; }
-      .hero-card { min-height: auto; padding: 22px; }
-      .hero-copy p { font-size: 0.95rem; }
-      .week-grid,
-      .forms,
-      .links-grid { grid-template-columns: 1fr; }
-      .day { min-height: 116px; }
+    @keyframes shine {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
 
-      .intro-loader__logo {
-        letter-spacing: 0.18em;
+    @media (max-width: 1024px) {
+      .hero-orbit,
+      .hero-orbit-2,
+      .hero-orbit-3 {
+        display: none;
       }
     }
   </style>
 </head>
-<body>
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <strong id="brandName">Irev</strong>
-        <span id="brandSub">stream profile</span>
-      </div>
-      <div class="toolbar">
-        <select id="langSelect" aria-label="Language">
-          <option value="ko">KO</option>
-          <option value="en">EN</option>
-          <option value="ja">JA</option>
+<body class="text-[color:var(--text)] min-h-screen">
+  <header class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-[#09080f]/65 backdrop-blur-2xl">
+    <div class="max-w-7xl mx-auto px-5 md:px-6 h-16 flex items-center justify-between">
+      <a href="#top" class="flex items-center gap-3 min-w-0">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-violet-500/40">I</div>
+        <div class="min-w-0">
+          <strong class="block text-xl tracking-tight leading-none">Irev</strong>
+          <span id="brandSub" class="block text-[10px] text-violet-300 tracking-[0.22em] mt-1">DEMON × NEKOMATA</span>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-2 md:gap-3">
+        <a href="#schedule" id="navSchedule" class="hidden md:inline-flex px-4 py-2 rounded-2xl text-sm soft-panel hover:border-violet-400/60 transition-colors">Schedule</a>
+        <a href="#profile" id="navProfile" class="hidden md:inline-flex px-4 py-2 rounded-2xl text-sm soft-panel hover:border-violet-400/60 transition-colors">Profile</a>
+        <select id="langSelect" class="h-11 bg-black/25 border border-white/15 rounded-2xl px-4 text-sm outline-none focus:border-violet-400 cursor-pointer">
+          <option value="ko">🇰🇷 KO</option>
+          <option value="en">🇬🇧 EN</option>
+          <option value="ja">🇯🇵 JA</option>
         </select>
-        <button id="themeBtn" type="button">🌙</button>
+        <button id="themeBtn" class="w-11 h-11 rounded-2xl border border-white/15 bg-black/25 hover:bg-white/10 transition-all active:scale-95 text-lg" aria-label="theme switch">☀️</button>
       </div>
     </div>
   </header>
 
-  <main class="shell">
-    <section class="hero">
-      <div class="hero-card">
-        <div class="hero-copy">
-          <div class="eyebrow" id="eyebrow">악마 혈통 · 네코마타 혼혈 · 인간 폼으로 방송</div>
-          <h1 id="heroTitle">이래브</h1>
-          <p id="heroDesc">악마와 네코마타의 피가 섞인 존재. 평소에는 차갑고 얌전해 보여도, 눈빛과 분위기에서 사람 아닌 쪽이 새어 나온다.</p>
-          <div class="hero-actions">
-            <a class="btn primary" id="ctaPrimary" href="#schedule">방송 일정 보기</a>
-            <a class="btn secondary" id="ctaSecondary" href="https://discord.gg/amqfjt68nw">디스코드</a>
-          </div>
-        </div>
+  <main id="top" class="relative z-10 max-w-7xl mx-auto px-5 md:px-6 pt-24 pb-24">
+    <section class="hero-shell rounded-[2rem] md:rounded-[2.25rem] min-h-[620px] md:min-h-[680px] flex items-end panel mb-8 md:mb-12">
+      <div class="hero-orbit orb-dot"></div>
+      <div class="hero-orbit-2 orb-dot"></div>
+      <div class="hero-orbit-3"></div>
 
-        <div class="hero-side">
-          <div class="mini-card">
-            <h2 id="statusTitle">Today</h2>
-            <p id="statusBody">오늘 방송 여부는 아래 일정에서 바로 확인 가능.</p>
-          </div>
-          <div class="mini-card">
-            <h2 id="vibeTitle">Mood</h2>
-            <div class="chips" id="vibeChips"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="schedule">
-      <div class="section-head">
+      <div class="w-full p-7 md:p-12 lg:p-14 grid lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-10 items-end">
         <div>
-          <h2 id="scheduleHeading">Schedule</h2>
-          <p id="scheduleSub">복잡한 장식 없이, 바로 확인되는 주간 일정.</p>
-        </div>
-      </div>
+          <div id="eyebrow" class="inline-flex items-center gap-2 px-4 md:px-5 py-2.5 tag rounded-full text-xs md:text-sm font-medium mb-6 text-white/90">
+            악마 혈통 · 네코마타 혼혈 · 인간 폼 방송
+          </div>
 
-      <div class="card schedule-card">
-        <div class="schedule-top">
-          <div class="schedule-summary">
-            <strong id="scheduleSummaryTitle">기본 방송 시간</strong>
-            <span id="scheduleSummaryText">CHZZK 22:00–02:00 · Twitch 03:00–05:00 (KST)</span>
+          <div class="flex items-center gap-3 mb-5">
+            <span class="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-semibold bg-emerald-500/10 border border-emerald-400/20 text-emerald-300">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span id="heroStatus">STREAM PROFILE</span>
+            </span>
+            <span class="hidden sm:inline-flex rounded-full px-3.5 py-1.5 text-xs font-semibold bg-white/8 border border-white/10 text-violet-200">KST</span>
           </div>
-          <div class="toggle" role="tablist" aria-label="week toggle">
-            <button id="weekA" class="active" type="button">A WEEK</button>
-            <button id="weekB" type="button">B WEEK</button>
+
+          <h1 id="heroTitle" class="neon-text text-5xl sm:text-6xl md:text-7xl lg:text-[5.35rem] font-black tracking-[-0.05em] leading-[0.94] mb-5">이래브</h1>
+          <p id="heroDesc" class="text-base sm:text-lg md:text-xl leading-relaxed max-w-2xl text-violet-100/95 whitespace-pre-line"></p>
+
+          <div class="flex flex-wrap gap-3 sm:gap-4 mt-8 md:mt-10">
+            <a id="ctaPrimary" href="#schedule" class="inline-flex items-center gap-3 rounded-[1.35rem] px-6 md:px-8 py-4 md:py-4.5 bg-gradient-to-r from-violet-600 to-fuchsia-500 font-bold text-base md:text-lg shadow-2xl shadow-violet-600/35 hover:scale-[1.01] transition-transform">
+              <span>📅</span>
+              <span>방송 일정 보기</span>
+            </a>
+            <a id="ctaSecondary" href="https://discord.gg/amqfjt68nw" class="external-link inline-flex items-center gap-3 rounded-[1.35rem] px-6 md:px-8 py-4 bg-white/10 hover:bg-white/16 border border-white/15 font-medium transition-colors">
+              <span>💬</span>
+              <span>디스코드</span>
+            </a>
           </div>
         </div>
-        <div class="week-grid" id="weekGrid"></div>
+
+        <div class="grid gap-4 md:gap-5 lg:pl-8">
+          <div class="panel rounded-[1.8rem] p-5 md:p-6 card-glow">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <div id="statusTitle" class="text-xs uppercase tracking-[0.24em] font-semibold text-emerald-300 mb-2">Today</div>
+                <p id="statusBody" class="text-sm md:text-[15px] text-violet-100/90 leading-relaxed"></p>
+              </div>
+              <div class="w-11 h-11 rounded-2xl bg-emerald-500/10 border border-emerald-400/20 flex items-center justify-center text-xl">✦</div>
+            </div>
+          </div>
+
+          <div class="panel rounded-[1.8rem] p-5 md:p-6 card-glow">
+            <div id="vibeTitle" class="text-xs uppercase tracking-[0.24em] font-semibold text-violet-300 mb-4">Mood</div>
+            <div id="vibeChips" class="flex flex-wrap gap-2.5"></div>
+          </div>
+
+          <div class="grid sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3 gap-4">
+            <div class="panel rounded-[1.6rem] p-5">
+              <div class="text-[11px] uppercase tracking-[0.2em] text-violet-300 mb-2" id="heroMetaAHead">LINEAGE</div>
+              <div class="font-bold text-lg" id="heroMetaA">Demon × Nekomata</div>
+            </div>
+            <div class="panel rounded-[1.6rem] p-5">
+              <div class="text-[11px] uppercase tracking-[0.2em] text-violet-300 mb-2" id="heroMetaBHead">FORM</div>
+              <div class="font-bold text-lg" id="heroMetaB">Human on stream</div>
+            </div>
+            <div class="panel rounded-[1.6rem] p-5">
+              <div class="text-[11px] uppercase tracking-[0.2em] text-violet-300 mb-2" id="heroMetaCHead">AURA</div>
+              <div class="font-bold text-lg" id="heroMetaC">Quiet danger</div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="section">
-      <div class="meta-grid">
-        <div class="card profile-card">
-          <div class="section-head" style="margin-bottom:14px;">
-            <div>
-              <h2 id="profileHeading">Profile</h2>
-              <p id="profileSub">설정은 하나로. 악마와 네코마타 혼혈.</p>
-            </div>
+    <section id="schedule" class="mb-8 md:mb-12">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-6">
+        <div>
+          <h2 id="scheduleHeading" class="text-3xl md:text-4xl font-black tracking-tight">Schedule</h2>
+          <p id="scheduleSub" class="mt-2 text-sm md:text-base text-[color:var(--muted)]">이번 주 방송만 딱 보고 가자</p>
+        </div>
+
+        <div class="panel rounded-[1.5rem] p-1.5 inline-flex gap-1.5 self-start">
+          <button id="weekA" class="week-chip h-11 px-6 rounded-[1rem] text-sm font-bold transition-all">A WEEK</button>
+          <button id="weekB" class="week-chip h-11 px-6 rounded-[1rem] text-sm font-bold transition-all">B WEEK</button>
+        </div>
+      </div>
+
+      <div class="panel rounded-[2rem] p-5 md:p-7 lg:p-8 card-glow">
+        <div class="grid lg:grid-cols-[1fr_auto] gap-5 items-start mb-7">
+          <div>
+            <div id="scheduleSummaryTitle" class="text-[11px] uppercase tracking-[0.24em] text-violet-400 mb-2">기본 방송 시간</div>
+            <div id="scheduleSummaryText" class="text-base md:text-lg font-semibold leading-relaxed">CHZZK 22:00–02:00 ・ Twitch 03:00–05:00 (KST)</div>
           </div>
-          <p id="profileText"></p>
-          <div class="profile-note" id="profileNote"></div>
-          <div class="forms">
-            <div class="form-box">
-              <strong id="slimeLabel">악마 폼</strong>
-              <img src="slime.png" alt="Demon form" onerror="this.style.display='none'">
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div class="soft-panel rounded-[1.2rem] px-4 py-3">
+              <div class="text-[11px] uppercase tracking-[0.2em] text-violet-300 mb-1" id="schedMetaAHead">Platform</div>
+              <div class="font-semibold" id="schedMetaAVal">CHZZK / Twitch</div>
             </div>
-            <div class="form-box">
-              <strong id="humanLabel">인간 폼</strong>
-              <img src="human.png" alt="Human form" onerror="this.style.display='none'">
+            <div class="soft-panel rounded-[1.2rem] px-4 py-3">
+              <div class="text-[11px] uppercase tracking-[0.2em] text-violet-300 mb-1" id="schedMetaBHead">Cycle</div>
+              <div class="font-semibold" id="schedMetaBVal">A / B rotation</div>
             </div>
           </div>
         </div>
 
-        <div class="card link-card">
-          <div class="section-head" style="margin-bottom:14px;">
-            <div>
-              <h2 id="linksHeading">Links</h2>
-              <p id="linksSub">필요한 곳만 바로 들어가면 된다.</p>
+        <div id="todayLine" class="hidden mb-5 rounded-[1.3rem] px-4 py-4 bg-fuchsia-500/10 border border-fuchsia-400/18 text-fuchsia-200 text-sm font-medium"></div>
+
+        <div id="weekGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-7 gap-3 md:gap-4"></div>
+      </div>
+    </section>
+
+    <section class="grid xl:grid-cols-[1.1fr_0.9fr] gap-8">
+      <div id="profile" class="panel rounded-[2rem] p-6 md:p-8 lg:p-10 card-glow">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-8">
+          <div>
+            <h2 id="profileHeading" class="text-3xl md:text-4xl font-black tracking-tight mb-2">Profile</h2>
+            <p id="profileSub" class="text-[color:var(--muted)]">악마 × 네코마타 혼혈</p>
+          </div>
+          <div class="tag rounded-full px-4 py-2 text-xs font-semibold self-start" id="profileBadge">LORE CORE</div>
+        </div>
+
+        <div id="profileText" class="text-base md:text-lg leading-8 text-violet-100/95 whitespace-pre-line mb-7"></div>
+        <div class="pt-6 border-t border-white/10 text-sm md:text-[15px] leading-7 text-[color:var(--muted)]" id="profileNote"></div>
+
+        <div class="grid sm:grid-cols-2 gap-5 mt-10">
+          <div class="form-frame group">
+            <div class="soft-panel rounded-[1.8rem] p-5 md:p-6 text-center h-full">
+              <div class="flex items-center justify-between mb-4">
+                <div id="slimeLabel" class="text-[11px] uppercase tracking-[0.2em] text-rose-300 font-bold">악마 폼</div>
+                <span class="inline-flex w-10 h-10 items-center justify-center rounded-2xl bg-rose-500/10 border border-rose-400/20">👁️</span>
+              </div>
+              <img src="slime.png" alt="Demon form" class="w-full rounded-[1.4rem] border border-white/10 mx-auto max-h-72 object-cover bg-black/30" />
             </div>
           </div>
-          <div class="links-grid" id="linksGrid"></div>
+
+          <div class="form-frame alt group">
+            <div class="soft-panel rounded-[1.8rem] p-5 md:p-6 text-center h-full">
+              <div class="flex items-center justify-between mb-4">
+                <div id="humanLabel" class="text-[11px] uppercase tracking-[0.2em] text-sky-300 font-bold">인간 폼</div>
+                <span class="inline-flex w-10 h-10 items-center justify-center rounded-2xl bg-sky-500/10 border border-sky-400/20">🫧</span>
+              </div>
+              <img src="human.png" alt="Human form" class="w-full rounded-[1.4rem] border border-white/10 mx-auto max-h-72 object-cover bg-black/30" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid gap-8">
+        <div class="panel rounded-[2rem] p-6 md:p-8 lg:p-10 card-glow">
+          <div class="flex items-end justify-between gap-4 mb-8">
+            <div>
+              <h2 id="linksHeading" class="text-3xl md:text-4xl font-black tracking-tight mb-2">Links</h2>
+              <p id="linksSub" class="text-[color:var(--muted)]">필요한 곳만 바로 클릭</p>
+            </div>
+            <div class="hidden sm:flex w-12 h-12 rounded-2xl bg-violet-500/10 border border-violet-400/20 items-center justify-center text-xl">↗</div>
+          </div>
+
+          <div id="linksGrid" class="grid gap-3.5"></div>
+        </div>
+
+        <div class="panel rounded-[2rem] p-6 md:p-8 card-glow">
+          <div class="flex items-center justify-between gap-4 mb-6">
+            <div>
+              <h3 id="noteHeading" class="text-2xl font-black tracking-tight mb-1">Presence</h3>
+              <p id="noteSub" class="text-sm text-[color:var(--muted)]">방송의 결</p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-fuchsia-500/10 border border-fuchsia-400/20 flex items-center justify-center text-xl">✦</div>
+          </div>
+          <p id="noteBody" class="text-sm md:text-[15px] leading-7 text-violet-100/90"></p>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="shell">
-    <span id="footerText">Irev profile page</span>
+  <footer class="relative z-10 border-t border-white/10 mt-6">
+    <div class="max-w-7xl mx-auto px-5 md:px-6 py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-sm text-[color:var(--muted)]">
+      <span id="footerText">Irev official stream profile — 2026</span>
+      <span id="footerSub">human shell, inhuman core</span>
+    </div>
   </footer>
 
-  <div id="introLoader" class="intro-loader" aria-hidden="true">
-    <div class="intro-loader__inner">
-      <div class="intro-loader__logo">LOADING</div>
-      <div class="intro-loader__bar">
-        <span id="introLoaderBar"></span>
+  <div id="introLoader" class="fixed inset-0 z-[99999] hidden items-center justify-center bg-black/92 backdrop-blur-3xl">
+    <div class="w-[min(88vw,420px)] text-center px-5">
+      <div class="mb-9">
+        <div class="loader-logo text-6xl sm:text-7xl font-black tracking-[0.32em] neon-text">IREV</div>
       </div>
-      <div class="introLoader__count intro-loader__count" id="introLoaderCount">10</div>
-      <div class="intro-loader__sub" id="introLoaderSub">잠시 후 이동합니다</div>
+      <div class="soft-panel rounded-full p-1 mb-5 overflow-hidden">
+        <div id="introLoaderBar" class="progress-bar h-2.5 rounded-full w-0 transition-all duration-200"></div>
+      </div>
+      <div id="introLoaderCount" class="text-5xl font-black text-white mb-2">8</div>
+      <div id="introLoaderSub" class="text-sm tracking-[0.24em] text-violet-300">LOADING WORLD...</div>
     </div>
   </div>
 
   <script>
     const i18n = {
       ko: {
-        brandSub: "stream profile",
-        eyebrow: "악마 혈통 · 네코마타 혼혈 · 인간 폼으로 방송",
+        brandSub: "DEMON × NEKOMATA",
+        navSchedule: "일정",
+        navProfile: "프로필",
+        eyebrow: "악마 혈통 · 네코마타 혼혈 · 인간 폼 방송",
+        heroStatus: "STREAM PROFILE",
         heroTitle: "이래브",
-        heroDesc: "악마와 네코마타의 피가 섞인 존재. 평소에는 차갑고 얌전해 보여도, 눈빛과 분위기에서 사람 아닌 쪽이 새어 나온다.",
+        heroDesc: "악마와 네코마타의 피가 섞인 존재.\n차갑게 보이지만 눈빛 하나로 본성이 드러난다.",
         ctaPrimary: "방송 일정 보기",
         ctaSecondary: "디스코드",
         statusTitle: "Today",
-        statusBody: "오늘 방송 여부는 아래 일정에서 바로 확인 가능.",
+        statusBody: "오늘 방송 여부는 아래 스케줄에서 바로 확인",
         vibeTitle: "Mood",
         vibes: ["demon blood", "nekomata", "quiet danger"],
+        heroMetaAHead: "LINEAGE",
+        heroMetaA: "악마 × 네코마타",
+        heroMetaBHead: "FORM",
+        heroMetaB: "방송 시 인간 폼",
+        heroMetaCHead: "AURA",
+        heroMetaC: "조용한 위압감",
         scheduleHeading: "Schedule",
-        scheduleSub: "복잡한 장식 없이, 바로 확인되는 주간 일정.",
+        scheduleSub: "이번 주 방송만 딱 보고 가자",
         scheduleSummaryTitle: "기본 방송 시간",
-        scheduleSummaryText: "CHZZK 22:00–02:00 · Twitch 03:00–05:00 (KST)",
+        scheduleSummaryText: "CHZZK 22:00–02:00 ・ Twitch 03:00–05:00 (KST)",
+        schedMetaAHead: "Platform",
+        schedMetaAVal: "CHZZK / Twitch",
+        schedMetaBHead: "Cycle",
+        schedMetaBVal: "A / B 로테이션",
         weekA: "A WEEK",
         weekB: "B WEEK",
         live: "방송",
         off: "휴방",
+        today: "오늘",
         liveNow: "지금 방송중",
+        nextLive: "다음 방송",
+        noLiveWeek: "이번 주는 등록된 방송이 없음",
+        todayLineLive: "오늘은 방송 있는 날이다.",
+        todayLineOff: "오늘은 휴방이다.",
         chzzk: "치지직",
         twitch: "트위치",
         profileHeading: "Profile",
-        profileSub: "설정은 하나로. 악마와 네코마타 혼혈.",
-        profileText: "이래브는 악마와 네코마타 사이에서 태어난 혼혈이다.\n겉으로는 사람처럼 서 있지만, 감정이 흔들릴수록 귀와 꼬리, 눈빛, 기척이 먼저 본색을 드러낸다.",
-        profileNote: "방송에서는 인간 폼으로 활동하지만, 세계관 기준 본체는 인간이 아니라 악마와 요괴의 혼혈 쪽이다.",
+        profileSub: "악마 × 네코마타 혼혈",
+        profileBadge: "LORE CORE",
+        profileText: "이래브는 악마와 네코마타 사이에서 태어난 혼혈이다.\n겉으로는 사람처럼 서 있지만, 감정이 흔들릴수록 귀와 꼬리, 눈빛, 기척이 먼저 본색을 드러낸다.\n방송에서는 인간 폼이 앞에 서지만, 정체 자체는 인간이 아니다.",
+        profileNote: "겉은 인간처럼 정돈되어 있어도 중심에는 악마와 요괴의 피가 남아 있다. 그래서 분위기는 차갑고 고요한데, 그 밑바닥에는 늘 위험한 결이 깔려 있다.",
         slimeLabel: "악마 폼",
         humanLabel: "인간 폼",
         linksHeading: "Links",
-        linksSub: "필요한 곳만 바로 들어가면 된다.",
-        footerText: "Irev profile page",
-        loadingText: "잠시 후 이동합니다",
+        linksSub: "필요한 곳만 바로 클릭",
+        noteHeading: "Presence",
+        noteSub: "방송의 결",
+        noteBody: "말투는 차갑고 정리는 깔끔하다. 그런데 가끔 눈빛이나 반응 하나가 인간보다 조금 더 날카롭게 튄다. 그 미세한 어긋남이 이래브의 분위기를 완성한다.",
+        footerText: "Irev official stream profile — 2026",
+        footerSub: "인간 외피, 비인간 심장",
+        loadingText: "세계 불러오는 중...",
         loadingMoving: "이동 중..."
       },
       en: {
-        brandSub: "stream profile",
+        brandSub: "DEMON × NEKOMATA",
+        navSchedule: "Schedule",
+        navProfile: "Profile",
         eyebrow: "demon blood · nekomata hybrid · human form on stream",
+        heroStatus: "STREAM PROFILE",
         heroTitle: "Irev",
-        heroDesc: "A being born from demon blood and nekomata lineage. Calm on the surface, but the eyes and presence make it obvious that something inhuman is still there.",
+        heroDesc: "A being born from demon blood and nekomata lineage.\nCalm on the surface, but a single look reveals that something inhuman is still there.",
         ctaPrimary: "View schedule",
         ctaSecondary: "Discord",
         statusTitle: "Today",
-        statusBody: "You can check today’s stream status in the schedule below.",
+        statusBody: "Check today’s stream status directly in the schedule below.",
         vibeTitle: "Mood",
         vibes: ["demon blood", "nekomata", "quiet danger"],
+        heroMetaAHead: "LINEAGE",
+        heroMetaA: "Demon × Nekomata",
+        heroMetaBHead: "FORM",
+        heroMetaB: "Human form on stream",
+        heroMetaCHead: "AURA",
+        heroMetaC: "Quiet danger",
         scheduleHeading: "Schedule",
-        scheduleSub: "A weekly layout that shows the point right away.",
+        scheduleSub: "Just check this week and go.",
         scheduleSummaryTitle: "Regular stream window",
-        scheduleSummaryText: "CHZZK 22:00–02:00 · Twitch 03:00–05:00 (KST)",
+        scheduleSummaryText: "CHZZK 22:00–02:00 ・ Twitch 03:00–05:00 (KST)",
+        schedMetaAHead: "Platform",
+        schedMetaAVal: "CHZZK / Twitch",
+        schedMetaBHead: "Cycle",
+        schedMetaBVal: "A / B rotation",
         weekA: "A WEEK",
         weekB: "B WEEK",
         live: "LIVE",
         off: "OFF",
+        today: "TODAY",
         liveNow: "LIVE NOW",
+        nextLive: "Next stream",
+        noLiveWeek: "No stream is scheduled this week",
+        todayLineLive: "Today is a live day.",
+        todayLineOff: "Today is an off day.",
         chzzk: "CHZZK",
         twitch: "Twitch",
         profileHeading: "Profile",
-        profileSub: "One clean concept: demon and nekomata hybrid.",
-        profileText: "Irev is a hybrid born between a demon and a nekomata.\nThe body can pass as human, but when emotion slips, the ears, tail, stare, and atmosphere reveal what it really is first.",
-        profileNote: "On stream, the human form comes forward. In the lore, the true nature is never human. It belongs to the line between demon and yokai.",
+        profileSub: "Demon × Nekomata hybrid",
+        profileBadge: "LORE CORE",
+        profileText: "Irev is a hybrid born between a demon and a nekomata.\nThe body can pass as human, but when emotion slips, the ears, tail, stare, and atmosphere reveal what it really is first.\nOn stream, the human form stands in front. The nature beneath it never becomes human.",
+        profileNote: "The exterior stays composed and human-shaped, but the core still belongs to demon blood and yokai instinct. That is why the mood feels cold, silent, and slightly dangerous.",
         slimeLabel: "Demon form",
         humanLabel: "Human form",
         linksHeading: "Links",
         linksSub: "Only the places that matter.",
-        footerText: "Irev profile page",
-        loadingText: "You will be redirected shortly",
+        noteHeading: "Presence",
+        noteSub: "the stream texture",
+        noteBody: "The voice is controlled and the layout is clean. Then a glance, a pause, or a single reaction cuts a little too sharply. That tiny fracture is what makes Irev feel real.",
+        footerText: "Irev official stream profile — 2026",
+        footerSub: "human shell, inhuman core",
+        loadingText: "Loading world...",
         loadingMoving: "Redirecting..."
       },
       ja: {
-        brandSub: "stream profile",
-        eyebrow: "悪魔の血統 · ネコマタ混血 · 配信では人間形態",
-        heroTitle: "イレヴ",
-        heroDesc: "悪魔とネコマタの血が混ざった存在。普段は静かで落ち着いて見えるが、視線と気配に人ではない側が滲む。",
+        brandSub: "DEMON × NEKOMATA",
+        navSchedule: "スケジュール",
+        navProfile: "プロフィール",
+        eyebrow: "悪魔の血統 · ネコマタ混血 · 配信では人間フォーム",
+        heroStatus: "STREAM PROFILE",
+        heroTitle: "イレブ",
+        heroDesc: "悪魔とネコマタの血が混ざった存在。\n冷たく見えても、その視線ひとつで本性がにじみ出る。",
         ctaPrimary: "配信予定を見る",
         ctaSecondary: "Discord",
         statusTitle: "Today",
-        statusBody: "今日の配信有無は下の予定ですぐ確認できます。",
+        statusBody: "今日の配信有無は下のスケジュールですぐ確認できる。",
         vibeTitle: "Mood",
         vibes: ["demon blood", "nekomata", "quiet danger"],
+        heroMetaAHead: "LINEAGE",
+        heroMetaA: "悪魔 × ネコマタ",
+        heroMetaBHead: "FORM",
+        heroMetaB: "配信時は人間フォーム",
+        heroMetaCHead: "AURA",
+        heroMetaC: "静かな危うさ",
         scheduleHeading: "Schedule",
-        scheduleSub: "余計な飾りを減らして、すぐ分かる週間予定。",
+        scheduleSub: "今週の配信だけ見ればいい",
         scheduleSummaryTitle: "基本配信時間",
-        scheduleSummaryText: "CHZZK 22:00–02:00 · Twitch 03:00–05:00 (KST)",
+        scheduleSummaryText: "CHZZK 22:00–02:00 ・ Twitch 03:00–05:00 (KST)",
+        schedMetaAHead: "Platform",
+        schedMetaAVal: "CHZZK / Twitch",
+        schedMetaBHead: "Cycle",
+        schedMetaBVal: "A / B ローテーション",
         weekA: "A WEEK",
         weekB: "B WEEK",
-        live: "配信",
-        off: "休み",
+        live: "LIVE",
+        off: "OFF",
+        today: "TODAY",
         liveNow: "配信中",
+        nextLive: "次の配信",
+        noLiveWeek: "今週は配信予定なし",
+        todayLineLive: "今日は配信がある日。",
+        todayLineOff: "今日は休配信の日。",
         chzzk: "CHZZK",
         twitch: "Twitch",
         profileHeading: "Profile",
-        profileSub: "設定は一つだけ。悪魔とネコマタの混血。",
-        profileText: "イレヴは悪魔とネコマタの間に生まれた混血。\n見た目は人間に近いが、感情が揺れるほど耳や尻尾、視線、気配のほうが先に本性を漏らす。",
-        profileNote: "配信では人間形態で動くが、世界観上の本質は人間ではない。悪魔と妖怪の境界側にある存在。",
-        slimeLabel: "悪魔形態",
-        humanLabel: "人間形態",
+        profileSub: "悪魔 × ネコマタ混血",
+        profileBadge: "LORE CORE",
+        profileText: "イレブは悪魔とネコマタの間に生まれた混血。\n見た目は人の形をしていても、感情が揺れるほど耳、尾、目つき、気配が先に本性を暴く。\n配信では人間フォームが前に出るが、その本質まで人間になることはない。",
+        profileNote: "外見は人間らしく整っていても、中心には悪魔と妖の血が残っている。だから空気は冷たく静かで、その底にはいつも危うさが沈んでいる。",
+        slimeLabel: "悪魔フォーム",
+        humanLabel: "人間フォーム",
         linksHeading: "Links",
-        linksSub: "必要な場所だけで十分。",
-        footerText: "Irev profile page",
-        loadingText: "まもなく移動します",
+        linksSub: "必要な場所だけすぐ押せる。",
+        noteHeading: "Presence",
+        noteSub: "配信の質感",
+        noteBody: "話し方は冷静で、画面は整っている。それでも視線や間や反応のひとつが、人間より少しだけ鋭く跳ねる。その僅かなズレがイレブの空気を完成させる。",
+        footerText: "Irev official stream profile — 2026",
+        footerSub: "人の殻、異形の核",
+        loadingText: "世界を読み込み中...",
         loadingMoving: "移動中..."
       }
     };
 
+    const daysOfWeek = {
+      mon: { ko: "월", en: "Mon", ja: "月" },
+      tue: { ko: "화", en: "Tue", ja: "火" },
+      wed: { ko: "수", en: "Wed", ja: "水" },
+      thu: { ko: "목", en: "Thu", ja: "木" },
+      fri: { ko: "금", en: "Fri", ja: "金" },
+      sat: { ko: "토", en: "Sat", ja: "土" },
+      sun: { ko: "일", en: "Sun", ja: "日" }
+    };
+
     const weeks = {
       A: [
-        { day: { ko: "월", en: "Mon", ja: "月" }, state: "off" },
-        { day: { ko: "화", en: "Tue", ja: "火" }, state: "live" },
-        { day: { ko: "수", en: "Wed", ja: "水" }, state: "off" },
-        { day: { ko: "목", en: "Thu", ja: "木" }, state: "live" },
-        { day: { ko: "금", en: "Fri", ja: "金" }, state: "off" },
-        { day: { ko: "토", en: "Sat", ja: "土" }, state: "live" },
-        { day: { ko: "일", en: "Sun", ja: "日" }, state: "off" }
+        { key: 'mon', state: 'live', note: { ko: 'CHZZK', en: 'CHZZK', ja: 'CHZZK' } },
+        { key: 'tue', state: 'off',  note: { ko: '휴식', en: 'Off', ja: '休み' } },
+        { key: 'wed', state: 'live', note: { ko: 'CHZZK', en: 'CHZZK', ja: 'CHZZK' } },
+        { key: 'thu', state: 'off',  note: { ko: '정비', en: 'Maintenance', ja: '調整' } },
+        { key: 'fri', state: 'live', note: { ko: 'CHZZK + Twitch', en: 'CHZZK + Twitch', ja: 'CHZZK + Twitch' } },
+        { key: 'sat', state: 'live', note: { ko: '심야', en: 'Late night', ja: '深夜' } },
+        { key: 'sun', state: 'off',  note: { ko: '휴식', en: 'Off', ja: '休み' } }
       ],
       B: [
-        { day: { ko: "월", en: "Mon", ja: "月" }, state: "live" },
-        { day: { ko: "화", en: "Tue", ja: "火" }, state: "off" },
-        { day: { ko: "수", en: "Wed", ja: "水" }, state: "live" },
-        { day: { ko: "목", en: "Thu", ja: "木" }, state: "off" },
-        { day: { ko: "금", en: "Fri", ja: "金" }, state: "live" },
-        { day: { ko: "토", en: "Sat", ja: "土" }, state: "off" },
-        { day: { ko: "일", en: "Sun", ja: "日" }, state: "live" }
+        { key: 'mon', state: 'off',  note: { ko: '휴식', en: 'Off', ja: '休み' } },
+        { key: 'tue', state: 'live', note: { ko: 'CHZZK', en: 'CHZZK', ja: 'CHZZK' } },
+        { key: 'wed', state: 'off',  note: { ko: '정비', en: 'Maintenance', ja: '調整' } },
+        { key: 'thu', state: 'live', note: { ko: 'CHZZK', en: 'CHZZK', ja: 'CHZZK' } },
+        { key: 'fri', state: 'live', note: { ko: 'CHZZK + Twitch', en: 'CHZZK + Twitch', ja: 'CHZZK + Twitch' } },
+        { key: 'sat', state: 'off',  note: { ko: '휴식', en: 'Off', ja: '休み' } },
+        { key: 'sun', state: 'live', note: { ko: '심야', en: 'Late night', ja: '深夜' } }
       ]
     };
 
     const links = [
-      { icon: "💬", label: "Discord", href: "https://discord.gg/amqfjt68nw" },
-      { icon: "▶️", label: "YouTube", href: "https://www.youtube.com/@Even%EB%8B%A4%EC%8B%9C%EB%B3%B4%EA%B8%B0" },
-      { icon: "𝕏", label: "X", href: "https://x.com/aven1166793?s=21" },
-      { icon: "💝", label: "Donate", href: "https://toon.at/donate/aven" },
-      { icon: "🎁", label: "Fansim", href: "https://fancim.me/celeb/profile.aspx?url=758954" },
-      { icon: "🖋️", label: "Naver Comic", href: "https://comic.naver.com/community/u/Even77777?lastPage=Creators" },
-      { icon: "☕", label: "Cafe", href: "https://cafe.naver.com/f-e/cafes/31529869/menus/0?t=1762537197544" }
+      { icon: '🎥', label: 'CHZZK', href: 'https://chzzk.naver.com/' },
+      { icon: '🟣', label: 'Twitch', href: 'https://www.twitch.tv/' },
+      { icon: '💬', label: 'Discord', href: 'https://discord.gg/amqfjt68nw' },
+      { icon: '▶️', label: 'YouTube', href: 'https://www.youtube.com/' },
+      { icon: '🖤', label: 'X / Twitter', href: 'https://x.com/' }
     ];
 
     const $ = (s) => document.querySelector(s);
+    const $$ = (s) => document.querySelectorAll(s);
 
-    const introLoader = $("#introLoader");
-    const introLoaderBar = $("#introLoaderBar");
-    const introLoaderCount = $("#introLoaderCount");
-    const introLoaderSub = $("#introLoaderSub");
-
-    let lang = localStorage.getItem("irev_lang") || "ko";
-    let week = localStorage.getItem("irev_week") || "A";
+    let lang = localStorage.getItem('irev_lang') || 'ko';
+    let week = localStorage.getItem('irev_week') || 'A';
     let loadingLock = false;
 
-    function setTheme(theme) {
-      document.documentElement.setAttribute("data-theme", theme);
-      localStorage.setItem("irev_theme", theme);
-      $("#themeBtn").textContent = theme === "dark" ? "☀️" : "🌙";
+    function setTheme(isDark) {
+      const root = document.documentElement;
+      root.classList.toggle('dark', isDark);
+      root.classList.toggle('light', !isDark);
+      localStorage.setItem('irev_theme', isDark ? 'dark' : 'light');
+      $('#themeBtn').textContent = isDark ? '☀️' : '🌙';
     }
 
     function getTodayIndex() {
@@ -911,21 +752,26 @@
       const minutes = now.getHours() * 60 + now.getMinutes();
       const todayIndex = getTodayIndex();
       const prevIndex = (todayIndex + 6) % 7;
-
       const chzzk = minutes >= 22 * 60 || minutes < 2 * 60;
       const twitch = minutes >= 3 * 60 && minutes < 5 * 60;
 
-      if (chzzk && days[(minutes < 2 * 60) ? prevIndex : todayIndex].state === "live") {
-        return {
-          index: minutes < 2 * 60 ? prevIndex : todayIndex,
-          platform: "chzzk"
-        };
+      if (chzzk && days[(minutes < 2 * 60) ? prevIndex : todayIndex].state === 'live') {
+        return { index: minutes < 2 * 60 ? prevIndex : todayIndex, platform: 'chzzk' };
       }
-
-      if (twitch && days[todayIndex].state === "live") {
-        return { index: todayIndex, platform: "twitch" };
+      if (twitch && days[todayIndex].state === 'live') {
+        return { index: todayIndex, platform: 'twitch' };
       }
+      return null;
+    }
 
+    function getNextLive(days) {
+      const today = getTodayIndex();
+      for (let step = 0; step < 7; step++) {
+        const idx = (today + step) % 7;
+        if (days[idx].state === 'live') {
+          return { index: idx, step };
+        }
+      }
       return null;
     }
 
@@ -934,157 +780,208 @@
       const days = weeks[week];
       const liveNow = getLiveNow(days);
       const todayIndex = getTodayIndex();
+      const nextLive = getNextLive(days);
 
-      $("#weekA").classList.toggle("active", week === "A");
-      $("#weekB").classList.toggle("active", week === "B");
-      $("#weekA").textContent = t.weekA;
-      $("#weekB").textContent = t.weekB;
+      $('#weekA').textContent = t.weekA;
+      $('#weekB').textContent = t.weekB;
+      $('#weekA').classList.toggle('active', week === 'A');
+      $('#weekB').classList.toggle('active', week === 'B');
 
-      $("#weekGrid").innerHTML = days.map((item, index) => {
-        const today = index === todayIndex;
-        const now = liveNow && liveNow.index === index;
-        const stateLabel = item.state === "live" ? t.live : t.off;
-        const timeText = item.state === "live"
-          ? `CHZZK 22:00–02:00 / ${t.twitch} 03:00–05:00`
-          : "-";
+      const line = $('#todayLine');
+      line.classList.remove('hidden');
+      if (liveNow) {
+        line.innerHTML = `<strong>${t.liveNow}</strong> · ${t[liveNow.platform]} · ${days[liveNow.index].note[lang]}`;
+        line.className = 'mb-5 rounded-[1.3rem] px-4 py-4 bg-emerald-500/10 border border-emerald-400/18 text-emerald-200 text-sm font-medium';
+      } else if (days[todayIndex].state === 'live') {
+        line.textContent = `${t.todayLineLive} ${t.scheduleSummaryText}`;
+        line.className = 'mb-5 rounded-[1.3rem] px-4 py-4 bg-violet-500/10 border border-violet-400/18 text-violet-200 text-sm font-medium';
+      } else if (nextLive) {
+        const d = days[nextLive.index];
+        line.textContent = `${t.nextLive} · ${daysOfWeek[d.key][lang]} · ${d.note[lang]}`;
+        line.className = 'mb-5 rounded-[1.3rem] px-4 py-4 bg-fuchsia-500/10 border border-fuchsia-400/18 text-fuchsia-200 text-sm font-medium';
+      } else {
+        line.textContent = t.noLiveWeek;
+        line.className = 'mb-5 rounded-[1.3rem] px-4 py-4 bg-white/5 border border-white/10 text-[color:var(--muted)] text-sm font-medium';
+      }
 
-        return `
-          <article class="day ${today ? "today" : ""}">
-            <div class="day-top">
-              <div class="day-name">${item.day[lang]}</div>
-              <div class="tag ${item.state === "live" ? "live" : ""}">${stateLabel}</div>
+      $('#statusBody').textContent = liveNow
+        ? `${t.liveNow} · ${t[liveNow.platform]}`
+        : days[todayIndex].state === 'live'
+          ? t.todayLineLive
+          : t.todayLineOff;
+
+      let html = '';
+      days.forEach((item, i) => {
+        const isToday = i === todayIndex;
+        const isNow = liveNow && liveNow.index === i;
+        const label = item.state === 'live' ? t.live : t.off;
+        const stateClass = item.state === 'live'
+          ? 'bg-emerald-500/12 text-emerald-300 border border-emerald-400/18'
+          : 'bg-white/5 text-zinc-400 border border-white/8';
+
+        html += `
+          <div class="sched-card rounded-[1.5rem] p-5 bg-black/20 border border-white/10 ${isToday ? 'today-ring' : ''}">
+            <div class="flex items-start justify-between gap-3 mb-4">
+              <div>
+                <div class="text-[11px] uppercase tracking-[0.2em] text-violet-300 mb-2">${isToday ? t.today : ''}</div>
+                <div class="text-2xl font-black tracking-tight">${daysOfWeek[item.key][lang]}</div>
+              </div>
+              <div class="w-10 h-10 rounded-2xl flex items-center justify-center ${item.state === 'live' ? 'bg-emerald-500/10 border border-emerald-400/20' : 'bg-white/5 border border-white/8'}">
+                ${item.state === 'live' ? '✦' : '·'}
+              </div>
             </div>
-            <div class="day-body">
-              <span>${timeText}</span>
-              ${now ? `<span class="tag now">${t.liveNow} · ${t[liveNow.platform]}</span>` : `<span></span>`}
-            </div>
-          </article>
+
+            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold ${stateClass}">${label}</div>
+
+            <div class="mt-4 text-sm text-[color:var(--muted)] min-h-[20px]">${item.note[lang]}</div>
+
+            ${isNow ? `
+              <div class="mt-4 inline-flex items-center gap-2 rounded-full px-3 py-2 text-[11px] font-semibold bg-fuchsia-500/12 border border-fuchsia-400/18 text-fuchsia-300 live-badge">
+                <span class="w-2 h-2 rounded-full bg-fuchsia-400"></span>
+                ${t.liveNow} · ${t[liveNow.platform]}
+              </div>` : ''}
+          </div>
         `;
-      }).join("");
+      });
+
+      $('#weekGrid').innerHTML = html;
     }
 
     function renderLinks() {
-      $("#linksGrid").innerHTML = links.map(link => `
-        <a class="link-item" href="${link.href}">
-          <span><span>${link.icon}</span><span>${link.label}</span></span>
-          <span class="link-arrow">↗</span>
+      $('#linksGrid').innerHTML = links.map(l => `
+        <a href="${l.href}" class="external-link link-card soft-panel rounded-[1.45rem] px-5 py-4 flex items-center justify-between gap-4 transition-all hover:border-violet-400/55 hover:-translate-y-0.5">
+          <div class="flex items-center gap-4 min-w-0">
+            <span class="w-12 h-12 rounded-2xl bg-white/8 border border-white/10 flex items-center justify-center text-2xl shrink-0">${l.icon}</span>
+            <div class="min-w-0">
+              <div class="font-bold text-base truncate">${l.label}</div>
+            </div>
+          </div>
+          <span class="link-arrow text-violet-300 text-xl transition-transform shrink-0">↗</span>
         </a>
-      `).join("");
+      `).join('');
     }
 
     function renderText() {
       const t = i18n[lang];
-      $("#langSelect").value = lang;
-      $("#brandSub").textContent = t.brandSub;
-      $("#eyebrow").textContent = t.eyebrow;
-      $("#heroTitle").textContent = t.heroTitle;
-      $("#heroDesc").textContent = t.heroDesc;
-      $("#ctaPrimary").textContent = t.ctaPrimary;
-      $("#ctaSecondary").textContent = t.ctaSecondary;
-      $("#statusTitle").textContent = t.statusTitle;
-      $("#statusBody").textContent = t.statusBody;
-      $("#vibeTitle").textContent = t.vibeTitle;
-      $("#vibeChips").innerHTML = t.vibes.map(v => `<span class="chip">${v}</span>`).join("");
-      $("#scheduleHeading").textContent = t.scheduleHeading;
-      $("#scheduleSub").textContent = t.scheduleSub;
-      $("#scheduleSummaryTitle").textContent = t.scheduleSummaryTitle;
-      $("#scheduleSummaryText").textContent = t.scheduleSummaryText;
-      $("#profileHeading").textContent = t.profileHeading;
-      $("#profileSub").textContent = t.profileSub;
-      $("#profileText").textContent = t.profileText;
-      $("#profileNote").textContent = t.profileNote;
-      $("#slimeLabel").textContent = t.slimeLabel;
-      $("#humanLabel").textContent = t.humanLabel;
-      $("#linksHeading").textContent = t.linksHeading;
-      $("#linksSub").textContent = t.linksSub;
-      $("#footerText").textContent = t.footerText;
+      $('#langSelect').value = lang;
 
-      if (!loadingLock) {
-        introLoaderSub.textContent = t.loadingText;
-      }
+      $('#brandSub').textContent = t.brandSub;
+      $('#navSchedule').textContent = t.navSchedule;
+      $('#navProfile').textContent = t.navProfile;
+      $('#eyebrow').textContent = t.eyebrow;
+      $('#heroStatus').textContent = t.heroStatus;
+      $('#heroTitle').textContent = t.heroTitle;
+      $('#heroDesc').textContent = t.heroDesc;
+      $('#ctaPrimary').lastElementChild.textContent = t.ctaPrimary;
+      $('#ctaSecondary').lastElementChild.textContent = t.ctaSecondary;
+      $('#statusTitle').textContent = t.statusTitle;
+      $('#vibeTitle').textContent = t.vibeTitle;
+      $('#vibeChips').innerHTML = t.vibes.map(v => `<span class="tag rounded-full px-4 py-2 text-xs font-medium">${v}</span>`).join('');
+      $('#heroMetaAHead').textContent = t.heroMetaAHead;
+      $('#heroMetaA').textContent = t.heroMetaA;
+      $('#heroMetaBHead').textContent = t.heroMetaBHead;
+      $('#heroMetaB').textContent = t.heroMetaB;
+      $('#heroMetaCHead').textContent = t.heroMetaCHead;
+      $('#heroMetaC').textContent = t.heroMetaC;
+
+      $('#scheduleHeading').textContent = t.scheduleHeading;
+      $('#scheduleSub').textContent = t.scheduleSub;
+      $('#scheduleSummaryTitle').textContent = t.scheduleSummaryTitle;
+      $('#scheduleSummaryText').textContent = t.scheduleSummaryText;
+      $('#schedMetaAHead').textContent = t.schedMetaAHead;
+      $('#schedMetaAVal').textContent = t.schedMetaAVal;
+      $('#schedMetaBHead').textContent = t.schedMetaBHead;
+      $('#schedMetaBVal').textContent = t.schedMetaBVal;
+
+      $('#profileHeading').textContent = t.profileHeading;
+      $('#profileSub').textContent = t.profileSub;
+      $('#profileBadge').textContent = t.profileBadge;
+      $('#profileText').textContent = t.profileText;
+      $('#profileNote').textContent = t.profileNote;
+      $('#slimeLabel').textContent = t.slimeLabel;
+      $('#humanLabel').textContent = t.humanLabel;
+
+      $('#linksHeading').textContent = t.linksHeading;
+      $('#linksSub').textContent = t.linksSub;
+      $('#noteHeading').textContent = t.noteHeading;
+      $('#noteSub').textContent = t.noteSub;
+      $('#noteBody').textContent = t.noteBody;
+      $('#footerText').textContent = t.footerText;
+      $('#footerSub').textContent = t.footerSub;
 
       renderSchedule();
       renderLinks();
     }
 
-    function runLoadingAndGo(url, seconds = 10) {
+    function runLoadingAndGo(url) {
       if (loadingLock) return;
       loadingLock = true;
-
       const t = i18n[lang];
-      let remain = seconds;
+      let remain = 8;
 
-      introLoader.classList.add("show");
-      introLoader.setAttribute("aria-hidden", "false");
-      introLoaderCount.textContent = remain;
-      introLoaderBar.style.width = "0%";
-      introLoaderSub.textContent = t.loadingText;
+      const loader = $('#introLoader');
+      loader.classList.remove('hidden');
+      loader.classList.add('flex');
 
-      const total = seconds;
+      $('#introLoaderCount').textContent = remain;
+      $('#introLoaderBar').style.width = '0%';
+      $('#introLoaderSub').textContent = t.loadingText;
 
       const tick = setInterval(() => {
-        remain -= 1;
-        const percent = ((total - remain) / total) * 100;
-
-        introLoaderCount.textContent = Math.max(remain, 0);
-        introLoaderBar.style.width = `${Math.min(percent, 100)}%`;
+        remain--;
+        const percent = ((8 - remain) / 8) * 100;
+        $('#introLoaderCount').textContent = Math.max(remain, 0);
+        $('#introLoaderBar').style.width = `${percent}%`;
 
         if (remain <= 0) {
           clearInterval(tick);
-          introLoaderSub.textContent = t.loadingMoving;
-          introLoaderBar.style.width = "100%";
-
+          $('#introLoaderSub').textContent = t.loadingMoving;
           setTimeout(() => {
             window.location.href = url;
-          }, 220);
+          }, 240);
         }
-      }, 1000);
+      }, 220);
     }
 
-    $("#langSelect").addEventListener("change", (e) => {
-      lang = e.target.value;
-      localStorage.setItem("irev_lang", lang);
+    function bindEvents() {
+      $('#langSelect').addEventListener('change', (e) => {
+        lang = e.target.value;
+        localStorage.setItem('irev_lang', lang);
+        renderText();
+      });
+
+      $('#themeBtn').addEventListener('click', () => {
+        const isDark = document.documentElement.classList.contains('dark');
+        setTheme(!isDark);
+      });
+
+      $('#weekA').addEventListener('click', () => {
+        week = 'A';
+        localStorage.setItem('irev_week', week);
+        renderSchedule();
+      });
+
+      $('#weekB').addEventListener('click', () => {
+        week = 'B';
+        localStorage.setItem('irev_week', week);
+        renderSchedule();
+      });
+
+      document.addEventListener('click', (e) => {
+        const link = e.target.closest('a[href]');
+        if (!link) return;
+        const href = link.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+        if (!link.classList.contains('external-link')) return;
+        e.preventDefault();
+        runLoadingAndGo(href);
+      });
+    }
+
+    window.addEventListener('load', () => {
+      setTheme(localStorage.getItem('irev_theme') !== 'light');
       renderText();
-    });
-
-    $("#themeBtn").addEventListener("click", () => {
-      const current = document.documentElement.getAttribute("data-theme") || "dark";
-      setTheme(current === "dark" ? "light" : "dark");
-    });
-
-    $("#weekA").addEventListener("click", () => {
-      week = "A";
-      localStorage.setItem("irev_week", week);
-      renderSchedule();
-    });
-
-    $("#weekB").addEventListener("click", () => {
-      week = "B";
-      localStorage.setItem("irev_week", week);
-      renderSchedule();
-    });
-
-    document.addEventListener("click", (e) => {
-      const link = e.target.closest('a[href]');
-      if (!link) return;
-
-      const href = link.getAttribute("href");
-      if (!href) return;
-
-      if (href.startsWith("#")) return;
-      if (
-        href.startsWith("javascript:") ||
-        href.startsWith("mailto:") ||
-        href.startsWith("tel:")
-      ) return;
-
-      e.preventDefault();
-      runLoadingAndGo(link.href, 10);
-    });
-
-    window.addEventListener("load", () => {
-      setTheme(localStorage.getItem("irev_theme") || "dark");
-      renderText();
+      bindEvents();
       setInterval(renderSchedule, 60000);
     });
   </script>
