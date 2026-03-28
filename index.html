@@ -236,6 +236,29 @@
       transform: translate(4px, -4px);
     }
 
+    .link-group-title {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgb(196 181 253 / 0.9);
+      margin-bottom: 0.9rem;
+      font-weight: 800;
+    }
+
+    .platform-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 0.95rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: rgba(245,241,255,0.92);
+      backdrop-filter: blur(10px);
+    }
+
     .form-frame img {
       transition: transform 0.35s ease, filter 0.35s ease;
     }
@@ -309,13 +332,13 @@
         <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-violet-500/40">I</div>
         <div class="min-w-0">
           <strong class="block text-xl tracking-tight leading-none">Irev</strong>
-          <span id="brandSub" class="block text-[10px] text-violet-300 tracking-[0.22em] mt-1">DEMON × NEKOMATA</span>
+          <span id="brandSub" class="block text-[10px] text-violet-300 tracking-[0.22em] mt-1">DEMON × SLIME</span>
         </div>
       </a>
 
       <div class="flex items-center gap-2 md:gap-3">
         <a href="#schedule" id="navSchedule" class="hidden md:inline-flex px-4 py-2 rounded-2xl text-sm soft-panel hover:border-violet-400/60 transition-colors">Schedule</a>
-        <a href="#profile" id="navProfile" class="hidden md:inline-flex px-4 py-2 rounded-2xl text-sm soft-panel hover:border-violet-400/60 transition-colors">Profile</a>
+        <a href="#profile" id="navImages" class="hidden md:inline-flex px-4 py-2 rounded-2xl text-sm soft-panel hover:border-violet-400/60 transition-colors">Images</a>
         <select id="langSelect" class="h-11 bg-black/25 border border-white/15 rounded-2xl px-4 text-sm outline-none focus:border-violet-400 cursor-pointer">
           <option value="ko">🇰🇷 KO</option>
           <option value="en">🇬🇧 EN</option>
@@ -335,7 +358,7 @@
       <div class="w-full p-7 md:p-12 lg:p-14 grid lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-10 items-end">
         <div>
           <div id="eyebrow" class="inline-flex items-center gap-2 px-4 md:px-5 py-2.5 tag rounded-full text-xs md:text-sm font-medium mb-6 text-white/90">
-            악마 혈통 · 네코마타 혼혈 · 인간 폼 방송
+            방송 링크 · 일정 · 이미지
           </div>
 
           <div class="flex items-center gap-3 mb-5">
@@ -359,6 +382,14 @@
               <span>디스코드</span>
             </a>
           </div>
+
+          <div class="flex flex-wrap gap-2.5 mt-5">
+            <span class="platform-pill">🎥 CHZZK</span>
+            <span class="platform-pill">💚 SOOP</span>
+            <span class="platform-pill">✨ 씨미</span>
+            <span class="platform-pill">▶️ YouTube</span>
+            <span class="platform-pill">💬 Discord</span>
+          </div>
         </div>
 
         <div class="grid gap-4 md:gap-5 lg:pl-8">
@@ -380,7 +411,7 @@
           <div class="grid sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3 gap-4">
             <div class="panel rounded-[1.6rem] p-5">
               <div class="text-[11px] uppercase tracking-[0.2em] text-violet-300 mb-2" id="heroMetaAHead">LINEAGE</div>
-              <div class="font-bold text-lg" id="heroMetaA">Demon × Nekomata</div>
+              <div class="font-bold text-lg" id="heroMetaA">Demon × Slime</div>
             </div>
             <div class="panel rounded-[1.6rem] p-5">
               <div class="text-[11px] uppercase tracking-[0.2em] text-violet-300 mb-2" id="heroMetaBHead">FORM</div>
@@ -399,29 +430,29 @@
       <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-6">
         <div>
           <h2 id="scheduleHeading" class="text-3xl md:text-4xl font-black tracking-tight">Schedule</h2>
-          <p id="scheduleSub" class="mt-2 text-sm md:text-base text-[color:var(--muted)]">이번 주 방송만 딱 보고 가자</p>
+          <p id="scheduleSub" class="mt-2 text-sm md:text-base text-[color:var(--muted)]">동출 기준으로 너무 무겁지 않게 굴리는 주간표</p>
         </div>
 
-        <div class="panel rounded-[1.5rem] p-1.5 inline-flex gap-1.5 self-start">
-          <button id="weekA" class="week-chip h-11 px-6 rounded-[1rem] text-sm font-bold transition-all">A WEEK</button>
-          <button id="weekB" class="week-chip h-11 px-6 rounded-[1rem] text-sm font-bold transition-all">B WEEK</button>
+        <div class="panel rounded-[1.5rem] px-5 py-3 inline-flex gap-2 self-start text-sm font-semibold text-violet-200">
+          <span>●</span>
+          <span id="weekPlanLabel">멀티스트림 고정 주간표</span>
         </div>
       </div>
 
       <div class="panel rounded-[2rem] p-5 md:p-7 lg:p-8 card-glow">
         <div class="grid lg:grid-cols-[1fr_auto] gap-5 items-start mb-7">
           <div>
-            <div id="scheduleSummaryTitle" class="text-[11px] uppercase tracking-[0.24em] text-violet-400 mb-2">기본 방송 시간</div>
-            <div id="scheduleSummaryText" class="text-base md:text-lg font-semibold leading-relaxed">CHZZK 22:00–02:00 ・ Twitch 03:00–05:00 (KST)</div>
+            <div id="scheduleSummaryTitle" class="text-[11px] uppercase tracking-[0.24em] text-violet-400 mb-2">추천 방송 시간</div>
+            <div id="scheduleSummaryText" class="text-base md:text-lg font-semibold leading-relaxed">화·수 20:30–23:30 · 금 21:00–01:00 · 토·일 19:00 시작 (KST)</div>
           </div>
           <div class="grid sm:grid-cols-2 gap-3">
             <div class="soft-panel rounded-[1.2rem] px-4 py-3">
               <div class="text-[11px] uppercase tracking-[0.2em] text-violet-300 mb-1" id="schedMetaAHead">Platform</div>
-              <div class="font-semibold" id="schedMetaAVal">CHZZK / Twitch</div>
+              <div class="font-semibold" id="schedMetaAVal">CHZZK / SOOP / 씨미</div>
             </div>
             <div class="soft-panel rounded-[1.2rem] px-4 py-3">
               <div class="text-[11px] uppercase tracking-[0.2em] text-violet-300 mb-1" id="schedMetaBHead">Cycle</div>
-              <div class="font-semibold" id="schedMetaBVal">A / B rotation</div>
+              <div class="font-semibold" id="schedMetaBVal">5 days · weekends fixed</div>
             </div>
           </div>
         </div>
@@ -436,10 +467,10 @@
       <div id="profile" class="panel rounded-[2rem] p-6 md:p-8 lg:p-10 card-glow">
         <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-8">
           <div>
-            <h2 id="profileHeading" class="text-3xl md:text-4xl font-black tracking-tight mb-2">Profile</h2>
-            <p id="profileSub" class="text-[color:var(--muted)]">악마 × 네코마타 혼혈</p>
+            <h2 id="profileHeading" class="text-3xl md:text-4xl font-black tracking-tight mb-2">Images</h2>
+            <p id="profileSub" class="text-[color:var(--muted)]">악마 × 슬라임</p>
           </div>
-          <div class="tag rounded-full px-4 py-2 text-xs font-semibold self-start" id="profileBadge">LORE CORE</div>
+          <div class="tag rounded-full px-4 py-2 text-xs font-semibold self-start" id="profileBadge">IMAGE INFO</div>
         </div>
 
         <div id="profileText" class="text-base md:text-lg leading-8 text-violet-100/95 whitespace-pre-line mb-7"></div>
@@ -449,10 +480,10 @@
           <div class="form-frame group">
             <div class="soft-panel rounded-[1.8rem] p-5 md:p-6 text-center h-full">
               <div class="flex items-center justify-between mb-4">
-                <div id="slimeLabel" class="text-[11px] uppercase tracking-[0.2em] text-rose-300 font-bold">악마 폼</div>
+                <div id="slimeLabel" class="text-[11px] uppercase tracking-[0.2em] text-rose-300 font-bold">슬라임 폼</div>
                 <span class="inline-flex w-10 h-10 items-center justify-center rounded-2xl bg-rose-500/10 border border-rose-400/20">👁️</span>
               </div>
-              <img src="slime.png" alt="Demon form" class="w-full rounded-[1.4rem] border border-white/10 mx-auto max-h-72 object-cover bg-black/30" />
+              <img src="slime.png" alt="Slime form" class="w-full rounded-[1.4rem] border border-white/10 mx-auto max-h-72 object-cover bg-black/30" />
             </div>
           </div>
 
@@ -484,8 +515,8 @@
         <div class="panel rounded-[2rem] p-6 md:p-8 card-glow">
           <div class="flex items-center justify-between gap-4 mb-6">
             <div>
-              <h3 id="noteHeading" class="text-2xl font-black tracking-tight mb-1">Presence</h3>
-              <p id="noteSub" class="text-sm text-[color:var(--muted)]">방송의 결</p>
+              <h3 id="noteHeading" class="text-2xl font-black tracking-tight mb-1">Info</h3>
+              <p id="noteSub" class="text-sm text-[color:var(--muted)]">안내</p>
             </div>
             <div class="w-12 h-12 rounded-2xl bg-fuchsia-500/10 border border-fuchsia-400/20 flex items-center justify-center text-xl">✦</div>
           </div>
@@ -518,35 +549,36 @@
   <script>
     const i18n = {
       ko: {
-        brandSub: "DEMON × NEKOMATA",
+        brandSub: "DEMON × SLIME",
         navSchedule: "일정",
-        navProfile: "프로필",
-        eyebrow: "악마 혈통 · 네코마타 혼혈 · 인간 폼 방송",
+        navImages: "이미지",
+        eyebrow: "방송 링크 · 일정 · 이미지",
         heroStatus: "STREAM PROFILE",
         heroTitle: "이래브",
-        heroDesc: "악마와 네코마타의 피가 섞인 존재.\n차갑게 보이지만 눈빛 하나로 본성이 드러난다.",
+        heroDesc: "방송 링크, 일정, 대표 이미지를 한곳에서 확인할 수 있습니다.",
         ctaPrimary: "방송 일정 보기",
         ctaSecondary: "디스코드",
         statusTitle: "Today",
-        statusBody: "오늘 방송 여부는 아래 스케줄에서 바로 확인",
+        statusBody: "오늘 라이브 여부와 다음 방송 시간을 아래에서 확인",
         vibeTitle: "Mood",
-        vibes: ["demon blood", "nekomata", "quiet danger"],
+        vibes: ["demon theme", "slime theme", "human form"],
         heroMetaAHead: "LINEAGE",
-        heroMetaA: "악마 × 네코마타",
+        heroMetaA: "악마 × 슬라임",
         heroMetaBHead: "FORM",
-        heroMetaB: "방송 시 인간 폼",
+        heroMetaB: "주로 인간형",
         heroMetaCHead: "AURA",
-        heroMetaC: "조용한 위압감",
+        heroMetaC: "슬라임 버전 운영",
         scheduleHeading: "Schedule",
-        scheduleSub: "이번 주 방송만 딱 보고 가자",
-        scheduleSummaryTitle: "기본 방송 시간",
-        scheduleSummaryText: "CHZZK 22:00–02:00 ・ Twitch 03:00–05:00 (KST)",
+        scheduleSub: "동출 기준으로 너무 무겁지 않게 굴리는 주간표",
+        scheduleSummaryTitle: "추천 방송 시간",
+        scheduleSummaryText: "화·수 20:30–23:30 · 금 21:00–01:00 · 토·일 19:00 시작 (KST)",
         schedMetaAHead: "Platform",
-        schedMetaAVal: "CHZZK / Twitch",
+        schedMetaAVal: "CHZZK / SOOP / C-ME",
         schedMetaBHead: "Cycle",
-        schedMetaBVal: "A / B 로테이션",
-        weekA: "A WEEK",
-        weekB: "B WEEK",
+        schedMetaBVal: "주 5일 · 주말 고정",
+        weekA: "이번 주",
+        weekB: "다음 주",
+        weekPlanLabel: "멀티스트림 고정 주간표",
         live: "방송",
         off: "휴방",
         today: "오늘",
@@ -556,54 +588,56 @@
         todayLineLive: "오늘은 방송 있는 날이다.",
         todayLineOff: "오늘은 휴방이다.",
         chzzk: "치지직",
-        twitch: "트위치",
-        profileHeading: "Profile",
-        profileSub: "악마 × 네코마타 혼혈",
-        profileBadge: "LORE CORE",
-        profileText: "이래브는 악마와 네코마타 사이에서 태어난 혼혈이다.\n겉으로는 사람처럼 서 있지만, 감정이 흔들릴수록 귀와 꼬리, 눈빛, 기척이 먼저 본색을 드러낸다.\n방송에서는 인간 폼이 앞에 서지만, 정체 자체는 인간이 아니다.",
-        profileNote: "겉은 인간처럼 정돈되어 있어도 중심에는 악마와 요괴의 피가 남아 있다. 그래서 분위기는 차갑고 고요한데, 그 밑바닥에는 늘 위험한 결이 깔려 있다.",
-        slimeLabel: "악마 폼",
+        soop: "숲",
+        cme: "씨미",
+        profileHeading: "Images",
+        profileSub: "대표 이미지",
+        profileBadge: "IMAGE INFO",
+        profileText: "방송에 사용하는 대표 이미지를 정리해두었습니다.\n슬라임 이미지와 인간형 이미지를 구분해서 볼 수 있습니다.",
+        profileNote: "아래에서 대표 이미지를 확인할 수 있습니다.",
+        slimeLabel: "슬라임 폼",
         humanLabel: "인간 폼",
         linksHeading: "Links",
         linksSub: "필요한 곳만 바로 클릭",
-        noteHeading: "Presence",
-        noteSub: "방송의 결",
-        noteBody: "말투는 차갑고 정리는 깔끔하다. 그런데 가끔 눈빛이나 반응 하나가 인간보다 조금 더 날카롭게 튄다. 그 미세한 어긋남이 이래브의 분위기를 완성한다.",
+        noteHeading: "Info",
+        noteSub: "안내",
+        noteBody: "방송에 쓰는 대표 이미지와 플랫폼 링크, 일정을 한곳에서 보기 쉽게 정리한 페이지입니다.",
         footerText: "Irev official stream profile — 2026",
-        footerSub: "인간 외피, 비인간 심장",
+        footerSub: "stream links and images",
         loadingText: "세계 불러오는 중...",
         loadingMoving: "이동 중..."
       },
       en: {
-        brandSub: "DEMON × NEKOMATA",
+        brandSub: "DEMON × SLIME",
         navSchedule: "Schedule",
-        navProfile: "Profile",
-        eyebrow: "demon blood · nekomata hybrid · human form on stream",
+        navImages: "Images",
+        eyebrow: "stream links · schedule · images",
         heroStatus: "STREAM PROFILE",
         heroTitle: "Irev",
-        heroDesc: "A being born from demon blood and nekomata lineage.\nCalm on the surface, but a single look reveals that something inhuman is still there.",
+        heroDesc: "You can check stream links, schedule, and main images here.",
         ctaPrimary: "View schedule",
         ctaSecondary: "Discord",
         statusTitle: "Today",
-        statusBody: "Check today’s stream status directly in the schedule below.",
+        statusBody: "Check whether today is live and see the next stream below.",
         vibeTitle: "Mood",
-        vibes: ["demon blood", "nekomata", "quiet danger"],
+        vibes: ["demon theme", "slime theme", "human form"],
         heroMetaAHead: "LINEAGE",
-        heroMetaA: "Demon × Nekomata",
+        heroMetaA: "Demon × Slime",
         heroMetaBHead: "FORM",
-        heroMetaB: "Human form on stream",
+        heroMetaB: "Mainly human-style",
         heroMetaCHead: "AURA",
-        heroMetaC: "Quiet danger",
+        heroMetaC: "Slime version",
         scheduleHeading: "Schedule",
-        scheduleSub: "Just check this week and go.",
-        scheduleSummaryTitle: "Regular stream window",
-        scheduleSummaryText: "CHZZK 22:00–02:00 ・ Twitch 03:00–05:00 (KST)",
+        scheduleSub: "A steady weekly plan built for multistreaming.",
+        scheduleSummaryTitle: "Suggested stream window",
+        scheduleSummaryText: "화·수 20:30–23:30 · 금 21:00–01:00 · 토·일 19:00 시작 (KST)",
         schedMetaAHead: "Platform",
-        schedMetaAVal: "CHZZK / Twitch",
+        schedMetaAVal: "CHZZK / SOOP / C-ME",
         schedMetaBHead: "Cycle",
-        schedMetaBVal: "A / B rotation",
-        weekA: "A WEEK",
-        weekB: "B WEEK",
+        schedMetaBVal: "5 days · weekends fixed",
+        weekA: "THIS WEEK",
+        weekB: "NEXT WEEK",
+        weekPlanLabel: "Fixed multistream schedule",
         live: "LIVE",
         off: "OFF",
         today: "TODAY",
@@ -613,54 +647,56 @@
         todayLineLive: "Today is a live day.",
         todayLineOff: "Today is an off day.",
         chzzk: "CHZZK",
-        twitch: "Twitch",
-        profileHeading: "Profile",
-        profileSub: "Demon × Nekomata hybrid",
-        profileBadge: "LORE CORE",
-        profileText: "Irev is a hybrid born between a demon and a nekomata.\nThe body can pass as human, but when emotion slips, the ears, tail, stare, and atmosphere reveal what it really is first.\nOn stream, the human form stands in front. The nature beneath it never becomes human.",
-        profileNote: "The exterior stays composed and human-shaped, but the core still belongs to demon blood and yokai instinct. That is why the mood feels cold, silent, and slightly dangerous.",
-        slimeLabel: "Demon form",
+        soop: "SOOP",
+        cme: "C-ME",
+        profileHeading: "Images",
+        profileSub: "Main images",
+        profileBadge: "IMAGE INFO",
+        profileText: "Main images used for the stream are collected here.\nYou can check the slime image and the human-style image separately.",
+        profileNote: "You can check the main images below.",
+        slimeLabel: "Slime form",
         humanLabel: "Human form",
         linksHeading: "Links",
         linksSub: "Only the places that matter.",
-        noteHeading: "Presence",
-        noteSub: "the stream texture",
-        noteBody: "The voice is controlled and the layout is clean. Then a glance, a pause, or a single reaction cuts a little too sharply. That tiny fracture is what makes Irev feel real.",
+        noteHeading: "Info",
+        noteSub: "notes",
+        noteBody: "This page keeps the main images, platform links, and weekly schedule easy to check in one place.",
         footerText: "Irev official stream profile — 2026",
-        footerSub: "human shell, inhuman core",
+        footerSub: "stream links and images",
         loadingText: "Loading world...",
         loadingMoving: "Redirecting..."
       },
       ja: {
-        brandSub: "DEMON × NEKOMATA",
+        brandSub: "DEMON × SLIME",
         navSchedule: "スケジュール",
-        navProfile: "プロフィール",
-        eyebrow: "悪魔の血統 · ネコマタ混血 · 配信では人間フォーム",
+        navImages: "画像",
+        eyebrow: "配信リンク · スケジュール · 画像",
         heroStatus: "STREAM PROFILE",
         heroTitle: "イレブ",
-        heroDesc: "悪魔とネコマタの血が混ざった存在。\n冷たく見えても、その視線ひとつで本性がにじみ出る。",
+        heroDesc: "配信リンク、スケジュール、メイン画像をここで確認できます。",
         ctaPrimary: "配信予定を見る",
         ctaSecondary: "Discord",
         statusTitle: "Today",
-        statusBody: "今日の配信有無は下のスケジュールですぐ確認できる。",
+        statusBody: "今日の配信有無と次の配信時間を下で確認できる。",
         vibeTitle: "Mood",
-        vibes: ["demon blood", "nekomata", "quiet danger"],
+        vibes: ["demon theme", "slime theme", "human form"],
         heroMetaAHead: "LINEAGE",
-        heroMetaA: "悪魔 × ネコマタ",
+        heroMetaA: "悪魔 × スライム",
         heroMetaBHead: "FORM",
-        heroMetaB: "配信時は人間フォーム",
+        heroMetaB: "主に人型",
         heroMetaCHead: "AURA",
-        heroMetaC: "静かな危うさ",
+        heroMetaC: "スライム版あり",
         scheduleHeading: "Schedule",
-        scheduleSub: "今週の配信だけ見ればいい",
-        scheduleSummaryTitle: "基本配信時間",
-        scheduleSummaryText: "CHZZK 22:00–02:00 ・ Twitch 03:00–05:00 (KST)",
+        scheduleSub: "同時配信でも 무리 없는週刊スケジュール",
+        scheduleSummaryTitle: "おすすめ配信時間",
+        scheduleSummaryText: "화·수 20:30–23:30 · 금 21:00–01:00 · 토·일 19:00 시작 (KST)",
         schedMetaAHead: "Platform",
-        schedMetaAVal: "CHZZK / Twitch",
+        schedMetaAVal: "CHZZK / SOOP / 씨미",
         schedMetaBHead: "Cycle",
-        schedMetaBVal: "A / B ローテーション",
-        weekA: "A WEEK",
-        weekB: "B WEEK",
+        schedMetaBVal: "週5日・週末固定",
+        weekA: "今週",
+        weekB: "来週",
+        weekPlanLabel: "固定マルチ配信スケジュール",
         live: "LIVE",
         off: "OFF",
         today: "TODAY",
@@ -670,21 +706,22 @@
         todayLineLive: "今日は配信がある日。",
         todayLineOff: "今日は休配信の日。",
         chzzk: "CHZZK",
-        twitch: "Twitch",
-        profileHeading: "Profile",
-        profileSub: "悪魔 × ネコマタ混血",
-        profileBadge: "LORE CORE",
-        profileText: "イレブは悪魔とネコマタの間に生まれた混血。\n見た目は人の形をしていても、感情が揺れるほど耳、尾、目つき、気配が先に本性を暴く。\n配信では人間フォームが前に出るが、その本質まで人間になることはない。",
-        profileNote: "外見は人間らしく整っていても、中心には悪魔と妖の血が残っている。だから空気は冷たく静かで、その底にはいつも危うさが沈んでいる。",
-        slimeLabel: "悪魔フォーム",
+        soop: "SOOP",
+        cme: "C-ME",
+        profileHeading: "Images",
+        profileSub: "メイン画像",
+        profileBadge: "IMAGE INFO",
+        profileText: "配信で使うメイン画像をまとめています。\nスライム画像と人間画像を分けて確認できます。",
+        profileNote: "下でメイン画像を確認できます。",
+        slimeLabel: "スライムフォーム",
         humanLabel: "人間フォーム",
         linksHeading: "Links",
         linksSub: "必要な場所だけすぐ押せる。",
-        noteHeading: "Presence",
-        noteSub: "配信の質感",
-        noteBody: "話し方は冷静で、画面は整っている。それでも視線や間や反応のひとつが、人間より少しだけ鋭く跳ねる。その僅かなズレがイレブの空気を完成させる。",
+        noteHeading: "Info",
+        noteSub: "案内",
+        noteBody: "このページではメイン画像、配信リンク、週間スケジュールを見やすくまとめている。",
         footerText: "Irev official stream profile — 2026",
-        footerSub: "人の殻、異形の核",
+        footerSub: "stream links and images",
         loadingText: "世界を読み込み中...",
         loadingMoving: "移動中..."
       }
@@ -702,31 +739,51 @@
 
     const weeks = {
       A: [
-        { key: 'mon', state: 'live', note: { ko: 'CHZZK', en: 'CHZZK', ja: 'CHZZK' } },
-        { key: 'tue', state: 'off',  note: { ko: '휴식', en: 'Off', ja: '休み' } },
-        { key: 'wed', state: 'live', note: { ko: 'CHZZK', en: 'CHZZK', ja: 'CHZZK' } },
-        { key: 'thu', state: 'off',  note: { ko: '정비', en: 'Maintenance', ja: '調整' } },
-        { key: 'fri', state: 'live', note: { ko: 'CHZZK + Twitch', en: 'CHZZK + Twitch', ja: 'CHZZK + Twitch' } },
-        { key: 'sat', state: 'live', note: { ko: '심야', en: 'Late night', ja: '深夜' } },
-        { key: 'sun', state: 'off',  note: { ko: '휴식', en: 'Off', ja: '休み' } }
+        { key: 'mon', state: 'off',  note: { ko: '휴식 · 클립정리', en: 'Off · clip work', ja: '休み・クリップ整理' } },
+        { key: 'tue', state: 'live', note: { ko: '동출 20:30', en: 'Multistream 20:30', ja: '同時配信 20:30' } },
+        { key: 'wed', state: 'live', note: { ko: '동출 20:30', en: 'Multistream 20:30', ja: '同時配信 20:30' } },
+        { key: 'thu', state: 'off',  note: { ko: '정비 · 편집', en: 'Maintenance · edit', ja: '調整・編集' } },
+        { key: 'fri', state: 'live', note: { ko: '동출 21:00', en: 'Multistream 21:00', ja: '同時配信 21:00' } },
+        { key: 'sat', state: 'live', note: { ko: '주말 고정 19:00', en: 'Weekend fixed 19:00', ja: '週末固定 19:00' } },
+        { key: 'sun', state: 'live', note: { ko: '주말 고정 19:00', en: 'Weekend fixed 19:00', ja: '週末固定 19:00' } }
       ],
       B: [
-        { key: 'mon', state: 'off',  note: { ko: '휴식', en: 'Off', ja: '休み' } },
-        { key: 'tue', state: 'live', note: { ko: 'CHZZK', en: 'CHZZK', ja: 'CHZZK' } },
-        { key: 'wed', state: 'off',  note: { ko: '정비', en: 'Maintenance', ja: '調整' } },
-        { key: 'thu', state: 'live', note: { ko: 'CHZZK', en: 'CHZZK', ja: 'CHZZK' } },
-        { key: 'fri', state: 'live', note: { ko: 'CHZZK + Twitch', en: 'CHZZK + Twitch', ja: 'CHZZK + Twitch' } },
-        { key: 'sat', state: 'off',  note: { ko: '휴식', en: 'Off', ja: '休み' } },
-        { key: 'sun', state: 'live', note: { ko: '심야', en: 'Late night', ja: '深夜' } }
+        { key: 'mon', state: 'off',  note: { ko: '휴식 · 클립정리', en: 'Off · clip work', ja: '休み・クリップ整理' } },
+        { key: 'tue', state: 'live', note: { ko: '동출 20:30', en: 'Multistream 20:30', ja: '同時配信 20:30' } },
+        { key: 'wed', state: 'live', note: { ko: '동출 20:30', en: 'Multistream 20:30', ja: '同時配信 20:30' } },
+        { key: 'thu', state: 'off',  note: { ko: '정비 · 편집', en: 'Maintenance · edit', ja: '調整・編集' } },
+        { key: 'fri', state: 'live', note: { ko: '동출 21:00', en: 'Multistream 21:00', ja: '同時配信 21:00' } },
+        { key: 'sat', state: 'live', note: { ko: '주말 고정 19:00', en: 'Weekend fixed 19:00', ja: '週末固定 19:00' } },
+        { key: 'sun', state: 'live', note: { ko: '주말 고정 19:00', en: 'Weekend fixed 19:00', ja: '週末固定 19:00' } }
       ]
     };
 
-    const links = [
-      { icon: '🎥', label: 'CHZZK', href: 'https://chzzk.naver.com/911df19d52a45f1d08791b2d43517dee' },
-      { icon: '🟣', label: 'Twitch', href: 'https://www.twitch.tv/aven1231' },
-      { icon: '💬', label: 'Discord', href: 'https://discord.gg/amqfjt68nw' },
-      { icon: '▶️', label: 'YouTube', href: 'https://www.youtube.com/@Irev-k6l2x' },
-      { icon: '🖤', label: 'X / Twitter', href: 'https://x.com/ilaebeu35547' }
+    const linkGroups = [
+      {
+        key: 'live',
+        title: { ko: '생방송', en: 'Live', ja: 'Live' },
+        items: [
+          { icon: '🎥', label: 'CHZZK', href: 'https://chzzk.naver.com/911df19d52a45f1d08791b2d43517dee', desc: { ko: '메인 방송', en: 'Main live', ja: 'メイン配信' } },
+          { icon: '💚', label: 'SOOP', href: 'https://www.sooplive.com/station/slimeavenia', desc: { ko: '추가 송출', en: 'Extra live', ja: '追加配信' } },
+          { icon: '✨', label: '씨미', href: 'https://ci.me/@irev', desc: { ko: '추가 송출', en: 'Extra live', ja: '追加配信' } }
+        ]
+      },
+      {
+        key: 'video',
+        title: { ko: '영상 업로드', en: 'Videos', ja: '動画' },
+        items: [
+          { icon: '▶️', label: 'YouTube', href: 'https://www.youtube.com/@Irev-k6l2x', desc: { ko: '영상 · 클립', en: 'Uploads & clips', ja: '動画・クリップ' } }
+        ]
+      },
+      {
+        key: 'community',
+        title: { ko: '커뮤니티', en: 'Community', ja: 'コミュニティ' },
+        items: [
+          { icon: '☕', label: 'Naver Cafe', href: 'https://cafe.naver.com/black1tzbh?iframe_url=/MyCafeIntro.nhn%3Fclubid=31529869', desc: { ko: '카페 · 공지', en: 'Cafe & notices', ja: 'カフェ・お知らせ' } },
+          { icon: '💬', label: 'Discord', href: 'https://discord.gg/2MZaSJekRz', desc: { ko: '공지 · 소통', en: 'Announcements & chat', ja: '告知・交流' } },
+          { icon: '🖤', label: 'X / Twitter', href: 'https://x.com/ilaebeu35547', desc: { ko: '짧은 소식', en: 'Short updates', ja: '短いお知らせ' } }
+        ]
+      }
     ];
 
     const $ = (s) => document.querySelector(s);
@@ -750,19 +807,6 @@
     }
 
     function getLiveNow(days) {
-      const now = new Date();
-      const minutes = now.getHours() * 60 + now.getMinutes();
-      const todayIndex = getTodayIndex();
-      const prevIndex = (todayIndex + 6) % 7;
-      const chzzk = minutes >= 22 * 60 || minutes < 2 * 60;
-      const twitch = minutes >= 3 * 60 && minutes < 5 * 60;
-
-      if (chzzk && days[(minutes < 2 * 60) ? prevIndex : todayIndex].state === 'live') {
-        return { index: minutes < 2 * 60 ? prevIndex : todayIndex, platform: 'chzzk' };
-      }
-      if (twitch && days[todayIndex].state === 'live') {
-        return { index: todayIndex, platform: 'twitch' };
-      }
       return null;
     }
 
@@ -784,15 +828,11 @@
       const todayIndex = getTodayIndex();
       const nextLive = getNextLive(days);
 
-      $('#weekA').textContent = t.weekA;
-      $('#weekB').textContent = t.weekB;
-      $('#weekA').classList.toggle('active', week === 'A');
-      $('#weekB').classList.toggle('active', week === 'B');
 
       const line = $('#todayLine');
       line.classList.remove('hidden');
       if (liveNow) {
-        line.innerHTML = `<strong>${t.liveNow}</strong> · ${t[liveNow.platform]} · ${days[liveNow.index].note[lang]}`;
+        line.innerHTML = `<strong>${t.liveNow}</strong> · ${days[liveNow.index].note[lang]}`;
         line.className = 'mb-5 rounded-[1.3rem] px-4 py-4 bg-emerald-500/10 border border-emerald-400/18 text-emerald-200 text-sm font-medium';
       } else if (days[todayIndex].state === 'live') {
         line.textContent = `${t.todayLineLive} ${t.scheduleSummaryText}`;
@@ -807,9 +847,9 @@
       }
 
       $('#statusBody').textContent = liveNow
-        ? `${t.liveNow} · ${t[liveNow.platform]}`
+        ? `${t.liveNow} · ${days[liveNow.index].note[lang]}`
         : days[todayIndex].state === 'live'
-          ? t.todayLineLive
+          ? `${t.todayLineLive} ${days[todayIndex].note[lang]}`
           : t.todayLineOff;
 
       let html = '';
@@ -840,7 +880,7 @@
             ${isNow ? `
               <div class="mt-4 inline-flex items-center gap-2 rounded-full px-3 py-2 text-[11px] font-semibold bg-fuchsia-500/12 border border-fuchsia-400/18 text-fuchsia-300 live-badge">
                 <span class="w-2 h-2 rounded-full bg-fuchsia-400"></span>
-                ${t.liveNow} · ${t[liveNow.platform]}
+                ${t.liveNow}
               </div>` : ''}
           </div>
         `;
@@ -850,16 +890,24 @@
     }
 
     function renderLinks() {
-      $('#linksGrid').innerHTML = links.map(l => `
-        <a href="${l.href}" class="external-link link-card soft-panel rounded-[1.45rem] px-5 py-4 flex items-center justify-between gap-4 transition-all hover:border-violet-400/55 hover:-translate-y-0.5">
-          <div class="flex items-center gap-4 min-w-0">
-            <span class="w-12 h-12 rounded-2xl bg-white/8 border border-white/10 flex items-center justify-center text-2xl shrink-0">${l.icon}</span>
-            <div class="min-w-0">
-              <div class="font-bold text-base truncate">${l.label}</div>
-            </div>
+      $('#linksGrid').innerHTML = linkGroups.map(group => `
+        <section class="mb-6 last:mb-0">
+          <div class="link-group-title">${group.title[lang]}</div>
+          <div class="grid gap-3.5">
+            ${group.items.map(l => `
+              <a href="${l.href}" class="external-link link-card soft-panel rounded-[1.45rem] px-5 py-4 flex items-center justify-between gap-4 transition-all hover:border-violet-400/55 hover:-translate-y-0.5">
+                <div class="flex items-center gap-4 min-w-0">
+                  <span class="w-12 h-12 rounded-2xl bg-white/8 border border-white/10 flex items-center justify-center text-2xl shrink-0">${l.icon}</span>
+                  <div class="min-w-0">
+                    <div class="font-bold text-base truncate">${l.label}</div>
+                    <div class="text-sm text-[color:var(--muted)] truncate mt-0.5">${l.desc[lang]}</div>
+                  </div>
+                </div>
+                <span class="link-arrow text-violet-300 text-xl transition-transform shrink-0">↗</span>
+              </a>
+            `).join('')}
           </div>
-          <span class="link-arrow text-violet-300 text-xl transition-transform shrink-0">↗</span>
-        </a>
+        </section>
       `).join('');
     }
 
@@ -869,7 +917,7 @@
 
       $('#brandSub').textContent = t.brandSub;
       $('#navSchedule').textContent = t.navSchedule;
-      $('#navProfile').textContent = t.navProfile;
+      $('#navImages').textContent = t.navImages;
       $('#eyebrow').textContent = t.eyebrow;
       $('#heroStatus').textContent = t.heroStatus;
       $('#heroTitle').textContent = t.heroTitle;
@@ -887,6 +935,7 @@
       $('#heroMetaC').textContent = t.heroMetaC;
 
       $('#scheduleHeading').textContent = t.scheduleHeading;
+      $('#weekPlanLabel').textContent = t.weekPlanLabel;
       $('#scheduleSub').textContent = t.scheduleSub;
       $('#scheduleSummaryTitle').textContent = t.scheduleSummaryTitle;
       $('#scheduleSummaryText').textContent = t.scheduleSummaryText;
@@ -957,23 +1006,11 @@
         setTheme(!isDark);
       });
 
-      $('#weekA').addEventListener('click', () => {
-        week = 'A';
-        localStorage.setItem('irev_week', week);
-        renderSchedule();
-      });
-
-      $('#weekB').addEventListener('click', () => {
-        week = 'B';
-        localStorage.setItem('irev_week', week);
-        renderSchedule();
-      });
-
       document.addEventListener('click', (e) => {
         const link = e.target.closest('a[href]');
         if (!link) return;
         const href = link.getAttribute('href');
-        if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+        if (!href || href.startsWith('#') || href.startsWith('javascript:') || false) return;
         if (!link.classList.contains('external-link')) return;
         e.preventDefault();
         runLoadingAndGo(href);
