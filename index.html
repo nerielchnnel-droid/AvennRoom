@@ -1,1029 +1,405 @@
 <!DOCTYPE html>
-<html lang="ko" class="dark scroll-smooth">
+<html lang="ko">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Irev</title>
-  <meta name="description" content="Irev official stream profile" />
+  <title>Irev Guide</title>
+  <meta name="description" content="Irev participation guide, chat rules, and schedule" />
   <link rel="icon" type="image/png" href="favicon.png" />
-  <link rel="shortcut icon" href="favicon.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;700;800;900&display=swap');
 
     :root {
-      --bg: #09080f;
-      --panel: rgba(18, 16, 29, 0.78);
-      --panel-2: rgba(255, 255, 255, 0.06);
-      --line: rgba(255, 255, 255, 0.11);
-      --text: #f5f1ff;
-      --muted: #baaee0;
-      --violet: 159 92 255;
-      --violet-2: 213 162 255;
-      --pink: 244 114 182;
-      --good: 16 185 129;
-      --bad: 99 102 241;
+      --bg: #f7f7f8;
+      --panel: #ffffff;
+      --panel-soft: #fafafa;
+      --line: #e5e7eb;
+      --line-strong: #d1d5db;
+      --text: #111827;
+      --muted: #6b7280;
+      --accent: #374151;
+      --accent-soft: #f3f4f6;
+      --live-bg: #ecfdf5;
+      --live-line: #a7f3d0;
+      --live-text: #065f46;
+      --off-bg: #f9fafb;
+      --off-line: #e5e7eb;
+      --off-text: #6b7280;
     }
 
+    * { box-sizing: border-box; }
+
     html, body {
+      margin: 0;
       background: var(--bg);
       color: var(--text);
       font-family: 'Pretendard', system-ui, sans-serif;
     }
 
     body {
-      background-image:
-        radial-gradient(circle at 10% 20%, rgba(159,92,255,0.18), transparent 22%),
-        radial-gradient(circle at 90% 10%, rgba(56,189,248,0.11), transparent 24%),
-        radial-gradient(circle at 50% 80%, rgba(236,72,153,0.08), transparent 26%),
-        linear-gradient(180deg, #0a0911 0%, #07070d 100%);
       min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.12;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: 28px 28px;
-      mask-image: radial-gradient(circle at center, black 45%, transparent 100%);
-      z-index: 0;
-    }
-
-    .dark {
-      color-scheme: dark;
-    }
-
-    .light {
-      color-scheme: light;
-    }
-
-    .light body,
-    html.light body {
-      --bg: #f6f3ff;
-      --panel: rgba(255, 255, 255, 0.82);
-      --panel-2: rgba(17, 24, 39, 0.04);
-      --line: rgba(17, 24, 39, 0.10);
-      --text: #17131f;
-      --muted: #5a4d77;
-      background-image:
-        radial-gradient(circle at 10% 20%, rgba(159,92,255,0.11), transparent 22%),
-        radial-gradient(circle at 90% 10%, rgba(56,189,248,0.10), transparent 24%),
-        radial-gradient(circle at 50% 80%, rgba(236,72,153,0.06), transparent 26%),
-        linear-gradient(180deg, #fbf9ff 0%, #f3efff 100%);
     }
 
     .panel {
       background: var(--panel);
       border: 1px solid var(--line);
-      box-shadow:
-        0 18px 50px rgba(0,0,0,0.28),
-        inset 0 1px 0 rgba(255,255,255,0.05);
-      backdrop-filter: blur(18px);
+      box-shadow: 0 8px 24px rgba(17, 24, 39, 0.04);
     }
 
     .soft-panel {
-      background: var(--panel-2);
+      background: var(--panel-soft);
       border: 1px solid var(--line);
-      backdrop-filter: blur(14px);
     }
 
-    .neon-text {
-      text-shadow:
-        0 0 10px rgba(159, 92, 255, 0.75),
-        0 0 26px rgba(159, 92, 255, 0.42),
-        0 0 58px rgba(208, 179, 255, 0.2);
-    }
-
-    .hero-shell {
+    .guide-action {
       position: relative;
-      overflow: hidden;
-      isolation: isolate;
-      background:
-        linear-gradient(115deg, rgba(159,92,255,0.16) 0%, rgba(159,92,255,0.07) 35%, rgba(255,255,255,0) 70%),
-        linear-gradient(180deg, rgba(4,2,12,0.08) 0%, rgba(4,2,12,0.46) 100%),
-        url('PIA14415~orig.jpg') center/cover no-repeat;
+      text-align: left;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
     }
 
-    .hero-shell::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 20% 28%, rgba(159,92,255,0.25), transparent 25%),
-        radial-gradient(circle at 80% 18%, rgba(56,189,248,0.16), transparent 22%),
-        radial-gradient(circle at 72% 75%, rgba(236,72,153,0.12), transparent 24%);
-      mix-blend-mode: screen;
-      z-index: -1;
+    .guide-action:hover {
+      transform: translateY(-2px);
+      border-color: var(--line-strong);
+      box-shadow: 0 12px 28px rgba(17, 24, 39, 0.06);
     }
 
-    .hero-shell::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, rgba(8,8,14,0.86) 0%, rgba(8,8,14,0.44) 46%, rgba(8,8,14,0.74) 100%);
-      z-index: -1;
-    }
-
-    .tag {
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.07);
-      backdrop-filter: blur(10px);
-    }
-
-    .hero-orbit,
-    .hero-orbit-2,
-    .hero-orbit-3 {
-      position: absolute;
-      border-radius: 9999px;
-      border: 1px solid rgba(255,255,255,0.08);
-      pointer-events: none;
-    }
-
-    .hero-orbit {
-      width: 540px;
-      height: 540px;
-      right: -120px;
-      top: -120px;
-      animation: spin 26s linear infinite;
-    }
-
-    .hero-orbit-2 {
-      width: 340px;
-      height: 340px;
-      right: -24px;
-      top: -18px;
-      animation: spinReverse 18s linear infinite;
-    }
-
-    .hero-orbit-3 {
-      width: 720px;
-      height: 720px;
-      right: -220px;
-      bottom: -320px;
-      opacity: 0.45;
-      animation: drift 10s ease-in-out infinite;
-    }
-
-    .orb-dot::before,
-    .orb-dot::after {
-      content: "";
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      border-radius: 9999px;
-      background: radial-gradient(circle, rgba(255,255,255,0.92), rgba(159,92,255,0.82));
-      box-shadow: 0 0 24px rgba(159,92,255,0.9);
-    }
-
-    .orb-dot::before {
-      top: 12%;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    .orb-dot::after {
-      bottom: 10%;
-      right: 16%;
-    }
-
-    .glow-ring {
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,0.05),
-        0 0 0 8px rgba(159,92,255,0.04),
-        0 18px 50px rgba(0,0,0,0.25);
-    }
-
-    .card-glow {
-      box-shadow:
-        0 0 24px rgba(159,92,255,0.08),
-        0 22px 54px rgba(0,0,0,0.24);
-    }
-
-    .week-chip.active {
-      background: linear-gradient(135deg, rgb(159 92 255) 0%, rgb(123 58 237) 100%);
-      color: white;
-      box-shadow: 0 10px 30px rgba(159,92,255,0.34);
-    }
-
-    .sched-card {
-      transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
-    }
-
-    .sched-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(159,92,255,0.42);
-      box-shadow: 0 16px 42px rgba(0,0,0,0.24);
-    }
-
-    .today-ring {
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,0.06),
-        0 0 0 2px rgba(159,92,255,0.64),
-        0 0 40px rgba(159,92,255,0.14);
-    }
-
-    .live-badge {
-      animation: pulseRing 2s infinite ease-in-out;
-    }
-
-    .link-card:hover .link-arrow {
-      transform: translate(4px, -4px);
-    }
-
-    .link-group-title {
-      font-size: 11px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: rgb(196 181 253 / 0.9);
-      margin-bottom: 0.9rem;
-      font-weight: 800;
-    }
-
-    .platform-pill {
+    .guide-open-btn {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.65rem 0.95rem;
+      padding: 0.7rem 0.95rem;
       border-radius: 9999px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.06);
-      font-size: 0.78rem;
+      border: 1px solid var(--line);
+      background: #fff;
+      font-size: 0.9rem;
       font-weight: 700;
-      color: rgba(245,241,255,0.92);
-      backdrop-filter: blur(10px);
+      color: var(--text);
     }
 
-    .form-frame img {
-      transition: transform 0.35s ease, filter 0.35s ease;
+    .guide-arrow {
+      transition: transform 0.18s ease;
     }
 
-    .form-frame:hover img {
-      transform: scale(1.03) rotate(1.2deg);
-      filter: saturate(1.08);
+    .guide-action:hover .guide-arrow {
+      transform: translateX(3px);
     }
 
-    .form-frame.alt:hover img {
-      transform: scale(1.03) rotate(-1.2deg);
+    .sched-card {
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
     }
 
-    .loader-logo {
-      background: linear-gradient(90deg, rgba(159,92,255,1), rgba(244,114,182,1), rgba(159,92,255,1));
-      background-size: 200% 100%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: shine 2.4s linear infinite;
+    .sched-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--line-strong);
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.05);
     }
 
-    .progress-bar {
-      background: linear-gradient(90deg, rgba(139,92,246,1), rgba(217,70,239,1), rgba(96,165,250,1));
-      background-size: 200% 100%;
-      animation: shine 1.8s linear infinite;
+    .today-ring {
+      border-color: #9ca3af !important;
+      box-shadow: 0 0 0 1px rgba(156, 163, 175, 0.14);
     }
 
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+    .modal-shell {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      background: rgba(17, 24, 39, 0.18);
+      backdrop-filter: blur(6px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease;
+      z-index: 100;
     }
 
-    @keyframes spinReverse {
-      from { transform: rotate(360deg); }
-      to { transform: rotate(0deg); }
+    .modal-shell.open {
+      opacity: 1;
+      pointer-events: auto;
     }
 
-    @keyframes drift {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
+    .modal-card {
+      width: min(760px, 100%);
+      max-height: min(82vh, 900px);
+      overflow: auto;
+      border-radius: 1.5rem;
+      transform: translateY(10px);
+      transition: transform 0.18s ease;
     }
 
-    @keyframes pulseRing {
-      0%, 100% {
-        box-shadow: 0 0 0 0 rgba(217,70,239,0.5);
-      }
-      70% {
-        box-shadow: 0 0 0 12px rgba(217,70,239,0);
-      }
+    .modal-shell.open .modal-card {
+      transform: translateY(0);
     }
 
-    @keyframes shine {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 200% 50%; }
+    .rule-item {
+      opacity: 0;
+      transform: translateY(6px);
+      animation: reveal 0.24s ease forwards;
     }
 
-    @media (max-width: 1024px) {
-      .hero-orbit,
-      .hero-orbit-2,
-      .hero-orbit-3 {
-        display: none;
+    @keyframes reveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
   </style>
 </head>
-<body class="text-[color:var(--text)] min-h-screen">
-  <header class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-[#09080f]/65 backdrop-blur-2xl">
-    <div class="max-w-7xl mx-auto px-5 md:px-6 h-16 flex items-center justify-between">
-      <a href="#top" class="flex items-center gap-3 min-w-0">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-violet-500/40">I</div>
+<body>
+  <header class="sticky top-0 z-40 border-b border-gray-200 bg-white/90 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-5 md:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-10 h-10 rounded-2xl border border-gray-200 bg-gray-100 flex items-center justify-center text-gray-900 font-black text-xl">I</div>
         <div class="min-w-0">
-          <strong class="block text-xl tracking-tight leading-none">Irev</strong>
-          <span id="brandSub" class="block text-[10px] text-violet-300 tracking-[0.22em] mt-1">DEMON × SLIME</span>
+          <strong class="block text-xl tracking-tight leading-none text-gray-900">Irev</strong>
+          <span class="block text-[10px] text-gray-500 tracking-[0.22em] mt-1">GUIDE + SCHEDULE</span>
         </div>
-      </a>
-
-      <div class="flex items-center gap-2 md:gap-3">
-        <a href="#schedule" id="navSchedule" class="hidden md:inline-flex px-4 py-2 rounded-2xl text-sm soft-panel hover:border-violet-400/60 transition-colors">Schedule</a>
-        <a href="#profile" id="navImages" class="hidden md:inline-flex px-4 py-2 rounded-2xl text-sm soft-panel hover:border-violet-400/60 transition-colors">Images</a>
-        <select id="langSelect" class="h-11 bg-black/25 border border-white/15 rounded-2xl px-4 text-sm outline-none focus:border-violet-400 cursor-pointer">
-          <option value="ko">🇰🇷 KO</option>
-          <option value="en">🇬🇧 EN</option>
-          <option value="ja">🇯🇵 JA</option>
-        </select>
-        <button id="themeBtn" class="w-11 h-11 rounded-2xl border border-white/15 bg-black/25 hover:bg-white/10 transition-all active:scale-95 text-lg" aria-label="theme switch">☀️</button>
       </div>
     </div>
   </header>
 
-  <main id="top" class="relative z-10 max-w-7xl mx-auto px-5 md:px-6 pt-24 pb-24">
-    <section class="hero-shell rounded-[2rem] md:rounded-[2.25rem] min-h-[620px] md:min-h-[680px] flex items-end panel mb-8 md:mb-12">
-      <div class="hero-orbit orb-dot"></div>
-      <div class="hero-orbit-2 orb-dot"></div>
-      <div class="hero-orbit-3"></div>
-
-      <div class="w-full p-7 md:p-12 lg:p-14 grid lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-10 items-end">
-        <div>
-          <div id="eyebrow" class="inline-flex items-center gap-2 px-4 md:px-5 py-2.5 tag rounded-full text-xs md:text-sm font-medium mb-6 text-white/90">
-            방송 링크 · 일정 · 이미지
+  <main class="max-w-6xl mx-auto px-5 md:px-6 pt-10 pb-14">
+    <section class="grid md:grid-cols-2 gap-4 md:gap-5 mb-8 md:mb-10">
+      <button type="button" data-modal-target="participationModal" class="guide-action panel rounded-[1.75rem] p-7 md:p-8 min-h-[210px]">
+        <div class="h-full flex flex-col justify-between gap-8">
+          <div>
+            <div class="text-[11px] uppercase tracking-[0.22em] text-gray-500 font-black mb-4">Participation</div>
+            <h1 class="text-3xl md:text-[2.1rem] font-black tracking-tight leading-tight text-gray-900">시참 방법</h1>
+            <p class="mt-4 text-sm md:text-base text-gray-500 leading-7">참여 조건, 대기 방법, 로테이션만 따로 확인할 수 있습니다.</p>
           </div>
-
-          <div class="flex items-center gap-3 mb-5">
-            <span class="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-semibold bg-emerald-500/10 border border-emerald-400/20 text-emerald-300">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span id="heroStatus">STREAM PROFILE</span>
-            </span>
-            <span class="hidden sm:inline-flex rounded-full px-3.5 py-1.5 text-xs font-semibold bg-white/8 border border-white/10 text-violet-200">KST</span>
-          </div>
-
-          <h1 id="heroTitle" class="neon-text text-5xl sm:text-6xl md:text-7xl lg:text-[5.35rem] font-black tracking-[-0.05em] leading-[0.94] mb-5">이래브</h1>
-          <p id="heroDesc" class="text-base sm:text-lg md:text-xl leading-relaxed max-w-2xl text-violet-100/95 whitespace-pre-line"></p>
-
-          <div class="flex flex-wrap gap-3 sm:gap-4 mt-8 md:mt-10">
-            <a id="ctaPrimary" href="#schedule" class="inline-flex items-center gap-3 rounded-[1.35rem] px-6 md:px-8 py-4 md:py-4.5 bg-gradient-to-r from-violet-600 to-fuchsia-500 font-bold text-base md:text-lg shadow-2xl shadow-violet-600/35 hover:scale-[1.01] transition-transform">
-              <span>📅</span>
-              <span>방송 일정 보기</span>
-            </a>
-            <a id="ctaSecondary" href="https://discord.gg/amqfjt68nw" class="external-link inline-flex items-center gap-3 rounded-[1.35rem] px-6 md:px-8 py-4 bg-white/10 hover:bg-white/16 border border-white/15 font-medium transition-colors">
-              <span>💬</span>
-              <span>디스코드</span>
-            </a>
-          </div>
-
-          <div class="flex flex-wrap gap-2.5 mt-5">
-            <span class="platform-pill">🎥 CHZZK</span>
-            <span class="platform-pill">💚 SOOP</span>
-            <span class="platform-pill">✨ 씨미</span>
-            <span class="platform-pill">🟢 Kick</span>
-            <span class="platform-pill">▶️ YouTube</span>
-            <span class="platform-pill">💬 Discord</span>
+          <div class="guide-open-btn w-fit">
+            <span>열기</span>
+            <span class="guide-arrow">→</span>
           </div>
         </div>
+      </button>
 
-        <div class="grid gap-4 md:gap-5 lg:pl-8">
-          <div class="panel rounded-[1.8rem] p-5 md:p-6 card-glow">
-            <div class="flex items-start justify-between gap-4">
-              <div>
-                <div id="statusTitle" class="text-xs uppercase tracking-[0.24em] font-semibold text-emerald-300 mb-2">Today</div>
-                <p id="statusBody" class="text-sm md:text-[15px] text-violet-100/90 leading-relaxed"></p>
-              </div>
-              <div class="w-11 h-11 rounded-2xl bg-emerald-500/10 border border-emerald-400/20 flex items-center justify-center text-xl">✦</div>
-            </div>
+      <button type="button" data-modal-target="rulesModal" class="guide-action panel rounded-[1.75rem] p-7 md:p-8 min-h-[210px]">
+        <div class="h-full flex flex-col justify-between gap-8">
+          <div>
+            <div class="text-[11px] uppercase tracking-[0.22em] text-gray-500 font-black mb-4">Chat Rules</div>
+            <h1 class="text-3xl md:text-[2.1rem] font-black tracking-tight leading-tight text-gray-900">채팅 규칙</h1>
+            <p class="mt-4 text-sm md:text-base text-gray-500 leading-7">시청 중 필요한 기본 규칙만 따로 정리했습니다.</p>
           </div>
-
-          <div class="panel rounded-[1.8rem] p-5 md:p-6 card-glow">
-            <div id="vibeTitle" class="text-xs uppercase tracking-[0.24em] font-semibold text-violet-300 mb-4">Mood</div>
-            <div id="vibeChips" class="flex flex-wrap gap-2.5"></div>
-          </div>
-
-          <div class="grid sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3 gap-4">
-            <div class="panel rounded-[1.6rem] p-5">
-              <div class="text-[11px] uppercase tracking-[0.2em] text-violet-300 mb-2" id="heroMetaAHead">LINEAGE</div>
-              <div class="font-bold text-lg" id="heroMetaA">Demon × Slime</div>
-            </div>
-            <div class="panel rounded-[1.6rem] p-5">
-              <div class="text-[11px] uppercase tracking-[0.2em] text-violet-300 mb-2" id="heroMetaBHead">FORM</div>
-              <div class="font-bold text-lg" id="heroMetaB">Human on stream</div>
-            </div>
-            <div class="panel rounded-[1.6rem] p-5">
-              <div class="text-[11px] uppercase tracking-[0.2em] text-violet-300 mb-2" id="heroMetaCHead">AURA</div>
-              <div class="font-bold text-lg" id="heroMetaC">Quiet danger</div>
-            </div>
+          <div class="guide-open-btn w-fit">
+            <span>열기</span>
+            <span class="guide-arrow">→</span>
           </div>
         </div>
-      </div>
+      </button>
     </section>
 
-    <section id="schedule" class="mb-8 md:mb-12">
+    <section id="schedule">
       <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-6">
         <div>
-          <h2 id="scheduleHeading" class="text-3xl md:text-4xl font-black tracking-tight">Schedule</h2>
-          <p id="scheduleSub" class="mt-2 text-sm md:text-base text-[color:var(--muted)]">동출 기준으로 너무 무겁지 않게 굴리는 주간표</p>
+          <h2 class="text-3xl md:text-4xl font-black tracking-tight text-gray-900">Schedule</h2>
+          <p class="mt-2 text-sm md:text-base text-gray-500">동출 기준으로 너무 무겁지 않게 굴리는 주간표</p>
         </div>
 
-        <div class="panel rounded-[1.5rem] px-5 py-3 inline-flex gap-2 self-start text-sm font-semibold text-violet-200">
+        <div class="panel rounded-[1.25rem] px-5 py-3 inline-flex gap-2 self-start text-sm font-semibold text-gray-700">
           <span>●</span>
-          <span id="weekPlanLabel">멀티스트림 고정 주간표</span>
+          <span>멀티스트림 고정 주간표</span>
         </div>
       </div>
 
-      <div class="panel rounded-[2rem] p-5 md:p-7 lg:p-8 card-glow">
+      <div class="panel rounded-[1.75rem] p-5 md:p-7 lg:p-8">
         <div class="grid lg:grid-cols-[1fr_auto] gap-5 items-start mb-7">
           <div>
-            <div id="scheduleSummaryTitle" class="text-[11px] uppercase tracking-[0.24em] text-violet-400 mb-2">추천 방송 시간</div>
-            <div id="scheduleSummaryText" class="text-base md:text-lg font-semibold leading-relaxed">화·수 20:30–23:30 · 금 21:00–01:00 · 토·일 19:00 시작 (KST)</div>
+            <div class="text-[11px] uppercase tracking-[0.24em] text-gray-500 mb-2">추천 방송 시간</div>
+            <div class="text-base md:text-lg font-semibold leading-relaxed text-gray-900">화·수 20:30–23:30 · 금 21:00–01:00 · 토·일 19:00 시작 (KST)</div>
           </div>
           <div class="grid sm:grid-cols-2 gap-3">
-            <div class="soft-panel rounded-[1.2rem] px-4 py-3">
-              <div class="text-[11px] uppercase tracking-[0.2em] text-violet-300 mb-1" id="schedMetaAHead">Platform</div>
-              <div class="font-semibold" id="schedMetaAVal">CHZZK / SOOP / 씨미 / Kick</div>
+            <div class="soft-panel rounded-[1rem] px-4 py-3">
+              <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 mb-1">Platform</div>
+              <div class="font-semibold text-gray-900">CHZZK / SOOP / C-ME / Kick</div>
             </div>
-            <div class="soft-panel rounded-[1.2rem] px-4 py-3">
-              <div class="text-[11px] uppercase tracking-[0.2em] text-violet-300 mb-1" id="schedMetaBHead">Cycle</div>
-              <div class="font-semibold" id="schedMetaBVal">5 days · weekends fixed</div>
+            <div class="soft-panel rounded-[1rem] px-4 py-3">
+              <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 mb-1">Cycle</div>
+              <div class="font-semibold text-gray-900">주 5일 · 주말 고정</div>
             </div>
           </div>
         </div>
 
-        <div id="todayLine" class="hidden mb-5 rounded-[1.3rem] px-4 py-4 bg-fuchsia-500/10 border border-fuchsia-400/18 text-fuchsia-200 text-sm font-medium"></div>
-
-        <div id="weekGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-7 gap-3 md:gap-4"></div>
-      </div>
-    </section>
-
-    <section class="grid xl:grid-cols-[1.1fr_0.9fr] gap-8">
-      <div id="profile" class="panel rounded-[2rem] p-6 md:p-8 lg:p-10 card-glow">
-        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-8">
-          <div>
-            <h2 id="profileHeading" class="text-3xl md:text-4xl font-black tracking-tight mb-2">Images</h2>
-            <p id="profileSub" class="text-[color:var(--muted)]">악마 × 슬라임</p>
-          </div>
-          <div class="tag rounded-full px-4 py-2 text-xs font-semibold self-start" id="profileBadge">IMAGE INFO</div>
+        <div class="mb-5 rounded-[1rem] px-4 py-4 border border-gray-200 bg-gray-50 text-gray-700 text-sm font-medium">
+          오늘은 방송 있는 날이다. 화·수 20:30–23:30 · 금 21:00–01:00 · 토·일 19:00 시작 (KST)
         </div>
 
-        <div id="profileText" class="text-base md:text-lg leading-8 text-violet-100/95 whitespace-pre-line mb-7"></div>
-        <div class="pt-6 border-t border-white/10 text-sm md:text-[15px] leading-7 text-[color:var(--muted)]" id="profileNote"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-7 gap-3 md:gap-4">
+          <div class="sched-card rounded-[1.25rem] p-5 bg-white border border-gray-200">
+            <div class="flex items-start justify-between gap-3 mb-4">
+              <div><div class="text-2xl font-black tracking-tight text-gray-900">월</div></div>
+              <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-gray-50 border border-gray-200 text-gray-500">·</div>
+            </div>
+            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-gray-50 text-gray-500 border border-gray-200">휴방</div>
+            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">휴식 · 클립정리</div>
+          </div>
 
-        <div class="grid sm:grid-cols-2 gap-5 mt-10">
-          <div class="form-frame group">
-            <div class="soft-panel rounded-[1.8rem] p-5 md:p-6 text-center h-full">
-              <div class="flex items-center justify-between mb-4">
-                <div id="slimeLabel" class="text-[11px] uppercase tracking-[0.2em] text-rose-300 font-bold">슬라임 폼</div>
-                <span class="inline-flex w-10 h-10 items-center justify-center rounded-2xl bg-rose-500/10 border border-rose-400/20">👁️</span>
+          <div class="sched-card rounded-[1.25rem] p-5 bg-white border border-gray-200">
+            <div class="flex items-start justify-between gap-3 mb-4">
+              <div><div class="text-2xl font-black tracking-tight text-gray-900">화</div></div>
+              <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-emerald-50 border border-emerald-200 text-emerald-700">●</div>
+            </div>
+            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">방송</div>
+            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">동출 20:30</div>
+          </div>
+
+          <div class="sched-card rounded-[1.25rem] p-5 bg-white border border-gray-200">
+            <div class="flex items-start justify-between gap-3 mb-4">
+              <div><div class="text-2xl font-black tracking-tight text-gray-900">수</div></div>
+              <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-emerald-50 border border-emerald-200 text-emerald-700">●</div>
+            </div>
+            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">방송</div>
+            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">동출 20:30</div>
+          </div>
+
+          <div class="sched-card rounded-[1.25rem] p-5 bg-white border border-gray-200">
+            <div class="flex items-start justify-between gap-3 mb-4">
+              <div><div class="text-2xl font-black tracking-tight text-gray-900">목</div></div>
+              <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-gray-50 border border-gray-200 text-gray-500">·</div>
+            </div>
+            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-gray-50 text-gray-500 border border-gray-200">휴방</div>
+            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">정비 · 편집</div>
+          </div>
+
+          <div class="sched-card rounded-[1.25rem] p-5 bg-white border border-gray-200">
+            <div class="flex items-start justify-between gap-3 mb-4">
+              <div><div class="text-2xl font-black tracking-tight text-gray-900">금</div></div>
+              <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-emerald-50 border border-emerald-200 text-emerald-700">●</div>
+            </div>
+            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">방송</div>
+            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">동출 21:00</div>
+          </div>
+
+          <div class="sched-card rounded-[1.25rem] p-5 bg-white border border-gray-200">
+            <div class="flex items-start justify-between gap-3 mb-4">
+              <div><div class="text-2xl font-black tracking-tight text-gray-900">토</div></div>
+              <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-emerald-50 border border-emerald-200 text-emerald-700">●</div>
+            </div>
+            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">방송</div>
+            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">주말 고정 19:00</div>
+          </div>
+
+          <div class="sched-card today-ring rounded-[1.25rem] p-5 bg-white border border-gray-200">
+            <div class="flex items-start justify-between gap-3 mb-4">
+              <div>
+                <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 mb-2">오늘</div>
+                <div class="text-2xl font-black tracking-tight text-gray-900">일</div>
               </div>
-              <img src="slime.png" alt="Slime form" class="w-full rounded-[1.4rem] border border-white/10 mx-auto max-h-72 object-cover bg-black/30" />
+              <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-emerald-50 border border-emerald-200 text-emerald-700">●</div>
             </div>
+            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">방송</div>
+            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">주말 고정 19:00</div>
           </div>
-
-          <div class="form-frame alt group">
-            <div class="soft-panel rounded-[1.8rem] p-5 md:p-6 text-center h-full">
-              <div class="flex items-center justify-between mb-4">
-                <div id="humanLabel" class="text-[11px] uppercase tracking-[0.2em] text-sky-300 font-bold">인간 폼</div>
-                <span class="inline-flex w-10 h-10 items-center justify-center rounded-2xl bg-sky-500/10 border border-sky-400/20">🫧</span>
-              </div>
-              <img src="human.png" alt="Human form" class="w-full rounded-[1.4rem] border border-white/10 mx-auto max-h-72 object-cover bg-black/30" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid gap-8">
-        <div class="panel rounded-[2rem] p-6 md:p-8 lg:p-10 card-glow">
-          <div class="flex items-end justify-between gap-4 mb-8">
-            <div>
-              <h2 id="linksHeading" class="text-3xl md:text-4xl font-black tracking-tight mb-2">Links</h2>
-              <p id="linksSub" class="text-[color:var(--muted)]">필요한 곳만 바로 클릭</p>
-            </div>
-            <div class="hidden sm:flex w-12 h-12 rounded-2xl bg-violet-500/10 border border-violet-400/20 items-center justify-center text-xl">↗</div>
-          </div>
-
-          <div id="linksGrid" class="grid gap-3.5"></div>
-        </div>
-
-        <div class="panel rounded-[2rem] p-6 md:p-8 card-glow">
-          <div class="flex items-center justify-between gap-4 mb-6">
-            <div>
-              <h3 id="noteHeading" class="text-2xl font-black tracking-tight mb-1">Info</h3>
-              <p id="noteSub" class="text-sm text-[color:var(--muted)]">안내</p>
-            </div>
-            <div class="w-12 h-12 rounded-2xl bg-fuchsia-500/10 border border-fuchsia-400/20 flex items-center justify-center text-xl">✦</div>
-          </div>
-          <p id="noteBody" class="text-sm md:text-[15px] leading-7 text-violet-100/90"></p>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="relative z-10 border-t border-white/10 mt-6">
-    <div class="max-w-7xl mx-auto px-5 md:px-6 py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-sm text-[color:var(--muted)]">
-      <span id="footerText">Irev official stream profile — 2026</span>
-      <span id="footerSub">human shell, inhuman core</span>
-    </div>
-  </footer>
+  <div id="participationModal" class="modal-shell" aria-hidden="true">
+    <div class="modal-card panel p-6 md:p-8 lg:p-9">
+      <div class="flex items-start justify-between gap-4 mb-6">
+        <div>
+          <div class="text-[11px] uppercase tracking-[0.22em] text-gray-500 font-black mb-2">Participation</div>
+          <h2 class="text-2xl md:text-3xl font-black tracking-tight text-gray-900">시참 방법</h2>
+        </div>
+        <button type="button" class="close-modal w-11 h-11 rounded-2xl border border-gray-200 bg-gray-50 text-xl text-gray-700">×</button>
+      </div>
 
-  <div id="introLoader" class="fixed inset-0 z-[99999] hidden items-center justify-center bg-black/92 backdrop-blur-3xl">
-    <div class="w-[min(88vw,420px)] text-center px-5">
-      <div class="mb-9">
-        <div class="loader-logo text-6xl sm:text-7xl font-black tracking-[0.32em] neon-text">IREV</div>
+      <div class="soft-panel rounded-[1.25rem] p-5 mb-4 rule-item" style="animation-delay:0.02s;">
+        <p class="text-sm md:text-[15px] leading-7 text-gray-700">♥ 빡겜하지 않고, 즐겁게 게임해봅시다! ♥</p>
       </div>
-      <div class="soft-panel rounded-full p-1 mb-5 overflow-hidden">
-        <div id="introLoaderBar" class="progress-bar h-2.5 rounded-full w-0 transition-all duration-200"></div>
+
+      <div class="grid gap-3.5">
+        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.06s;">
+          <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 font-black mb-2">참여 조건</div>
+          <p class="text-sm md:text-[15px] leading-7 text-gray-700">팔로워 1일 이상이며, 채팅이 활발해야 합니다.</p>
+        </div>
+        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.10s;">
+          <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 font-black mb-2">참여 방법</div>
+          <p class="text-sm md:text-[15px] leading-7 text-gray-700">디스코드 NickName 채널에 <strong>닉네임#태그</strong>를 입력한 뒤, 시참 채널에서 대기 버튼을 누르고 기다려주세요.</p>
+        </div>
+        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.14s;">
+          <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 font-black mb-2">호출 규칙</div>
+          <p class="text-sm md:text-[15px] leading-7 text-gray-700">자리비움 등으로 대답이 없으면 다음 사람으로 넘어갑니다.</p>
+        </div>
+        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.18s;">
+          <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 font-black mb-2">로테이션</div>
+          <p class="text-sm md:text-[15px] leading-7 text-gray-700">대기가 있을 경우 1인당 3판씩 진행합니다. 대기가 없을 경우 새 대기가 생길 때까지 계속 참여할 수 있습니다.</p>
+        </div>
       </div>
-      <div id="introLoaderCount" class="text-5xl font-black text-white mb-2">8</div>
-      <div id="introLoaderSub" class="text-sm tracking-[0.24em] text-violet-300">LOADING WORLD...</div>
+    </div>
+  </div>
+
+  <div id="rulesModal" class="modal-shell" aria-hidden="true">
+    <div class="modal-card panel p-6 md:p-8 lg:p-9">
+      <div class="flex items-start justify-between gap-4 mb-6">
+        <div>
+          <div class="text-[11px] uppercase tracking-[0.22em] text-gray-500 font-black mb-2">Chat Rules</div>
+          <h2 class="text-2xl md:text-3xl font-black tracking-tight text-gray-900">채팅 규칙</h2>
+        </div>
+        <button type="button" class="close-modal w-11 h-11 rounded-2xl border border-gray-200 bg-gray-50 text-xl text-gray-700">×</button>
+      </div>
+
+      <div class="soft-panel rounded-[1.25rem] p-5 mb-4 rule-item" style="animation-delay:0.02s;">
+        <p class="text-sm md:text-[15px] leading-7 text-gray-700">※ 임시 제한 3회 누적 시 자동으로 활동 제한됩니다.<br>※ 기본적인 매너만 지켜주시면 됩니다 :)<br>※ 경고 3번 받을 시 참여가 불가능할 수 있으며, 기준은 방장이 결정합니다.</p>
+      </div>
+
+      <div class="grid gap-3.5">
+        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.06s;"><strong class="text-gray-900">1.</strong> 개인정보 유추, 빨간약, 사적인 정보 언급 금지</div>
+        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.10s;"><strong class="text-gray-900">2.</strong> 이제 못 옴, 내일보자, 자러감, 딴 게임 하러 감 같은 퇴장 멘트 자제</div>
+        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.14s;"><strong class="text-gray-900">3.</strong> 훈수 및 지시성 채팅 금지</div>
+        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.18s;"><strong class="text-gray-900">4.</strong> 과한 욕설, 공격적 채팅, 패드립, 인신공격, 비하 발언 금지</div>
+        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.22s;"><strong class="text-gray-900">5.</strong> 시청자 간 과한 대화, 친목, 닉언 금지</div>
+        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.26s;"><strong class="text-gray-900">6.</strong> 타 스트리머 언급, 비교, 비하 금지</div>
+        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.30s;"><strong class="text-gray-900">7.</strong> 소수만 아는 이야기, 방송 흐름과 무관한 내수용 대화 자제</div>
+        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.34s;"><strong class="text-gray-900">8.</strong> 시청자 수 언급 금지</div>
+        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.38s;"><strong class="text-gray-900">9.</strong> 방송 관련 불만은 디스코드 문의 채널 이용</div>
+        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.42s;"><strong class="text-gray-900">10.</strong> 정치, 종교, 민감한 주제 금지</div>
+        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.46s;"><strong class="text-gray-900">11.</strong> 스포일러 및 과한 TMI 자제</div>
+      </div>
     </div>
   </div>
 
   <script>
-    const i18n = {
-      ko: {
-        brandSub: "DEMON × SLIME",
-        navSchedule: "일정",
-        navImages: "이미지",
-        eyebrow: "방송 링크 · 일정 · 이미지",
-        heroStatus: "STREAM PROFILE",
-        heroTitle: "이래브",
-        heroDesc: "방송 링크, 일정, 대표 이미지를 한곳에서 확인할 수 있습니다.",
-        ctaPrimary: "방송 일정 보기",
-        ctaSecondary: "디스코드",
-        statusTitle: "Today",
-        statusBody: "오늘 라이브 여부와 다음 방송 시간을 아래에서 확인",
-        vibeTitle: "Mood",
-        vibes: ["demon theme", "slime theme", "human form"],
-        heroMetaAHead: "LINEAGE",
-        heroMetaA: "악마 × 슬라임",
-        heroMetaBHead: "FORM",
-        heroMetaB: "주로 인간형",
-        heroMetaCHead: "AURA",
-        heroMetaC: "슬라임 버전 운영",
-        scheduleHeading: "Schedule",
-        scheduleSub: "동출 기준으로 너무 무겁지 않게 굴리는 주간표",
-        scheduleSummaryTitle: "추천 방송 시간",
-        scheduleSummaryText: "화·수 20:30–23:30 · 금 21:00–01:00 · 토·일 19:00 시작 (KST)",
-        schedMetaAHead: "Platform",
-        schedMetaAVal: "CHZZK / SOOP / C-ME / Kick",
-        schedMetaBHead: "Cycle",
-        schedMetaBVal: "주 5일 · 주말 고정",
-        weekA: "이번 주",
-        weekB: "다음 주",
-        weekPlanLabel: "멀티스트림 고정 주간표",
-        live: "방송",
-        off: "휴방",
-        today: "오늘",
-        liveNow: "지금 방송중",
-        nextLive: "다음 방송",
-        noLiveWeek: "이번 주는 등록된 방송이 없음",
-        todayLineLive: "오늘은 방송 있는 날이다.",
-        todayLineOff: "오늘은 휴방이다.",
-        chzzk: "치지직",
-        soop: "숲",
-        cme: "씨미",
-        profileHeading: "Images",
-        profileSub: "대표 이미지",
-        profileBadge: "IMAGE INFO",
-        profileText: "방송에 사용하는 대표 이미지를 정리해두었습니다.\n슬라임 이미지와 인간형 이미지를 구분해서 볼 수 있습니다.",
-        profileNote: "아래에서 대표 이미지를 확인할 수 있습니다.",
-        slimeLabel: "슬라임 폼",
-        humanLabel: "인간 폼",
-        linksHeading: "Links",
-        linksSub: "필요한 곳만 바로 클릭",
-        noteHeading: "Info",
-        noteSub: "안내",
-        noteBody: "방송에 쓰는 대표 이미지와 플랫폼 링크, 일정을 한곳에서 보기 쉽게 정리한 페이지입니다.",
-        footerText: "Irev official stream profile — 2026",
-        footerSub: "stream links and images",
-        loadingText: "세계 불러오는 중...",
-        loadingMoving: "이동 중..."
-      },
-      en: {
-        brandSub: "DEMON × SLIME",
-        navSchedule: "Schedule",
-        navImages: "Images",
-        eyebrow: "stream links · schedule · images",
-        heroStatus: "STREAM PROFILE",
-        heroTitle: "Irev",
-        heroDesc: "You can check stream links, schedule, and main images here.",
-        ctaPrimary: "View schedule",
-        ctaSecondary: "Discord",
-        statusTitle: "Today",
-        statusBody: "Check whether today is live and see the next stream below.",
-        vibeTitle: "Mood",
-        vibes: ["demon theme", "slime theme", "human form"],
-        heroMetaAHead: "LINEAGE",
-        heroMetaA: "Demon × Slime",
-        heroMetaBHead: "FORM",
-        heroMetaB: "Mainly human-style",
-        heroMetaCHead: "AURA",
-        heroMetaC: "Slime version",
-        scheduleHeading: "Schedule",
-        scheduleSub: "A steady weekly plan built for multistreaming.",
-        scheduleSummaryTitle: "Suggested stream window",
-        scheduleSummaryText: "화·수 20:30–23:30 · 금 21:00–01:00 · 토·일 19:00 시작 (KST)",
-        schedMetaAHead: "Platform",
-        schedMetaAVal: "CHZZK / SOOP / C-ME / Kick",
-        schedMetaBHead: "Cycle",
-        schedMetaBVal: "5 days · weekends fixed",
-        weekA: "THIS WEEK",
-        weekB: "NEXT WEEK",
-        weekPlanLabel: "Fixed multistream schedule",
-        live: "LIVE",
-        off: "OFF",
-        today: "TODAY",
-        liveNow: "LIVE NOW",
-        nextLive: "Next stream",
-        noLiveWeek: "No stream is scheduled this week",
-        todayLineLive: "Today is a live day.",
-        todayLineOff: "Today is an off day.",
-        chzzk: "CHZZK",
-        soop: "SOOP",
-        cme: "C-ME",
-        profileHeading: "Images",
-        profileSub: "Main images",
-        profileBadge: "IMAGE INFO",
-        profileText: "Main images used for the stream are collected here.\nYou can check the slime image and the human-style image separately.",
-        profileNote: "You can check the main images below.",
-        slimeLabel: "Slime form",
-        humanLabel: "Human form",
-        linksHeading: "Links",
-        linksSub: "Only the places that matter.",
-        noteHeading: "Info",
-        noteSub: "notes",
-        noteBody: "This page keeps the main images, platform links, and weekly schedule easy to check in one place.",
-        footerText: "Irev official stream profile — 2026",
-        footerSub: "stream links and images",
-        loadingText: "Loading world...",
-        loadingMoving: "Redirecting..."
-      },
-      ja: {
-        brandSub: "DEMON × SLIME",
-        navSchedule: "スケジュール",
-        navImages: "画像",
-        eyebrow: "配信リンク · スケジュール · 画像",
-        heroStatus: "STREAM PROFILE",
-        heroTitle: "イレブ",
-        heroDesc: "配信リンク、スケジュール、メイン画像をここで確認できます。",
-        ctaPrimary: "配信予定を見る",
-        ctaSecondary: "Discord",
-        statusTitle: "Today",
-        statusBody: "今日の配信有無と次の配信時間を下で確認できる。",
-        vibeTitle: "Mood",
-        vibes: ["demon theme", "slime theme", "human form"],
-        heroMetaAHead: "LINEAGE",
-        heroMetaA: "悪魔 × スライム",
-        heroMetaBHead: "FORM",
-        heroMetaB: "主に人型",
-        heroMetaCHead: "AURA",
-        heroMetaC: "スライム版あり",
-        scheduleHeading: "Schedule",
-        scheduleSub: "同時配信でも 무리 없는週刊スケジュール",
-        scheduleSummaryTitle: "おすすめ配信時間",
-        scheduleSummaryText: "화·수 20:30–23:30 · 금 21:00–01:00 · 토·일 19:00 시작 (KST)",
-        schedMetaAHead: "Platform",
-        schedMetaAVal: "CHZZK / SOOP / 씨미 / Kick",
-        schedMetaBHead: "Cycle",
-        schedMetaBVal: "週5日・週末固定",
-        weekA: "今週",
-        weekB: "来週",
-        weekPlanLabel: "固定マルチ配信スケジュール",
-        live: "LIVE",
-        off: "OFF",
-        today: "TODAY",
-        liveNow: "配信中",
-        nextLive: "次の配信",
-        noLiveWeek: "今週は配信予定なし",
-        todayLineLive: "今日は配信がある日。",
-        todayLineOff: "今日は休配信の日。",
-        chzzk: "CHZZK",
-        soop: "SOOP",
-        cme: "C-ME",
-        profileHeading: "Images",
-        profileSub: "メイン画像",
-        profileBadge: "IMAGE INFO",
-        profileText: "配信で使うメイン画像をまとめています。\nスライム画像と人間画像を分けて確認できます。",
-        profileNote: "下でメイン画像を確認できます。",
-        slimeLabel: "スライムフォーム",
-        humanLabel: "人間フォーム",
-        linksHeading: "Links",
-        linksSub: "必要な場所だけすぐ押せる。",
-        noteHeading: "Info",
-        noteSub: "案内",
-        noteBody: "このページではメイン画像、配信リンク、週間スケジュールを見やすくまとめている。",
-        footerText: "Irev official stream profile — 2026",
-        footerSub: "stream links and images",
-        loadingText: "世界を読み込み中...",
-        loadingMoving: "移動中..."
-      }
-    };
+    const modals = document.querySelectorAll('.modal-shell');
+    const openers = document.querySelectorAll('[data-modal-target]');
+    const closeButtons = document.querySelectorAll('.close-modal');
 
-    const daysOfWeek = {
-      mon: { ko: "월", en: "Mon", ja: "月" },
-      tue: { ko: "화", en: "Tue", ja: "火" },
-      wed: { ko: "수", en: "Wed", ja: "水" },
-      thu: { ko: "목", en: "Thu", ja: "木" },
-      fri: { ko: "금", en: "Fri", ja: "金" },
-      sat: { ko: "토", en: "Sat", ja: "土" },
-      sun: { ko: "일", en: "Sun", ja: "日" }
-    };
-
-    const weeks = {
-      A: [
-        { key: 'mon', state: 'off',  note: { ko: '휴식 · 클립정리', en: 'Off · clip work', ja: '休み・クリップ整理' } },
-        { key: 'tue', state: 'live', note: { ko: '동출 20:30', en: 'Multistream 20:30', ja: '同時配信 20:30' } },
-        { key: 'wed', state: 'live', note: { ko: '동출 20:30', en: 'Multistream 20:30', ja: '同時配信 20:30' } },
-        { key: 'thu', state: 'off',  note: { ko: '정비 · 편집', en: 'Maintenance · edit', ja: '調整・編集' } },
-        { key: 'fri', state: 'live', note: { ko: '동출 21:00', en: 'Multistream 21:00', ja: '同時配信 21:00' } },
-        { key: 'sat', state: 'live', note: { ko: '주말 고정 19:00', en: 'Weekend fixed 19:00', ja: '週末固定 19:00' } },
-        { key: 'sun', state: 'live', note: { ko: '주말 고정 19:00', en: 'Weekend fixed 19:00', ja: '週末固定 19:00' } }
-      ],
-      B: [
-        { key: 'mon', state: 'off',  note: { ko: '휴식 · 클립정리', en: 'Off · clip work', ja: '休み・クリップ整理' } },
-        { key: 'tue', state: 'live', note: { ko: '동출 20:30', en: 'Multistream 20:30', ja: '同時配信 20:30' } },
-        { key: 'wed', state: 'live', note: { ko: '동출 20:30', en: 'Multistream 20:30', ja: '同時配信 20:30' } },
-        { key: 'thu', state: 'off',  note: { ko: '정비 · 편집', en: 'Maintenance · edit', ja: '調整・編集' } },
-        { key: 'fri', state: 'live', note: { ko: '동출 21:00', en: 'Multistream 21:00', ja: '同時配信 21:00' } },
-        { key: 'sat', state: 'live', note: { ko: '주말 고정 19:00', en: 'Weekend fixed 19:00', ja: '週末固定 19:00' } },
-        { key: 'sun', state: 'live', note: { ko: '주말 고정 19:00', en: 'Weekend fixed 19:00', ja: '週末固定 19:00' } }
-      ]
-    };
-
-    const linkGroups = [
-      {
-        key: 'live',
-        title: { ko: '생방송', en: 'Live', ja: 'Live' },
-        items: [
-          { icon: '🎥', label: 'CHZZK', href: 'https://chzzk.naver.com/911df19d52a45f1d08791b2d43517dee', desc: { ko: '메인 방송', en: 'Main live', ja: 'メイン配信' } },
-          { icon: '💚', label: 'SOOP', href: 'https://www.sooplive.com/station/slimeavenia', desc: { ko: '추가 송출', en: 'Extra live', ja: '追加配信' } },
-          { icon: '✨', label: '씨미', href: 'https://ci.me/@irev', desc: { ko: '추가 송출', en: 'Extra live', ja: '追加配信' } },
-          { icon: '🟢', label: 'Kick', href: 'https://kick.com/irev6478', desc: { ko: '추가 송출', en: 'Extra live', ja: '追加配信' } }
-        ]
-      },
-      {
-        key: 'video',
-        title: { ko: '영상 업로드', en: 'Videos', ja: '動画' },
-        items: [
-          { icon: '▶️', label: 'YouTube', href: 'https://www.youtube.com/@Irev-k6l2x', desc: { ko: '영상 · 클립', en: 'Uploads & clips', ja: '動画・クリップ' } }
-        ]
-      },
-      {
-        key: 'community',
-        title: { ko: '커뮤니티', en: 'Community', ja: 'コミュニティ' },
-        items: [
-          { icon: '☕', label: 'Naver Cafe', href: 'https://cafe.naver.com/black1tzbh?iframe_url=/MyCafeIntro.nhn%3Fclubid=31529869', desc: { ko: '카페 · 공지', en: 'Cafe & notices', ja: 'カフェ・お知らせ' } },
-          { icon: '💬', label: 'Discord', href: 'https://discord.gg/2MZaSJekRz', desc: { ko: '공지 · 소통', en: 'Announcements & chat', ja: '告知・交流' } },
-          { icon: '🖤', label: 'X / Twitter', href: 'https://x.com/ilaebeu35547', desc: { ko: '짧은 소식', en: 'Short updates', ja: '短いお知らせ' } }
-        ]
-      }
-    ];
-
-    const $ = (s) => document.querySelector(s);
-    const $$ = (s) => document.querySelectorAll(s);
-
-    let lang = localStorage.getItem('irev_lang') || 'ko';
-    let week = localStorage.getItem('irev_week') || 'A';
-    let loadingLock = false;
-
-    function setTheme(isDark) {
-      const root = document.documentElement;
-      root.classList.toggle('dark', isDark);
-      root.classList.toggle('light', !isDark);
-      localStorage.setItem('irev_theme', isDark ? 'dark' : 'light');
-      $('#themeBtn').textContent = isDark ? '☀️' : '🌙';
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (!modal) return;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
     }
 
-    function getTodayIndex() {
-      const jsDay = new Date().getDay();
-      return jsDay === 0 ? 6 : jsDay - 1;
+    function closeModal(modal) {
+      if (!modal) return;
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
     }
 
-    function getLiveNow(days) {
-      return null;
-    }
+    openers.forEach((button) => {
+      button.addEventListener('click', () => openModal(button.dataset.modalTarget));
+    });
 
-    function getNextLive(days) {
-      const today = getTodayIndex();
-      for (let step = 0; step < 7; step++) {
-        const idx = (today + step) % 7;
-        if (days[idx].state === 'live') {
-          return { index: idx, step };
-        }
-      }
-      return null;
-    }
+    closeButtons.forEach((button) => {
+      button.addEventListener('click', () => closeModal(button.closest('.modal-shell')));
+    });
 
-    function renderSchedule() {
-      const t = i18n[lang];
-      const days = weeks[week];
-      const liveNow = getLiveNow(days);
-      const todayIndex = getTodayIndex();
-      const nextLive = getNextLive(days);
-
-
-      const line = $('#todayLine');
-      line.classList.remove('hidden');
-      if (liveNow) {
-        line.innerHTML = `<strong>${t.liveNow}</strong> · ${days[liveNow.index].note[lang]}`;
-        line.className = 'mb-5 rounded-[1.3rem] px-4 py-4 bg-emerald-500/10 border border-emerald-400/18 text-emerald-200 text-sm font-medium';
-      } else if (days[todayIndex].state === 'live') {
-        line.textContent = `${t.todayLineLive} ${t.scheduleSummaryText}`;
-        line.className = 'mb-5 rounded-[1.3rem] px-4 py-4 bg-violet-500/10 border border-violet-400/18 text-violet-200 text-sm font-medium';
-      } else if (nextLive) {
-        const d = days[nextLive.index];
-        line.textContent = `${t.nextLive} · ${daysOfWeek[d.key][lang]} · ${d.note[lang]}`;
-        line.className = 'mb-5 rounded-[1.3rem] px-4 py-4 bg-fuchsia-500/10 border border-fuchsia-400/18 text-fuchsia-200 text-sm font-medium';
-      } else {
-        line.textContent = t.noLiveWeek;
-        line.className = 'mb-5 rounded-[1.3rem] px-4 py-4 bg-white/5 border border-white/10 text-[color:var(--muted)] text-sm font-medium';
-      }
-
-      $('#statusBody').textContent = liveNow
-        ? `${t.liveNow} · ${days[liveNow.index].note[lang]}`
-        : days[todayIndex].state === 'live'
-          ? `${t.todayLineLive} ${days[todayIndex].note[lang]}`
-          : t.todayLineOff;
-
-      let html = '';
-      days.forEach((item, i) => {
-        const isToday = i === todayIndex;
-        const isNow = liveNow && liveNow.index === i;
-        const label = item.state === 'live' ? t.live : t.off;
-        const stateClass = item.state === 'live'
-          ? 'bg-emerald-500/12 text-emerald-300 border border-emerald-400/18'
-          : 'bg-white/5 text-zinc-400 border border-white/8';
-
-        html += `
-          <div class="sched-card rounded-[1.5rem] p-5 bg-black/20 border border-white/10 ${isToday ? 'today-ring' : ''}">
-            <div class="flex items-start justify-between gap-3 mb-4">
-              <div>
-                <div class="text-[11px] uppercase tracking-[0.2em] text-violet-300 mb-2">${isToday ? t.today : ''}</div>
-                <div class="text-2xl font-black tracking-tight">${daysOfWeek[item.key][lang]}</div>
-              </div>
-              <div class="w-10 h-10 rounded-2xl flex items-center justify-center ${item.state === 'live' ? 'bg-emerald-500/10 border border-emerald-400/20' : 'bg-white/5 border border-white/8'}">
-                ${item.state === 'live' ? '✦' : '·'}
-              </div>
-            </div>
-
-            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold ${stateClass}">${label}</div>
-
-            <div class="mt-4 text-sm text-[color:var(--muted)] min-h-[20px]">${item.note[lang]}</div>
-
-            ${isNow ? `
-              <div class="mt-4 inline-flex items-center gap-2 rounded-full px-3 py-2 text-[11px] font-semibold bg-fuchsia-500/12 border border-fuchsia-400/18 text-fuchsia-300 live-badge">
-                <span class="w-2 h-2 rounded-full bg-fuchsia-400"></span>
-                ${t.liveNow}
-              </div>` : ''}
-          </div>
-        `;
+    modals.forEach((modal) => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal(modal);
       });
+    });
 
-      $('#weekGrid').innerHTML = html;
-    }
-
-    function renderLinks() {
-      $('#linksGrid').innerHTML = linkGroups.map(group => `
-        <section class="mb-6 last:mb-0">
-          <div class="link-group-title">${group.title[lang]}</div>
-          <div class="grid gap-3.5">
-            ${group.items.map(l => `
-              <a href="${l.href}" class="external-link link-card soft-panel rounded-[1.45rem] px-5 py-4 flex items-center justify-between gap-4 transition-all hover:border-violet-400/55 hover:-translate-y-0.5">
-                <div class="flex items-center gap-4 min-w-0">
-                  <span class="w-12 h-12 rounded-2xl bg-white/8 border border-white/10 flex items-center justify-center text-2xl shrink-0">${l.icon}</span>
-                  <div class="min-w-0">
-                    <div class="font-bold text-base truncate">${l.label}</div>
-                    <div class="text-sm text-[color:var(--muted)] truncate mt-0.5">${l.desc[lang]}</div>
-                  </div>
-                </div>
-                <span class="link-arrow text-violet-300 text-xl transition-transform shrink-0">↗</span>
-              </a>
-            `).join('')}
-          </div>
-        </section>
-      `).join('');
-    }
-
-    function renderText() {
-      const t = i18n[lang];
-      $('#langSelect').value = lang;
-
-      $('#brandSub').textContent = t.brandSub;
-      $('#navSchedule').textContent = t.navSchedule;
-      $('#navImages').textContent = t.navImages;
-      $('#eyebrow').textContent = t.eyebrow;
-      $('#heroStatus').textContent = t.heroStatus;
-      $('#heroTitle').textContent = t.heroTitle;
-      $('#heroDesc').textContent = t.heroDesc;
-      $('#ctaPrimary').lastElementChild.textContent = t.ctaPrimary;
-      $('#ctaSecondary').lastElementChild.textContent = t.ctaSecondary;
-      $('#statusTitle').textContent = t.statusTitle;
-      $('#vibeTitle').textContent = t.vibeTitle;
-      $('#vibeChips').innerHTML = t.vibes.map(v => `<span class="tag rounded-full px-4 py-2 text-xs font-medium">${v}</span>`).join('');
-      $('#heroMetaAHead').textContent = t.heroMetaAHead;
-      $('#heroMetaA').textContent = t.heroMetaA;
-      $('#heroMetaBHead').textContent = t.heroMetaBHead;
-      $('#heroMetaB').textContent = t.heroMetaB;
-      $('#heroMetaCHead').textContent = t.heroMetaCHead;
-      $('#heroMetaC').textContent = t.heroMetaC;
-
-      $('#scheduleHeading').textContent = t.scheduleHeading;
-      $('#weekPlanLabel').textContent = t.weekPlanLabel;
-      $('#scheduleSub').textContent = t.scheduleSub;
-      $('#scheduleSummaryTitle').textContent = t.scheduleSummaryTitle;
-      $('#scheduleSummaryText').textContent = t.scheduleSummaryText;
-      $('#schedMetaAHead').textContent = t.schedMetaAHead;
-      $('#schedMetaAVal').textContent = t.schedMetaAVal;
-      $('#schedMetaBHead').textContent = t.schedMetaBHead;
-      $('#schedMetaBVal').textContent = t.schedMetaBVal;
-
-      $('#profileHeading').textContent = t.profileHeading;
-      $('#profileSub').textContent = t.profileSub;
-      $('#profileBadge').textContent = t.profileBadge;
-      $('#profileText').textContent = t.profileText;
-      $('#profileNote').textContent = t.profileNote;
-      $('#slimeLabel').textContent = t.slimeLabel;
-      $('#humanLabel').textContent = t.humanLabel;
-
-      $('#linksHeading').textContent = t.linksHeading;
-      $('#linksSub').textContent = t.linksSub;
-      $('#noteHeading').textContent = t.noteHeading;
-      $('#noteSub').textContent = t.noteSub;
-      $('#noteBody').textContent = t.noteBody;
-      $('#footerText').textContent = t.footerText;
-      $('#footerSub').textContent = t.footerSub;
-
-      renderSchedule();
-      renderLinks();
-    }
-
-    function runLoadingAndGo(url) {
-      if (loadingLock) return;
-      loadingLock = true;
-      const t = i18n[lang];
-      let remain = 8;
-
-      const loader = $('#introLoader');
-      loader.classList.remove('hidden');
-      loader.classList.add('flex');
-
-      $('#introLoaderCount').textContent = remain;
-      $('#introLoaderBar').style.width = '0%';
-      $('#introLoaderSub').textContent = t.loadingText;
-
-      const tick = setInterval(() => {
-        remain--;
-        const percent = ((8 - remain) / 8) * 100;
-        $('#introLoaderCount').textContent = Math.max(remain, 0);
-        $('#introLoaderBar').style.width = `${percent}%`;
-
-        if (remain <= 0) {
-          clearInterval(tick);
-          $('#introLoaderSub').textContent = t.loadingMoving;
-          setTimeout(() => {
-            window.location.href = url;
-          }, 240);
-        }
-      }, 220);
-    }
-
-    function bindEvents() {
-      $('#langSelect').addEventListener('change', (e) => {
-        lang = e.target.value;
-        localStorage.setItem('irev_lang', lang);
-        renderText();
-      });
-
-      $('#themeBtn').addEventListener('click', () => {
-        const isDark = document.documentElement.classList.contains('dark');
-        setTheme(!isDark);
-      });
-
-      document.addEventListener('click', (e) => {
-        const link = e.target.closest('a[href]');
-        if (!link) return;
-        const href = link.getAttribute('href');
-        if (!href || href.startsWith('#') || href.startsWith('javascript:') || false) return;
-        if (!link.classList.contains('external-link')) return;
-        e.preventDefault();
-        runLoadingAndGo(href);
-      });
-    }
-
-    window.addEventListener('load', () => {
-      setTheme(localStorage.getItem('irev_theme') !== 'light');
-      renderText();
-      bindEvents();
-      setInterval(renderSchedule, 60000);
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      const opened = document.querySelector('.modal-shell.open');
+      if (opened) closeModal(opened);
     });
   </script>
 </body>
