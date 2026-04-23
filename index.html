@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Irev Guide</title>
-  <meta name="description" content="Irev participation guide, chat rules, and schedule" />
+  <meta name="description" content="Irev guide with separate pages for participation, chat rules, and schedule" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -18,14 +18,11 @@
       --line-strong: #d1d5db;
       --text: #111827;
       --muted: #6b7280;
-      --accent: #374151;
-      --accent-soft: #f3f4f6;
-      --live-bg: #ecfdf5;
-      --live-line: #a7f3d0;
-      --live-text: #065f46;
-      --off-bg: #f9fafb;
-      --off-line: #e5e7eb;
-      --off-text: #6b7280;
+      --accent: #111827;
+      --accent-weak: #f3f4f6;
+      --green-bg: #ecfdf5;
+      --green-line: #a7f3d0;
+      --green-text: #065f46;
     }
 
     * { box-sizing: border-box; }
@@ -37,9 +34,7 @@
       font-family: 'Pretendard', system-ui, sans-serif;
     }
 
-    body {
-      min-height: 100vh;
-    }
+    body { min-height: 100vh; }
 
     .panel {
       background: var(--panel);
@@ -52,44 +47,85 @@
       border: 1px solid var(--line);
     }
 
-    .guide-action {
-      position: relative;
-      text-align: left;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-    }
-
-    .guide-action:hover {
-      transform: translateY(-2px);
-      border-color: var(--line-strong);
-      box-shadow: 0 12px 28px rgba(17, 24, 39, 0.06);
-    }
-
-    .guide-open-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.7rem 0.95rem;
-      border-radius: 9999px;
+    .lang-btn,
+    .page-btn {
       border: 1px solid var(--line);
       background: #fff;
-      font-size: 0.9rem;
-      font-weight: 700;
+      color: var(--muted);
+      font-weight: 800;
+      transition: all 0.18s ease;
+    }
+
+    .lang-btn:hover,
+    .page-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--line-strong);
       color: var(--text);
+      box-shadow: 0 8px 22px rgba(17, 24, 39, 0.06);
     }
 
-    .guide-arrow {
-      transition: transform 0.18s ease;
+    .lang-btn.active,
+    .page-btn.active {
+      background: var(--text);
+      color: #fff;
+      border-color: var(--text);
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.12);
     }
 
-    .guide-action:hover .guide-arrow {
-      transform: translateX(3px);
+    .lang-btn {
+      min-width: 96px;
+      padding: 0.78rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.95rem;
+      white-space: nowrap;
     }
 
-    .sched-card {
+    .page-btn {
+      min-width: 150px;
+      padding: 0.95rem 1.15rem;
+      border-radius: 1rem;
+      font-size: 0.98rem;
+      text-align: center;
+    }
+
+    .label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: #6b7280;
+      font-weight: 900;
+      margin-bottom: 0.7rem;
+    }
+
+    .subcopy {
+      color: #9ca3af;
+      line-height: 1.72;
+      margin-top: 0.8rem;
+      font-size: 0.9rem;
+    }
+
+    .page-view {
+      display: none;
+      animation: reveal 0.22s ease;
+    }
+
+    .page-view.active {
+      display: block;
+    }
+
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(6px);
+      animation: reveal 0.24s ease forwards;
+    }
+
+    .schedule-card,
+    .info-card {
       transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
     }
 
-    .sched-card:hover {
+    .schedule-card:hover,
+    .info-card:hover {
       transform: translateY(-2px);
       border-color: var(--line-strong);
       box-shadow: 0 10px 24px rgba(17, 24, 39, 0.05);
@@ -100,44 +136,83 @@
       box-shadow: 0 0 0 1px rgba(156, 163, 175, 0.14);
     }
 
-    .modal-shell {
-      position: fixed;
-      inset: 0;
+    .live-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.75rem 1rem;
+      border-radius: 9999px;
+      border: 1px solid var(--green-line);
+      background: var(--green-bg);
+      color: var(--green-text);
+      font-size: 0.86rem;
+      font-weight: 800;
+    }
+
+    .rule-list {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .rule-row {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 0.9rem;
+      align-items: start;
+      padding: 1rem 1.1rem;
+      border-radius: 1rem;
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+    }
+
+    .rule-no {
+      width: 36px;
+      height: 36px;
+      border-radius: 9999px;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1.25rem;
-      background: rgba(17, 24, 39, 0.18);
-      backdrop-filter: blur(6px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.18s ease;
-      z-index: 100;
+      background: #fff;
+      border: 1px solid var(--line);
+      font-weight: 900;
+      color: var(--text);
+      font-size: 0.9rem;
     }
 
-    .modal-shell.open {
-      opacity: 1;
-      pointer-events: auto;
+    .step-list {
+      display: grid;
+      gap: 0.9rem;
     }
 
-    .modal-card {
-      width: min(760px, 100%);
-      max-height: min(82vh, 900px);
-      overflow: auto;
-      border-radius: 1.5rem;
-      transform: translateY(10px);
-      transition: transform 0.18s ease;
+    .step-row {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 0.95rem;
+      align-items: start;
+      padding: 1rem 1.1rem;
+      border-radius: 1rem;
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
     }
 
-    .modal-shell.open .modal-card {
-      transform: translateY(0);
+    .step-no {
+      width: 42px;
+      height: 42px;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      font-weight: 900;
+      color: var(--text);
+      font-size: 0.95rem;
     }
 
-    .rule-item {
-      opacity: 0;
-      transform: translateY(6px);
-      animation: reveal 0.24s ease forwards;
-    }
+    [data-lang-content] { display: none; }
+    [data-lang-content].show { display: block; }
+    [data-lang-inline] { display: none; }
+    [data-lang-inline].show { display: inline; }
 
     @keyframes reveal {
       to {
@@ -148,8 +223,8 @@
   </style>
 </head>
 <body>
-  <header class="sticky top-0 z-40 border-b border-gray-200 bg-white/90 backdrop-blur">
-    <div class="max-w-6xl mx-auto px-5 md:px-6 h-16 flex items-center justify-between">
+  <header class="sticky top-0 z-40 border-b border-gray-200 bg-white/92 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-5 md:px-6 h-16 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3 min-w-0">
         <div class="w-10 h-10 rounded-2xl border border-gray-200 bg-gray-100 flex items-center justify-center text-gray-900 font-black text-xl">I</div>
         <div class="min-w-0">
@@ -157,250 +232,454 @@
           <span class="block text-[10px] text-gray-500 tracking-[0.22em] mt-1">GUIDE + SCHEDULE</span>
         </div>
       </div>
+
+      <div class="flex items-center gap-2 flex-wrap justify-end">
+        <button type="button" class="lang-btn active" data-lang-btn="ko">한국어</button>
+        <button type="button" class="lang-btn" data-lang-btn="ja">日本語</button>
+        <button type="button" class="lang-btn" data-lang-btn="en">English</button>
+      </div>
     </div>
   </header>
 
   <main class="max-w-6xl mx-auto px-5 md:px-6 pt-10 pb-14">
-    <section class="grid md:grid-cols-2 gap-4 md:gap-5 mb-8 md:mb-10">
-      <button type="button" data-modal-target="participationModal" class="guide-action panel rounded-[1.75rem] p-7 md:p-8 min-h-[210px]">
-        <div class="h-full flex flex-col justify-between gap-8">
-          <div>
-            <div class="text-[11px] uppercase tracking-[0.22em] text-gray-500 font-black mb-4">Participation</div>
-            <h1 class="text-3xl md:text-[2.1rem] font-black tracking-tight leading-tight text-gray-900">시참 방법</h1>
-            <p class="mt-4 text-sm md:text-base text-gray-500 leading-7">참여 조건, 대기 방법, 로테이션만 따로 확인할 수 있습니다.</p>
-          </div>
-          <div class="guide-open-btn w-fit">
-            <span>열기</span>
-            <span class="guide-arrow">→</span>
-          </div>
-        </div>
-      </button>
+    <section class="panel rounded-[1.8rem] p-6 md:p-8 mb-6">
+      <div class="label">Guide Navigation</div>
 
-      <button type="button" data-modal-target="rulesModal" class="guide-action panel rounded-[1.75rem] p-7 md:p-8 min-h-[210px]">
-        <div class="h-full flex flex-col justify-between gap-8">
-          <div>
-            <div class="text-[11px] uppercase tracking-[0.22em] text-gray-500 font-black mb-4">Chat Rules</div>
-            <h1 class="text-3xl md:text-[2.1rem] font-black tracking-tight leading-tight text-gray-900">채팅 규칙</h1>
-            <p class="mt-4 text-sm md:text-base text-gray-500 leading-7">시청 중 필요한 기본 규칙만 따로 정리했습니다.</p>
-          </div>
-          <div class="guide-open-btn w-fit">
-            <span>열기</span>
-            <span class="guide-arrow">→</span>
-          </div>
-        </div>
-      </button>
-    </section>
-
-    <section id="schedule">
-      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-6">
-        <div>
-          <h2 class="text-3xl md:text-4xl font-black tracking-tight text-gray-900">Schedule</h2>
-          <p class="mt-2 text-sm md:text-base text-gray-500">동출 기준으로 너무 무겁지 않게 굴리는 주간표</p>
-        </div>
-
-        <div class="panel rounded-[1.25rem] px-5 py-3 inline-flex gap-2 self-start text-sm font-semibold text-gray-700">
-          <span>●</span>
-          <span>멀티스트림 고정 주간표</span>
-        </div>
+      <div data-lang-content="ko" class="show">
+        <h1 class="text-3xl md:text-[2.4rem] font-black tracking-tight leading-tight text-gray-900">방송 안내</h1>
+        <p class="mt-3 text-sm md:text-base text-gray-500 leading-7">시참 안내, 채팅 규칙, 방송 스케줄을 페이지별로 나눠서 확인할 수 있습니다.</p>
+        <p class="subcopy">필요한 항목만 바로 찾을 수 있게 각각 따로 정리해두었습니다.</p>
+      </div>
+      <div data-lang-content="ja">
+        <h1 class="text-3xl md:text-[2.4rem] font-black tracking-tight leading-tight text-gray-900">配信ガイド</h1>
+        <p class="mt-3 text-sm md:text-base text-gray-500 leading-7">参加案内、チャットルール、配信スケジュールをページごとに分けて確認できます。</p>
+        <p class="subcopy">必要な項目だけすぐ見つけられるように、それぞれ整理してあります。</p>
+      </div>
+      <div data-lang-content="en">
+        <h1 class="text-3xl md:text-[2.4rem] font-black tracking-tight leading-tight text-gray-900">Stream Guide</h1>
+        <p class="mt-3 text-sm md:text-base text-gray-500 leading-7">Participation, chat rules, and the stream schedule are separated into their own pages.</p>
+        <p class="subcopy">Each section is organized so the important parts are easy to find at a glance.</p>
       </div>
 
-      <div class="panel rounded-[1.75rem] p-5 md:p-7 lg:p-8">
-        <div class="grid lg:grid-cols-[1fr_auto] gap-5 items-start mb-7">
+      <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+        <button type="button" class="page-btn active" data-page-btn="participation">
+          <span data-lang-inline="ko" class="show">시참 안내</span>
+          <span data-lang-inline="ja">参加案内</span>
+          <span data-lang-inline="en">Participation</span>
+        </button>
+        <button type="button" class="page-btn" data-page-btn="rules">
+          <span data-lang-inline="ko" class="show">채팅 규칙</span>
+          <span data-lang-inline="ja">チャットルール</span>
+          <span data-lang-inline="en">Chat Rules</span>
+        </button>
+        <button type="button" class="page-btn" data-page-btn="schedule">
+          <span data-lang-inline="ko" class="show">방송 스케줄</span>
+          <span data-lang-inline="ja">配信スケジュール</span>
+          <span data-lang-inline="en">Schedule</span>
+        </button>
+      </div>
+    </section>
+
+    <section id="page-participation" class="page-view active">
+      <div class="panel rounded-[1.8rem] p-6 md:p-8 lg:p-9">
+        <div class="grid lg:grid-cols-[1.15fr_0.85fr] gap-6 items-start">
           <div>
-            <div class="text-[11px] uppercase tracking-[0.24em] text-gray-500 mb-2">추천 방송 시간</div>
-            <div class="text-base md:text-lg font-semibold leading-relaxed text-gray-900">화·수 20:30–23:30 · 금 21:00–01:00 · 토·일 19:00 시작 (KST)</div>
+            <div class="label">Participation Guide</div>
+
+            <div data-lang-content="ko" class="show">
+              <h2 class="text-3xl md:text-[2.2rem] font-black tracking-tight text-gray-900">시참 안내</h2>
+              <p class="mt-4 text-sm md:text-base text-gray-500 leading-7">같이 즐겁게 게임하기 위한 참여 안내입니다. 아래 내용만 확인하면 바로 참여 흐름을 이해할 수 있습니다.</p>
+            </div>
+            <div data-lang-content="ja">
+              <h2 class="text-3xl md:text-[2.2rem] font-black tracking-tight text-gray-900">参加案内</h2>
+              <p class="mt-4 text-sm md:text-base text-gray-500 leading-7">一緒に楽しくゲームするための参加案内です。下の内容を見れば流れをすぐ把握できます。</p>
+            </div>
+            <div data-lang-content="en">
+              <h2 class="text-3xl md:text-[2.2rem] font-black tracking-tight text-gray-900">Participation</h2>
+              <p class="mt-4 text-sm md:text-base text-gray-500 leading-7">This is the participation guide for joining games together. The sections below explain the flow clearly and simply.</p>
+            </div>
           </div>
-          <div class="grid sm:grid-cols-2 gap-3">
-            <div class="soft-panel rounded-[1rem] px-4 py-3">
+
+          <div class="soft-panel rounded-[1.4rem] p-5 info-card reveal-item" style="animation-delay:0.04s;">
+            <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 font-black mb-3">
+              <span data-lang-inline="ko" class="show">한눈에 보기</span>
+              <span data-lang-inline="ja">まとめ</span>
+              <span data-lang-inline="en">Quick View</span>
+            </div>
+            <div data-lang-content="ko" class="show">
+              <p class="text-sm md:text-[15px] leading-7 text-gray-700">팔로우 1일 이상 + 채팅 참여가 있는 시청자만 가능하며, 호출 시 응답이 없으면 다음 순서로 넘어갑니다. 대기자가 있으면 1인당 3판씩 진행합니다.</p>
+            </div>
+            <div data-lang-content="ja">
+              <p class="text-sm md:text-[15px] leading-7 text-gray-700">フォロー1日以上かつチャット参加がある視聴者のみ参加できます。呼び出しに応答がない場合は次の順番へ進みます。待機者がいる場合は1人3試合までです。</p>
+            </div>
+            <div data-lang-content="en">
+              <p class="text-sm md:text-[15px] leading-7 text-gray-700">Participation is open to viewers who have followed for at least 1 day and actively chat. If there is no response when called, the next person in line is called. When others are waiting, each participant gets up to 3 rounds.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4 mt-6">
+          <div class="soft-panel rounded-[1.2rem] p-5 info-card reveal-item" style="animation-delay:0.08s;">
+            <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 font-black mb-3">
+              <span data-lang-inline="ko" class="show">참여 조건</span>
+              <span data-lang-inline="ja">参加条件</span>
+              <span data-lang-inline="en">Requirements</span>
+            </div>
+            <div data-lang-content="ko" class="show"><p class="text-sm md:text-[15px] leading-7 text-gray-700">팔로워 1일 이상이며, 채팅에 어느 정도 참여하고 있는 시청자만 가능합니다.</p></div>
+            <div data-lang-content="ja"><p class="text-sm md:text-[15px] leading-7 text-gray-700">フォローしてから1日以上経過しており、ある程度チャットに参加している視聴者のみ参加できます。</p></div>
+            <div data-lang-content="en"><p class="text-sm md:text-[15px] leading-7 text-gray-700">You must have followed for at least 1 day and be a viewer who actively participates in chat.</p></div>
+          </div>
+
+          <div class="soft-panel rounded-[1.2rem] p-5 info-card reveal-item" style="animation-delay:0.12s;">
+            <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 font-black mb-3">
+              <span data-lang-inline="ko" class="show">기본 분위기</span>
+              <span data-lang-inline="ja">基本方針</span>
+              <span data-lang-inline="en">Basic Tone</span>
+            </div>
+            <div data-lang-content="ko" class="show"><p class="text-sm md:text-[15px] leading-7 text-gray-700">빡겜보다는 즐겜 위주입니다. 너무 무겁지 않게, 같이 편하게 즐겨주세요.</p></div>
+            <div data-lang-content="ja"><p class="text-sm md:text-[15px] leading-7 text-gray-700">ガチプレイより、楽しく気軽に遊ぶことを優先しています。重くなりすぎず、気楽に楽しんでください。</p></div>
+            <div data-lang-content="en"><p class="text-sm md:text-[15px] leading-7 text-gray-700">The goal is to have fun rather than play too seriously. Please keep it relaxed and enjoyable.</p></div>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 font-black mb-3">
+            <span data-lang-inline="ko" class="show">참여 순서</span>
+            <span data-lang-inline="ja">参加の流れ</span>
+            <span data-lang-inline="en">Steps</span>
+          </div>
+          <div class="step-list">
+            <div class="step-row reveal-item" style="animation-delay:0.16s;">
+              <div class="step-no">1</div>
+              <div>
+                <div class="font-bold text-gray-900 mb-2">
+                  <span data-lang-inline="ko" class="show">닉네임 등록</span>
+                  <span data-lang-inline="ja">ニックネーム登録</span>
+                  <span data-lang-inline="en">Register Nickname</span>
+                </div>
+                <div data-lang-content="ko" class="show"><p class="text-sm md:text-[15px] leading-7 text-gray-700">디스코드 NickName 채널에 <strong>닉네임#태그</strong>를 입력해주세요.</p></div>
+                <div data-lang-content="ja"><p class="text-sm md:text-[15px] leading-7 text-gray-700">DiscordのNickNameチャンネルに<strong>ニックネーム#タグ</strong>を入力してください。</p></div>
+                <div data-lang-content="en"><p class="text-sm md:text-[15px] leading-7 text-gray-700">Enter your <strong>Nickname#Tag</strong> in the Discord NickName channel.</p></div>
+              </div>
+            </div>
+
+            <div class="step-row reveal-item" style="animation-delay:0.20s;">
+              <div class="step-no">2</div>
+              <div>
+                <div class="font-bold text-gray-900 mb-2">
+                  <span data-lang-inline="ko" class="show">대기 등록</span>
+                  <span data-lang-inline="ja">待機登録</span>
+                  <span data-lang-inline="en">Join Queue</span>
+                </div>
+                <div data-lang-content="ko" class="show"><p class="text-sm md:text-[15px] leading-7 text-gray-700">시참 채널에서 대기 버튼을 누르고 순서를 기다려주세요.</p></div>
+                <div data-lang-content="ja"><p class="text-sm md:text-[15px] leading-7 text-gray-700">参加チャンネルで待機ボタンを押して順番をお待ちください。</p></div>
+                <div data-lang-content="en"><p class="text-sm md:text-[15px] leading-7 text-gray-700">Press the queue button in the participation channel and wait for your turn.</p></div>
+              </div>
+            </div>
+
+            <div class="step-row reveal-item" style="animation-delay:0.24s;">
+              <div class="step-no">3</div>
+              <div>
+                <div class="font-bold text-gray-900 mb-2">
+                  <span data-lang-inline="ko" class="show">호출 확인</span>
+                  <span data-lang-inline="ja">呼び出し確認</span>
+                  <span data-lang-inline="en">Respond When Called</span>
+                </div>
+                <div data-lang-content="ko" class="show"><p class="text-sm md:text-[15px] leading-7 text-gray-700">호출 시 일정 시간 동안 응답이 없으면 다음 대기자로 넘어갑니다.</p></div>
+                <div data-lang-content="ja"><p class="text-sm md:text-[15px] leading-7 text-gray-700">呼び出し後、一定時間応答がない場合は次の待機者へ進みます。</p></div>
+                <div data-lang-content="en"><p class="text-sm md:text-[15px] leading-7 text-gray-700">If there is no response for a certain period after being called, the next person in queue will be called.</p></div>
+              </div>
+            </div>
+
+            <div class="step-row reveal-item" style="animation-delay:0.28s;">
+              <div class="step-no">4</div>
+              <div>
+                <div class="font-bold text-gray-900 mb-2">
+                  <span data-lang-inline="ko" class="show">로테이션</span>
+                  <span data-lang-inline="ja">ローテーション</span>
+                  <span data-lang-inline="en">Rotation</span>
+                </div>
+                <div data-lang-content="ko" class="show"><p class="text-sm md:text-[15px] leading-7 text-gray-700">대기 인원이 있을 경우 1인당 3판씩 진행합니다. 대기 인원이 없을 경우 새 대기자가 생길 때까지 계속 참여할 수 있습니다.</p></div>
+                <div data-lang-content="ja"><p class="text-sm md:text-[15px] leading-7 text-gray-700">待機者がいる場合、1人あたり3試合まで進行します。待機者がいない場合は、新しい待機者が来るまで継続参加できます。</p></div>
+                <div data-lang-content="en"><p class="text-sm md:text-[15px] leading-7 text-gray-700">If there are people waiting, each participant may play up to 3 rounds. If no one is waiting, you may continue until a new participant joins the queue.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-rules" class="page-view">
+      <div class="panel rounded-[1.8rem] p-6 md:p-8 lg:p-9">
+        <div class="grid lg:grid-cols-[1.15fr_0.85fr] gap-6 items-start">
+          <div>
+            <div class="label">Chat Rules</div>
+
+            <div data-lang-content="ko" class="show">
+              <h2 class="text-3xl md:text-[2.2rem] font-black tracking-tight text-gray-900">채팅 규칙</h2>
+              <p class="mt-4 text-sm md:text-base text-gray-500 leading-7">모두가 편하게 볼 수 있는 방송 분위기를 위한 기본 규칙입니다. 핵심만 빠르게 볼 수 있게 정리했습니다.</p>
+            </div>
+            <div data-lang-content="ja">
+              <h2 class="text-3xl md:text-[2.2rem] font-black tracking-tight text-gray-900">チャットルール</h2>
+              <p class="mt-4 text-sm md:text-base text-gray-500 leading-7">みんなが気持ちよく見られる配信のための基本ルールです。要点だけすぐ見られるように整理しています。</p>
+            </div>
+            <div data-lang-content="en">
+              <h2 class="text-3xl md:text-[2.2rem] font-black tracking-tight text-gray-900">Chat Rules</h2>
+              <p class="mt-4 text-sm md:text-base text-gray-500 leading-7">These are the basic rules for keeping the stream comfortable for everyone. They are organized so the important points are easy to scan.</p>
+            </div>
+          </div>
+
+          <div class="soft-panel rounded-[1.4rem] p-5 info-card reveal-item" style="animation-delay:0.04s;">
+            <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 font-black mb-3">
+              <span data-lang-inline="ko" class="show">핵심 안내</span>
+              <span data-lang-inline="ja">基本案内</span>
+              <span data-lang-inline="en">Key Notice</span>
+            </div>
+            <div data-lang-content="ko" class="show"><p class="text-sm md:text-[15px] leading-7 text-gray-700">기본 매너만 지켜주시면 됩니다. 임시 제한 3회 누적 시 활동 제한될 수 있고, 경고 3회 누적 시 시참이 제한될 수 있으며 최종 판단은 방장이 합니다.</p></div>
+            <div data-lang-content="ja"><p class="text-sm md:text-[15px] leading-7 text-gray-700">基本的なマナーを守っていただければ大丈夫です。一時制限が3回累積すると活動制限、警告が3回累積すると参加制限になる場合があり、最終判断は配信者が行います。</p></div>
+            <div data-lang-content="en"><p class="text-sm md:text-[15px] leading-7 text-gray-700">Basic manners are all that is required. Reaching 3 temporary restrictions may limit activity, and 3 warnings may restrict participation. Final decisions are made by the host.</p></div>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4 mt-6">
+          <div class="soft-panel rounded-[1.2rem] p-5 info-card reveal-item" style="animation-delay:0.08s;">
+            <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 font-black mb-3">
+              <span data-lang-inline="ko" class="show">기본 원칙</span>
+              <span data-lang-inline="ja">基本方針</span>
+              <span data-lang-inline="en">Basic Principle</span>
+            </div>
+            <div data-lang-content="ko" class="show"><p class="text-sm md:text-[15px] leading-7 text-gray-700">서로 편하게 볼 수 있는 분위기를 유지하는 것이 가장 중요합니다.</p></div>
+            <div data-lang-content="ja"><p class="text-sm md:text-[15px] leading-7 text-gray-700">お互いが気持ちよく見られる雰囲気を維持することが一番大切です。</p></div>
+            <div data-lang-content="en"><p class="text-sm md:text-[15px] leading-7 text-gray-700">The most important thing is keeping the stream comfortable for everyone.</p></div>
+          </div>
+          <div class="soft-panel rounded-[1.2rem] p-5 info-card reveal-item" style="animation-delay:0.12s;">
+            <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 font-black mb-3">
+              <span data-lang-inline="ko" class="show">문의</span>
+              <span data-lang-inline="ja">問い合わせ</span>
+              <span data-lang-inline="en">Contact</span>
+            </div>
+            <div data-lang-content="ko" class="show"><p class="text-sm md:text-[15px] leading-7 text-gray-700">방송 관련 불만이나 문의는 디스코드 문의 채널을 이용해주세요.</p></div>
+            <div data-lang-content="ja"><p class="text-sm md:text-[15px] leading-7 text-gray-700">配信に関する不満や問い合わせはDiscordの問い合わせチャンネルをご利用ください。</p></div>
+            <div data-lang-content="en"><p class="text-sm md:text-[15px] leading-7 text-gray-700">For complaints or stream-related issues, please use the Discord inquiry channel.</p></div>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 font-black mb-3">
+            <span data-lang-inline="ko" class="show">금지 및 주의 항목</span>
+            <span data-lang-inline="ja">禁止・注意事項</span>
+            <span data-lang-inline="en">Rules</span>
+          </div>
+          <div class="rule-list">
+            <div class="rule-row reveal-item" style="animation-delay:0.16s;"><div class="rule-no">1</div><div data-lang-content="ko" class="show">개인정보 유추, 빨간약, 사적인 정보 언급 금지</div><div data-lang-content="ja">個人情報の詮索、正体探し、私的な情報の言及は禁止</div><div data-lang-content="en">Do not mention or speculate about private information or identity.</div></div>
+            <div class="rule-row reveal-item" style="animation-delay:0.20s;"><div class="rule-no">2</div><div data-lang-content="ko" class="show">“이제 감”, “자러감”, “딴 게임 하러 감” 같은 퇴장 멘트 자제</div><div data-lang-content="ja">「もう落ちる」「寝る」「別ゲー行く」などの退出コメントは控えてください。</div><div data-lang-content="en">Please avoid exit messages such as “I’m leaving” or “going to another game.”</div></div>
+            <div class="rule-row reveal-item" style="animation-delay:0.24s;"><div class="rule-no">3</div><div data-lang-content="ko" class="show">과한 훈수 및 지시성 채팅 금지</div><div data-lang-content="ja">過度な指示コメントや過干渉なアドバイスは禁止</div><div data-lang-content="en">Excessive backseating or commanding chat is not allowed.</div></div>
+            <div class="rule-row reveal-item" style="animation-delay:0.28s;"><div class="rule-no">4</div><div data-lang-content="ko" class="show">과한 욕설, 공격적 채팅, 패드립, 인신공격, 비하 발언 금지</div><div data-lang-content="ja">過度な暴言、攻撃的な発言、人格攻撃、侮辱表現は禁止</div><div data-lang-content="en">Excessive swearing, aggressive language, personal attacks, or insulting remarks are not allowed.</div></div>
+            <div class="rule-row reveal-item" style="animation-delay:0.32s;"><div class="rule-no">5</div><div data-lang-content="ko" class="show">시청자 간 과한 대화, 친목, 닉언 금지</div><div data-lang-content="ja">視聴者同士の過度な身内ノリや、名前を呼び合う会話は控えてください。</div><div data-lang-content="en">Please avoid excessive viewer-only conversations, clique behavior, or repeated name-calling in chat.</div></div>
+            <div class="rule-row reveal-item" style="animation-delay:0.36s;"><div class="rule-no">6</div><div data-lang-content="ko" class="show">타 스트리머 언급, 비교, 비하 금지</div><div data-lang-content="ja">他の配信者の話題、比較、誹謗はご遠慮ください。</div><div data-lang-content="en">Do not bring up, compare, or insult other streamers.</div></div>
+            <div class="rule-row reveal-item" style="animation-delay:0.40s;"><div class="rule-no">7</div><div data-lang-content="ko" class="show">소수만 아는 이야기, 방송 흐름과 무관한 내수용 대화 자제</div><div data-lang-content="ja">配信の流れに関係ない内輪話や、一部の人しか分からない話は控えてください。</div><div data-lang-content="en">Avoid inside jokes or conversations unrelated to the stream that only a few people understand.</div></div>
+            <div class="rule-row reveal-item" style="animation-delay:0.44s;"><div class="rule-no">8</div><div data-lang-content="ko" class="show">시청자 수 언급 금지</div><div data-lang-content="ja">視聴者数への言及は禁止</div><div data-lang-content="en">Do not mention viewer count.</div></div>
+            <div class="rule-row reveal-item" style="animation-delay:0.48s;"><div class="rule-no">9</div><div data-lang-content="ko" class="show">정치, 종교, 민감한 주제 금지</div><div data-lang-content="ja">政治・宗教・その他センシティブな話題は禁止</div><div data-lang-content="en">Politics, religion, and other sensitive topics are not allowed.</div></div>
+            <div class="rule-row reveal-item" style="animation-delay:0.52s;"><div class="rule-no">10</div><div data-lang-content="ko" class="show">스포일러 및 과한 TMI 자제</div><div data-lang-content="ja">ネタバレや過度なTMIは控えてください。</div><div data-lang-content="en">Please avoid spoilers and excessive unrelated oversharing.</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-schedule" class="page-view">
+      <div class="panel rounded-[1.8rem] p-6 md:p-8 lg:p-9">
+        <div class="grid lg:grid-cols-[1.15fr_0.85fr] gap-6 items-start mb-6">
+          <div>
+            <div class="label">Schedule</div>
+
+            <div data-lang-content="ko" class="show">
+              <h2 class="text-3xl md:text-[2.2rem] font-black tracking-tight text-gray-900">방송 스케줄</h2>
+              <p class="mt-4 text-sm md:text-base text-gray-500 leading-7">무리하지 않으면서 꾸준히 이어가는 주간 방송 일정입니다. 변동이 있을 경우 별도로 공지합니다.</p>
+            </div>
+            <div data-lang-content="ja">
+              <h2 class="text-3xl md:text-[2.2rem] font-black tracking-tight text-gray-900">配信スケジュール</h2>
+              <p class="mt-4 text-sm md:text-base text-gray-500 leading-7">無理をしすぎず、継続しやすい形で進行する週間スケジュールです。変更がある場合は別途お知らせします。</p>
+            </div>
+            <div data-lang-content="en">
+              <h2 class="text-3xl md:text-[2.2rem] font-black tracking-tight text-gray-900">Schedule</h2>
+              <p class="mt-4 text-sm md:text-base text-gray-500 leading-7">This is the regular weekly schedule planned to stay consistent without overdoing it. Any changes will be announced separately.</p>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <div class="soft-panel rounded-[1.2rem] px-4 py-4 info-card">
               <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 mb-1">Platform</div>
               <div class="font-semibold text-gray-900">CHZZK / SOOP / C-ME / Kick</div>
             </div>
-            <div class="soft-panel rounded-[1rem] px-4 py-3">
+            <div class="soft-panel rounded-[1.2rem] px-4 py-4 info-card">
               <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 mb-1">Cycle</div>
-              <div class="font-semibold text-gray-900">주 5일 · 주말 고정</div>
+              <div data-lang-content="ko" class="font-semibold text-gray-900 show">주 5일 · 주말 고정</div>
+              <div data-lang-content="ja" class="font-semibold text-gray-900">週5日 · 週末固定</div>
+              <div data-lang-content="en" class="font-semibold text-gray-900">5 days a week · weekends fixed</div>
             </div>
           </div>
         </div>
 
-        <div class="mb-5 rounded-[1rem] px-4 py-4 border border-gray-200 bg-gray-50 text-gray-700 text-sm font-medium">
-          오늘은 방송 있는 날이다. 화·수 20:30–23:30 · 금 21:00–01:00 · 토·일 19:00 시작 (KST)
+        <div class="mb-6">
+          <div class="live-pill">
+            <span>●</span>
+            <span data-lang-inline="ko" class="show">추천 방송 시간</span>
+            <span data-lang-inline="ja">推奨配信時間</span>
+            <span data-lang-inline="en">Recommended Stream Time</span>
+          </div>
+          <div class="mt-3 text-base md:text-lg font-semibold leading-relaxed text-gray-900">화·수 20:30–23:30 · 금 21:00–01:00 · 토·일 19:00 시작 (KST)</div>
+          <div class="subcopy">
+            <div data-lang-content="ko" class="show">주중은 비교적 가볍게, 주말은 조금 더 길게 진행하는 편입니다.</div>
+            <div data-lang-content="ja">平日は比較的軽めに、週末は少し長めに進行する形です。</div>
+            <div data-lang-content="en">Weekdays are usually lighter, while weekends tend to run a bit longer.</div>
+          </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-7 gap-3 md:gap-4">
-          <div class="sched-card rounded-[1.25rem] p-5 bg-white border border-gray-200">
+          <div class="schedule-card rounded-[1.2rem] p-5 bg-white border border-gray-200">
             <div class="flex items-start justify-between gap-3 mb-4">
               <div><div class="text-2xl font-black tracking-tight text-gray-900">월</div></div>
               <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-gray-50 border border-gray-200 text-gray-500">·</div>
             </div>
-            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-gray-50 text-gray-500 border border-gray-200">휴방</div>
-            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">휴식 · 클립정리</div>
+            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-gray-50 text-gray-500 border border-gray-200">
+              <span data-lang-inline="ko" class="show">휴방</span><span data-lang-inline="ja">休み</span><span data-lang-inline="en">Off</span>
+            </div>
+            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">
+              <div data-lang-content="ko" class="show">휴식 · 클립 정리</div>
+              <div data-lang-content="ja">休息・クリップ整理</div>
+              <div data-lang-content="en">Rest · Clip editing</div>
+            </div>
           </div>
 
-          <div class="sched-card rounded-[1.25rem] p-5 bg-white border border-gray-200">
+          <div class="schedule-card rounded-[1.2rem] p-5 bg-white border border-gray-200">
             <div class="flex items-start justify-between gap-3 mb-4">
               <div><div class="text-2xl font-black tracking-tight text-gray-900">화</div></div>
               <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-emerald-50 border border-emerald-200 text-emerald-700">●</div>
             </div>
-            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">방송</div>
-            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">동출 20:30</div>
+            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span data-lang-inline="ko" class="show">방송</span><span data-lang-inline="ja">配信</span><span data-lang-inline="en">Live</span>
+            </div>
+            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">20:30</div>
           </div>
 
-          <div class="sched-card rounded-[1.25rem] p-5 bg-white border border-gray-200">
+          <div class="schedule-card rounded-[1.2rem] p-5 bg-white border border-gray-200">
             <div class="flex items-start justify-between gap-3 mb-4">
               <div><div class="text-2xl font-black tracking-tight text-gray-900">수</div></div>
               <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-emerald-50 border border-emerald-200 text-emerald-700">●</div>
             </div>
-            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">방송</div>
-            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">동출 20:30</div>
+            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span data-lang-inline="ko" class="show">방송</span><span data-lang-inline="ja">配信</span><span data-lang-inline="en">Live</span>
+            </div>
+            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">20:30</div>
           </div>
 
-          <div class="sched-card rounded-[1.25rem] p-5 bg-white border border-gray-200">
+          <div class="schedule-card rounded-[1.2rem] p-5 bg-white border border-gray-200">
             <div class="flex items-start justify-between gap-3 mb-4">
               <div><div class="text-2xl font-black tracking-tight text-gray-900">목</div></div>
               <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-gray-50 border border-gray-200 text-gray-500">·</div>
             </div>
-            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-gray-50 text-gray-500 border border-gray-200">휴방</div>
-            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">정비 · 편집</div>
+            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-gray-50 text-gray-500 border border-gray-200">
+              <span data-lang-inline="ko" class="show">휴방</span><span data-lang-inline="ja">休み</span><span data-lang-inline="en">Off</span>
+            </div>
+            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">
+              <div data-lang-content="ko" class="show">정비 · 편집</div>
+              <div data-lang-content="ja">調整・編集</div>
+              <div data-lang-content="en">Maintenance · Editing</div>
+            </div>
           </div>
 
-          <div class="sched-card rounded-[1.25rem] p-5 bg-white border border-gray-200">
+          <div class="schedule-card rounded-[1.2rem] p-5 bg-white border border-gray-200">
             <div class="flex items-start justify-between gap-3 mb-4">
               <div><div class="text-2xl font-black tracking-tight text-gray-900">금</div></div>
               <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-emerald-50 border border-emerald-200 text-emerald-700">●</div>
             </div>
-            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">방송</div>
-            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">동출 21:00</div>
+            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span data-lang-inline="ko" class="show">방송</span><span data-lang-inline="ja">配信</span><span data-lang-inline="en">Live</span>
+            </div>
+            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">21:00</div>
           </div>
 
-          <div class="sched-card rounded-[1.25rem] p-5 bg-white border border-gray-200">
+          <div class="schedule-card rounded-[1.2rem] p-5 bg-white border border-gray-200">
             <div class="flex items-start justify-between gap-3 mb-4">
               <div><div class="text-2xl font-black tracking-tight text-gray-900">토</div></div>
               <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-emerald-50 border border-emerald-200 text-emerald-700">●</div>
             </div>
-            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">방송</div>
-            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">주말 고정 19:00</div>
+            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span data-lang-inline="ko" class="show">방송</span><span data-lang-inline="ja">配信</span><span data-lang-inline="en">Live</span>
+            </div>
+            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">19:00</div>
           </div>
 
-          <div class="sched-card today-ring rounded-[1.25rem] p-5 bg-white border border-gray-200">
+          <div class="schedule-card today-ring rounded-[1.2rem] p-5 bg-white border border-gray-200">
             <div class="flex items-start justify-between gap-3 mb-4">
               <div>
-                <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 mb-2">오늘</div>
+                <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 mb-2">
+                  <span data-lang-inline="ko" class="show">오늘</span><span data-lang-inline="ja">今日</span><span data-lang-inline="en">Today</span>
+                </div>
                 <div class="text-2xl font-black tracking-tight text-gray-900">일</div>
               </div>
               <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-emerald-50 border border-emerald-200 text-emerald-700">●</div>
             </div>
-            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">방송</div>
-            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">주말 고정 19:00</div>
+            <div class="inline-flex px-4 py-2 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span data-lang-inline="ko" class="show">방송</span><span data-lang-inline="ja">配信</span><span data-lang-inline="en">Live</span>
+            </div>
+            <div class="mt-4 text-sm text-gray-500 min-h-[20px]">19:00</div>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <div id="participationModal" class="modal-shell" aria-hidden="true">
-    <div class="modal-card panel p-6 md:p-8 lg:p-9">
-      <div class="flex items-start justify-between gap-4 mb-6">
-        <div>
-          <div class="text-[11px] uppercase tracking-[0.22em] text-gray-500 font-black mb-2">Participation</div>
-          <h2 class="text-2xl md:text-3xl font-black tracking-tight text-gray-900">시참 방법</h2>
-        </div>
-        <button type="button" class="close-modal w-11 h-11 rounded-2xl border border-gray-200 bg-gray-50 text-xl text-gray-700">×</button>
-      </div>
-
-      <div class="soft-panel rounded-[1.25rem] p-5 mb-4 rule-item" style="animation-delay:0.02s;">
-        <p class="text-sm md:text-[15px] leading-7 text-gray-700">♥ 빡겜하지 않고, 즐겁게 게임해봅시다! ♥</p>
-      </div>
-
-      <div class="grid gap-3.5">
-        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.06s;">
-          <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 font-black mb-2">참여 조건</div>
-          <p class="text-sm md:text-[15px] leading-7 text-gray-700">팔로워 1일 이상이며, 채팅이 활발해야 합니다.</p>
-        </div>
-        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.10s;">
-          <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 font-black mb-2">참여 방법</div>
-          <p class="text-sm md:text-[15px] leading-7 text-gray-700">디스코드 NickName 채널에 <strong>닉네임#태그</strong>를 입력한 뒤, 시참 채널에서 대기 버튼을 누르고 기다려주세요.</p>
-        </div>
-        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.14s;">
-          <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 font-black mb-2">호출 규칙</div>
-          <p class="text-sm md:text-[15px] leading-7 text-gray-700">자리비움 등으로 대답이 없으면 다음 사람으로 넘어갑니다.</p>
-        </div>
-        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.18s;">
-          <div class="text-[11px] uppercase tracking-[0.2em] text-gray-500 font-black mb-2">로테이션</div>
-          <p class="text-sm md:text-[15px] leading-7 text-gray-700">대기가 있을 경우 1인당 3판씩 진행합니다. 대기가 없을 경우 새 대기가 생길 때까지 계속 참여할 수 있습니다.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="rulesModal" class="modal-shell" aria-hidden="true">
-    <div class="modal-card panel p-6 md:p-8 lg:p-9">
-      <div class="flex items-start justify-between gap-4 mb-6">
-        <div>
-          <div class="text-[11px] uppercase tracking-[0.22em] text-gray-500 font-black mb-2">Chat Rules</div>
-          <h2 class="text-2xl md:text-3xl font-black tracking-tight text-gray-900">채팅 규칙</h2>
-        </div>
-        <button type="button" class="close-modal w-11 h-11 rounded-2xl border border-gray-200 bg-gray-50 text-xl text-gray-700">×</button>
-      </div>
-
-      <div class="soft-panel rounded-[1.25rem] p-5 mb-4 rule-item" style="animation-delay:0.02s;">
-        <p class="text-sm md:text-[15px] leading-7 text-gray-700">※ 임시 제한 3회 누적 시 자동으로 활동 제한됩니다.<br>※ 기본적인 매너만 지켜주시면 됩니다 :)<br>※ 경고 3번 받을 시 참여가 불가능할 수 있으며, 기준은 방장이 결정합니다.</p>
-      </div>
-
-      <div class="grid gap-3.5">
-        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.06s;"><strong class="text-gray-900">1.</strong> 개인정보 유추, 빨간약, 사적인 정보 언급 금지</div>
-        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.10s;"><strong class="text-gray-900">2.</strong> 이제 못 옴, 내일보자, 자러감, 딴 게임 하러 감 같은 퇴장 멘트 자제</div>
-        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.14s;"><strong class="text-gray-900">3.</strong> 훈수 및 지시성 채팅 금지</div>
-        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.18s;"><strong class="text-gray-900">4.</strong> 과한 욕설, 공격적 채팅, 패드립, 인신공격, 비하 발언 금지</div>
-        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.22s;"><strong class="text-gray-900">5.</strong> 시청자 간 과한 대화, 친목, 닉언 금지</div>
-        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.26s;"><strong class="text-gray-900">6.</strong> 타 스트리머 언급, 비교, 비하 금지</div>
-        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.30s;"><strong class="text-gray-900">7.</strong> 소수만 아는 이야기, 방송 흐름과 무관한 내수용 대화 자제</div>
-        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.34s;"><strong class="text-gray-900">8.</strong> 시청자 수 언급 금지</div>
-        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.38s;"><strong class="text-gray-900">9.</strong> 방송 관련 불만은 디스코드 문의 채널 이용</div>
-        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.42s;"><strong class="text-gray-900">10.</strong> 정치, 종교, 민감한 주제 금지</div>
-        <div class="soft-panel rounded-[1.1rem] p-5 rule-item" style="animation-delay:0.46s;"><strong class="text-gray-900">11.</strong> 스포일러 및 과한 TMI 자제</div>
-      </div>
-    </div>
-  </div>
-
   <script>
-    const modals = document.querySelectorAll('.modal-shell');
-    const openers = document.querySelectorAll('[data-modal-target]');
-    const closeButtons = document.querySelectorAll('.close-modal');
+    const langButtons = document.querySelectorAll('[data-lang-btn]');
+    const pageButtons = document.querySelectorAll('[data-page-btn]');
+    const pageViews = document.querySelectorAll('.page-view');
 
-    function openModal(id) {
-      const modal = document.getElementById(id);
-      if (!modal) return;
-      modal.classList.add('open');
-      modal.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-    }
+    let currentLang = 'ko';
+    let currentPage = 'participation';
 
-    function closeModal(modal) {
-      if (!modal) return;
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-    }
+    function applyLanguage(lang) {
+      currentLang = lang;
 
-    openers.forEach((button) => {
-      button.addEventListener('click', () => openModal(button.dataset.modalTarget));
-    });
-
-    closeButtons.forEach((button) => {
-      button.addEventListener('click', () => closeModal(button.closest('.modal-shell')));
-    });
-
-    modals.forEach((modal) => {
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal(modal);
+      document.querySelectorAll('[data-lang-content]').forEach((el) => {
+        el.classList.toggle('show', el.getAttribute('data-lang-content') === lang);
       });
+
+      document.querySelectorAll('[data-lang-inline]').forEach((el) => {
+        el.classList.toggle('show', el.getAttribute('data-lang-inline') === lang);
+      });
+
+      document.documentElement.lang = lang === 'ja' ? 'ja' : (lang === 'en' ? 'en' : 'ko');
+
+      langButtons.forEach((btn) => {
+        btn.classList.toggle('active', btn.getAttribute('data-lang-btn') === lang);
+      });
+    }
+
+    function applyPage(page) {
+      currentPage = page;
+
+      pageButtons.forEach((btn) => {
+        btn.classList.toggle('active', btn.getAttribute('data-page-btn') === page);
+      });
+
+      pageViews.forEach((view) => {
+        view.classList.toggle('active', view.id === `page-${page}`);
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    langButtons.forEach((btn) => {
+      btn.addEventListener('click', () => applyLanguage(btn.getAttribute('data-lang-btn')));
     });
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key !== 'Escape') return;
-      const opened = document.querySelector('.modal-shell.open');
-      if (opened) closeModal(opened);
+    pageButtons.forEach((btn) => {
+      btn.addEventListener('click', () => applyPage(btn.getAttribute('data-page-btn')));
     });
+
+    applyLanguage(currentLang);
+    applyPage(currentPage);
   </script>
 </body>
 </html>
