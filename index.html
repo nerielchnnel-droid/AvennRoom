@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b0b12" />
+  <title>SOI Stream Rules</title>
+  <style>
+    :root{
+      --bg:#090910;
+      --bg2:#11111b;
+      --card:rgba(255,255,255,.055);
+      --card-hover:rgba(255,255,255,.08);
+      --line:rgba(255,255,255,.10);
+      --text:#f8f7ff;
+      --muted:#aaa8ba;
+      --purple:#a67cff;
+      --purple2:#7556ff;
+      --danger:#ff668c;
+      --shadow:0 24px 80px rgba(0,0,0,.42);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      color:var(--text);
+      font-family:Inter, Pretendard, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", "Noto Sans KR", "Noto Sans JP", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 18% 0%, rgba(117,86,255,.20), transparent 34rem),
+        radial-gradient(circle at 90% 24%, rgba(166,124,255,.12), transparent 28rem),
+        linear-gradient(180deg, #0b0b13 0%, #07070c 100%);
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+      background-size:42px 42px;
+      mask-image:linear-gradient(to bottom, black, transparent 75%);
+    }
+
+    a{color:inherit}
+    button{font:inherit}
+
+    .wrap{
+      width:min(1040px, calc(100% - 34px));
+      margin:0 auto;
+      padding:34px 0 64px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:70px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+      letter-spacing:.12em;
+      font-size:14px;
+      color:#ece9ff;
+      text-transform:uppercase;
+    }
+
+    .brand-dot{
+      width:11px;
+      height:11px;
+      border-radius:999px;
+      background:linear-gradient(135deg,var(--purple),var(--purple2));
+      box-shadow:0 0 24px rgba(166,124,255,.8);
+    }
+
+    .lang-switch{
+      display:flex;
+      gap:6px;
+      padding:5px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.035);
+      backdrop-filter:blur(12px);
+    }
+
+    .lang-btn{
+      border:0;
+      color:var(--muted);
+      background:transparent;
+      border-radius:999px;
+      padding:9px 13px;
+      cursor:pointer;
+      transition:.18s ease;
+      font-weight:700;
+      font-size:13px;
+    }
+
+    .lang-btn:hover{color:#fff}
+    .lang-btn.active{
+      color:#fff;
+      background:linear-gradient(135deg,rgba(166,124,255,.95),rgba(117,86,255,.95));
+      box-shadow:0 6px 20px rgba(117,86,255,.24);
+    }
+
+    .eyebrow{
+      margin:0 0 16px;
+      color:var(--purple);
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.15em;
+      text-transform:uppercase;
+    }
+
+    h1{
+      margin:0;
+      max-width:760px;
+      font-size:clamp(44px,8vw,84px);
+      line-height:.96;
+      letter-spacing:-.055em;
+    }
+
+    .lead{
+      max-width:690px;
+      margin:25px 0 0;
+      color:var(--muted);
+      font-size:clamp(16px,2.2vw,19px);
+      line-height:1.8;
+      word-break:keep-all;
+    }
+
+    .warning-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:9px;
+      margin-top:24px;
+      padding:11px 14px;
+      border:1px solid rgba(255,102,140,.25);
+      border-radius:999px;
+      color:#ffdce6;
+      background:rgba(255,102,140,.08);
+      font-size:13px;
+      font-weight:750;
+    }
+
+    .warning-pill .icon{font-size:15px}
+
+    .rules{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+      margin-top:54px;
+    }
+
+    .rule{
+      position:relative;
+      overflow:hidden;
+      min-height:188px;
+      padding:26px 26px 24px;
+      border:1px solid var(--line);
+      border-radius:25px;
+      background:linear-gradient(180deg,rgba(255,255,255,.065),rgba(255,255,255,.035));
+      box-shadow:var(--shadow);
+      transition:transform .18s ease,border-color .18s ease,background .18s ease;
+    }
+
+    .rule:hover{
+      transform:translateY(-3px);
+      border-color:rgba(166,124,255,.35);
+      background:var(--card-hover);
+    }
+
+    .rule::after{
+      content:"";
+      position:absolute;
+      width:150px;
+      height:150px;
+      border-radius:999px;
+      right:-70px;
+      bottom:-85px;
+      background:radial-gradient(circle,rgba(166,124,255,.18),transparent 67%);
+    }
+
+    .rule:last-child{
+      grid-column:1 / -1;
+      min-height:166px;
+    }
+
+    .num{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:42px;
+      height:42px;
+      margin-bottom:22px;
+      border-radius:14px;
+      border:1px solid rgba(166,124,255,.30);
+      color:#e9e0ff;
+      background:rgba(166,124,255,.10);
+      font-size:16px;
+      font-weight:900;
+      box-shadow:inset 0 0 20px rgba(166,124,255,.06);
+    }
+
+    .rule h2{
+      position:relative;
+      z-index:1;
+      margin:0;
+      font-size:clamp(20px,3vw,27px);
+      line-height:1.35;
+      letter-spacing:-.025em;
+      word-break:keep-all;
+    }
+
+    .rule p{
+      position:relative;
+      z-index:1;
+      margin:11px 0 0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.7;
+      word-break:keep-all;
+    }
+
+    .notice{
+      display:flex;
+      justify-content:space-between;
+      gap:24px;
+      align-items:center;
+      margin-top:18px;
+      padding:20px 22px;
+      border:1px solid rgba(166,124,255,.20);
+      border-radius:20px;
+      background:rgba(117,86,255,.07);
+    }
+
+    .notice strong{
+      display:block;
+      margin-bottom:5px;
+      font-size:15px;
+    }
+
+    .notice span{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    .notice-badge{
+      flex:0 0 auto;
+      color:#dcd2ff;
+      font-size:12px;
+      font-weight:850;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    footer{
+      display:flex;
+      justify-content:space-between;
+      gap:15px;
+      align-items:center;
+      margin-top:62px;
+      padding-top:24px;
+      border-top:1px solid var(--line);
+      color:#777586;
+      font-size:12px;
+      letter-spacing:.04em;
+    }
+
+    [data-lang]{display:none}
+    [data-lang].show{display:block}
+    span[data-lang].show{display:inline}
+
+    @media(max-width:700px){
+      .wrap{width:min(100% - 22px,1040px);padding-top:20px}
+      .topbar{
+        align-items:flex-start;
+        flex-direction:column;
+        margin-bottom:52px;
+      }
+      .rules{grid-template-columns:1fr}
+      .rule:last-child{grid-column:auto}
+      .rule{min-height:auto}
+      .notice{align-items:flex-start;flex-direction:column}
+      footer{align-items:flex-start;flex-direction:column}
+      h1{font-size:clamp(48px,16vw,72px)}
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <span>SOI · STREAM RULES</span>
+      </div>
+
+      <nav class="lang-switch" aria-label="Language selector">
+        <button class="lang-btn active" data-set-lang="ko">한국어</button>
+        <button class="lang-btn" data-set-lang="ja">日本語</button>
+        <button class="lang-btn" data-set-lang="en">English</button>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div data-lang="ko" class="show">
+        <p class="eyebrow">ERISAK SOI · STREAM RULES</p>
+        <h1>방송 규칙을<br>꼭 확인해 주세요.</h1>
+        <p class="lead">
+          모두가 편하게 방송을 즐길 수 있도록 기본적인 규칙을 운영하고 있습니다.
+          채팅에 참여하기 전에 아래 내용을 확인해 주세요.
+        </p>
+        <div class="warning-pill"><span class="icon">⚠</span> 규칙 미확인으로 발생하는 BAN은 별도 예외가 없습니다.</div>
+      </div>
+
+      <div data-lang="ja">
+        <p class="eyebrow">ERISAK SOI · STREAM RULES</p>
+        <h1>配信ルールを<br>ご確認ください。</h1>
+        <p class="lead">
+          みんなが気持ちよく配信を楽しめるよう、基本的なルールを設けています。
+          コメントする前に、以下の内容をご確認ください。
+        </p>
+        <div class="warning-pill"><span class="icon">⚠</span> ルール未読でのBANは仕方ありません！</div>
+      </div>
+
+      <div data-lang="en">
+        <p class="eyebrow">ERISAK SOI · STREAM RULES</p>
+        <h1>Please read<br>the stream rules.</h1>
+        <p class="lead">
+          These rules are here to keep the stream comfortable and fun for everyone.
+          Please check them before joining the chat.
+        </p>
+        <div class="warning-pill"><span class="icon">⚠</span> Bans for not reading the rules are unavoidable.</div>
+      </div>
+    </section>
+
+    <section class="rules">
+      <article class="rule">
+        <div class="num">01</div>
+        <div data-lang="ko" class="show">
+          <h2>타 스트리머 언급 금지</h2>
+          <p>방송 흐름과 관련 없는 다른 스트리머의 이름이나 이야기는 언급하지 말아주세요.</p>
+        </div>
+        <div data-lang="ja">
+          <h2>他の配信者の話題は禁止</h2>
+          <p>配信と関係のない他の配信者の名前や話題は出さないでください。</p>
+        </div>
+        <div data-lang="en">
+          <h2>Do not mention other streamers</h2>
+          <p>Please avoid bringing up other streamers when it is unrelated to the current stream.</p>
+        </div>
+      </article>
+
+      <article class="rule">
+        <div class="num">02</div>
+        <div data-lang="ko" class="show">
+          <h2>스포일러 및 TMI 자제</h2>
+          <p>게임·콘텐츠의 스포일러와 방송 흐름을 끊는 과도한 개인 이야기는 자제해 주세요.</p>
+        </div>
+        <div data-lang="ja">
+          <h2>ネタバレ・過度なTMIは控えてください</h2>
+          <p>ゲームやコンテンツのネタバレ、配信の流れを止める過度な個人話は控えてください。</p>
+        </div>
+        <div data-lang="en">
+          <h2>Avoid spoilers and excessive TMI</h2>
+          <p>Please avoid spoilers and overly personal stories that interrupt the flow of the stream.</p>
+        </div>
+      </article>
+
+      <article class="rule">
+        <div class="num">03</div>
+        <div data-lang="ko" class="show">
+          <h2>정치 · 종교 · 민감한 주제 금지</h2>
+          <p>분쟁이나 갈등으로 이어질 수 있는 정치, 종교 및 기타 민감한 주제는 다루지 않습니다.</p>
+        </div>
+        <div data-lang="ja">
+          <h2>政治・宗教・デリケートな話題は禁止</h2>
+          <p>対立につながりやすい政治、宗教、その他デリケートな話題は避けてください。</p>
+        </div>
+        <div data-lang="en">
+          <h2>No politics, religion, or sensitive topics</h2>
+          <p>Please avoid political, religious, or other sensitive topics that may cause unnecessary conflict.</p>
+        </div>
+      </article>
+
+      <article class="rule">
+        <div class="num">04</div>
+        <div data-lang="ko" class="show">
+          <h2>시청자 간 과도한 친목 금지</h2>
+          <p>특정 시청자끼리만 이어지는 대화나 방송과 무관한 친목성 채팅은 자제해 주세요.</p>
+        </div>
+        <div data-lang="ja">
+          <h2>視聴者同士の過度な馴れ合いは禁止</h2>
+          <p>特定の視聴者同士だけで続く会話や、配信と関係のない内輪話は控えてください。</p>
+        </div>
+        <div data-lang="en">
+          <h2>No excessive viewer-to-viewer socializing</h2>
+          <p>Please avoid long side conversations or inside-chat that excludes the rest of the stream.</p>
+        </div>
+      </article>
+
+      <article class="rule">
+        <div class="num">05</div>
+        <div data-lang="ko" class="show">
+          <h2>가오 부리지 말아주세요~</h2>
+          <p>과도한 허세, 시비, 훈수, 싸움 유도 등 다른 사람을 불편하게 만드는 행동은 하지 말아주세요.</p>
+        </div>
+        <div data-lang="ja">
+          <h2>イキらないでください～</h2>
+          <p>過度なマウント、煽り、指示、喧嘩を誘うような行為はやめてください。</p>
+        </div>
+        <div data-lang="en">
+          <h2>Please don't act tough~</h2>
+          <p>No flexing, provoking, excessive backseating, or behavior intended to start arguments.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="notice">
+      <div data-lang="ko" class="show">
+        <strong>규칙 적용은 상황에 따라 SOI가 최종 판단합니다.</strong>
+        <span>반복적인 규칙 위반이나 심한 경우에는 경고 없이 채팅 제한 또는 BAN이 적용될 수 있습니다.</span>
+      </div>
+      <div data-lang="ja">
+        <strong>ルールの適用は状況に応じてSOIが最終判断します。</strong>
+        <span>繰り返しの違反や悪質な場合、警告なしでチャット制限またはBANとなる場合があります。</span>
+      </div>
+      <div data-lang="en">
+        <strong>SOI has the final say on rule enforcement depending on the situation.</strong>
+        <span>Repeated or severe violations may result in chat restrictions or a ban without prior warning.</span>
+      </div>
+      <div class="notice-badge">SOI RULES · 2026</div>
+    </section>
+
+    <footer>
+      <span>SOI · ERISAK SOI · Stream Rules</span>
+      <span>Enjoy the stream. ♥</span>
+    </footer>
+  </main>
+
+  <script>
+    const langButtons = document.querySelectorAll('[data-set-lang]');
+    const langBlocks = document.querySelectorAll('[data-lang]');
+
+    function setLanguage(lang) {
+      document.documentElement.lang = lang;
+
+      langBlocks.forEach(el => {
+        el.classList.toggle('show', el.dataset.lang === lang);
+      });
+
+      langButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.setLang === lang);
+      });
+
+      try { localStorage.setItem('soi-rule-lang', lang); } catch(e) {}
+    }
+
+    langButtons.forEach(btn => {
+      btn.addEventListener('click', () => setLanguage(btn.dataset.setLang));
+    });
+
+    let saved = 'ko';
+    try { saved = localStorage.getItem('soi-rule-lang') || 'ko'; } catch(e) {}
+    if (!['ko','ja','en'].includes(saved)) saved = 'ko';
+    setLanguage(saved);
+  </script>
+</body>
+</html>
